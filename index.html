@@ -14,6 +14,7 @@
             --text-muted: #cccccc;
             --envelope-bg: #1e1e1e;
             --envelope-inside: #252525;
+            --neon-gold: #fff3a8;
         }
 
         body.locked {
@@ -35,7 +36,7 @@
             min-height: 100vh;
         }
 
-        /* --- CONTENEDOR DE MARIPOSAS DE FONDO GLOBAL --- */
+        /* --- CONTENEDOR EFECTO MARIPOSAS --- */
         #butterfly-container {
             position: absolute;
             top: 0;
@@ -43,33 +44,31 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 99; /* Por encima del fondo pero por debajo del texto e interacción */
+            z-index: 99; 
             overflow: hidden;
         }
 
-        /* Animación de las Mariposas */
         .golden-butterfly {
             position: absolute;
             width: 25px;
             height: 25px;
             pointer-events: none;
             opacity: 0;
-            filter: drop-shadow(0 2px 5px rgba(214,175,55,0.5));
+            filter: drop-shadow(0 2px 8px rgba(214,175,55,0.8));
         }
 
-        /* Destellos de las Mariposas */
         .butterfly-trail {
             position: absolute;
             background: radial-gradient(circle, #fff 0%, var(--accent-color) 60%, transparent 100%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 98;
-            opacity: 0.8;
-            animation: trailFade 1s forwards ease-out;
+            opacity: 0.9;
+            animation: trailFade 0.8s forwards ease-out;
         }
 
         @keyframes trailFade {
-            0% { transform: scale(1); opacity: 0.9; }
+            0% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 2px #fff); }
             100% { transform: scale(0); opacity: 0; }
         }
 
@@ -96,7 +95,6 @@
             pointer-events: none;
         }
 
-        /* Destellos estilo Diamante (Pantalla Inicial) */
         .diamond-sparkle {
             position: absolute;
             background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(212,175,55,0.2) 40%, rgba(212,175,55,0) 70%);
@@ -208,6 +206,7 @@
             font-size: 1.5rem;
         }
 
+        /* TARJETA PEQUEÑA INTERNA */
         .letter {
             position: absolute;
             bottom: 10px;
@@ -215,7 +214,7 @@
             width: 270px;
             height: 170px;
             background-color: #2b2b2b;
-            border: 1px solid var(--accent-color);
+            border: 2px solid var(--accent-color);
             border-radius: 6px;
             z-index: 2;
             transition: transform 0.7s ease;
@@ -223,9 +222,42 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 10px;
+            padding: 15px;
             box-sizing: border-box;
             text-align: center;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+        }
+
+        /* --- NUEVO EFECTO NEÓN ORO PARA EL TEXTO INTERIOR --- */
+        .neon-gold-text {
+            font-size: 2.2rem; /* Más grandes */
+            margin: 5px 0;
+            font-weight: bold;
+            color: var(--neon-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            /* Varias capas de sombra para lograr el efecto encendido neón */
+            text-shadow: 
+                0 0 6px rgba(255,255,255,0.6),
+                0 0 12px var(--accent-color),
+                0 0 25px var(--accent-color),
+                0 0 40px #ffae00;
+            animation: neonFlicker 3s infinite alternate;
+        }
+
+        @keyframes neonFlicker {
+            0%, 100% { opacity: 1; text-shadow: 0 0 6px rgba(255,255,255,0.6), 0 0 12px var(--accent-color), 0 0 25px var(--accent-color), 0 0 40px #ffae00; }
+            50% { opacity: 0.95; text-shadow: 0 0 4px rgba(255,255,255,0.4), 0 0 9px var(--accent-color), 0 0 20px var(--accent-color), 0 0 30px #e69d00; }
+        }
+
+        /* MINI CORONA VECTORIAL INTERNA */
+        .mini-crown {
+            width: 45px;
+            height: 25px;
+            background: var(--accent-color);
+            clip-path: polygon(0% 100%, 100% 100%, 90% 40%, 70% 80%, 50% 10%, 30% 80%, 10% 40%);
+            margin-bottom: 8px;
+            filter: drop-shadow(0 0 5px var(--accent-color));
         }
 
         /* --- ANIMACIONES AL ABRIR --- */
@@ -255,7 +287,7 @@
             opacity: 0;
             transition: opacity 1s ease-in-out;
             position: relative;
-            z-index: 100; /* Asegura que el texto e imágenes queden encima de las mariposas de fondo */
+            z-index: 100; 
         }
 
         body:not(.locked) .container {
@@ -333,7 +365,6 @@
             50% { transform: rotate(-12deg) scale(1.1); }
         }
 
-        /* REPRODUCTOR FLOTANTE */
         .music-player {
             position: fixed;
             top: 20px;
@@ -355,7 +386,7 @@
         .music-player span { font-size: 0.8rem; font-weight: bold; }
 
         header { margin-top: 90px; margin-bottom: 30px; }
-        h1 { font-size: 3rem; margin: 5px 0 15px 0; font-weight: bold; }
+        h1 { font-size: 3.2rem; margin: 5px 0 15px 0; font-weight: bold; }
         .subtitle { letter-spacing: 4px; color: var(--text-muted); font-size: 0.9rem; }
 
         .invitation-img {
@@ -414,7 +445,7 @@
 </head>
 <body class="locked">
 
-    <!-- CONTENEDOR EFECTO MARIPOSAS (OCUPA TODO EL ALTO DINÁMICO) -->
+    <!-- CONTENEDOR DE MARIPOSAS -->
     <div id="butterfly-container"></div>
 
     <!-- PANTALLA INICIAL: EL SOBRE INTERACTIVO 3D -->
@@ -430,10 +461,15 @@
                 <div class="envelope-deco-bg"></div>
                 <div class="pocket"></div>
                 <div class="seal-css"></div>
+                
+                <!-- TARJETA INTERNA ACTUALIZADA -->
                 <div class="letter">
-                    <p class="subtitle" style="font-size: 0.7rem; margin: 0;">MIS XV AÑOS</p>
-                    <h3 class="shine-text" style="font-size: 1.8rem; margin: 5px 0;">Alexa</h3>
-                    <p style="font-size: 0.75rem; color: #fff; margin: 0;">¡Abriendo invitación!</p>
+                    <!-- Corona agregada adentro -->
+                    <div class="mini-crown"></div>
+                    <p class="subtitle" style="font-size: 0.75rem; margin: 0;">MIS XV AÑOS</p>
+                    <!-- Letras Neón de Oro Líquido -->
+                    <h3 class="neon-gold-text">Alexa</h3>
+                    <p style="font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 3px;">¡Abriendo invitación!</p>
                 </div>
             </div>
         </div>
@@ -518,10 +554,10 @@
             overlayBg.appendChild(sparkle);
         }
 
-        // --- 2. SISTEMA DE MARIPOSAS DORADAS DINÁMICAS ---
+        // --- 2. SISTEMA DE MARIPOSAS DORADAS (CORREGIDO PARA CARGA RESTRUCTURADA) ---
         const butterflyContainer = document.getElementById('butterfly-container');
-        
-        // Código SVG para dibujar una hermosa mariposa dorada sin usar imágenes
+        let butterflyInterval;
+
         const butterflySVG = `
             <svg viewBox="0 0 50 50" fill="url(#goldGrad)">
                 <defs>
@@ -534,61 +570,68 @@
             </svg>
         `;
 
+        function startButterflies() {
+            // Se ejecuta repetitivamente cada 500ms para mantener el flujo constante
+            butterflyInterval = setInterval(createButterfly, 500);
+        }
+
         function createButterfly() {
-            // Solo creamos mariposas si el contenedor existe y tiene altura calculada
-            const documentHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+            // CORRECCIÓN: Leemos la altura exacta de la invitación en tiempo de ejecución activo
+            const documentHeight = Math.max(
+                document.body.scrollHeight, 
+                document.documentElement.scrollHeight,
+                document.body.offsetHeight,
+                document.documentElement.offsetHeight
+            );
             
             const butterfly = document.createElement('div');
             butterfly.classList.add('golden-butterfly');
             butterfly.innerHTML = butterflySVG;
 
-            // Atributos de movimiento aleatorio de izquierda a derecha o viceversa
-            const startX = Math.random() * 110 - 5; // Empieza un poco afuera
+            const startX = Math.random() * 100; 
+            // Aparecen repartidas proporcionalmente en todo lo alto de la página
             const startY = Math.random() * documentHeight;
-            const endX = startX + (Math.random() * 40 - 20); // Se desplaza un rango horizontal
-            const endY = startY - (Math.random() * 300 + 150); // Siempre viaja hacia arriba
+            const endX = startX + (Math.random() * 40 - 20); 
+            const endY = startY - (Math.random() * 300 + 200); // Vuelo ascendente
 
-            const size = Math.random() * 20 + 15; // Tamaños variados entre 15px y 35px
+            const size = Math.random() * 22 + 18; // Un poco más grandes para que luzcan (18px a 40px)
             butterfly.style.width = `${size}px`;
             butterfly.style.height = `${size}px`;
             
-            // Configurar posición inicial
             butterfly.style.left = `${startX}vw`;
             butterfly.style.top = `${startY}px`;
 
             butterflyContainer.appendChild(butterfly);
 
             let progress = 0;
-            const speed = Math.random() * 0.003 + 0.002; // Velocidad suave de vuelo
-            const amplitude = Math.random() * 30 + 10; // Amplitud del aleteo horizontal
-            const waveFrequency = Math.random() * 0.1 + 0.05;
+            const speed = Math.random() * 0.0025 + 0.002; 
+            const amplitude = Math.random() * 40 + 15; 
+            const waveFrequency = Math.random() * 0.08 + 0.04;
 
             function animate() {
                 progress += speed;
                 if (progress >= 1) {
                     butterfly.remove();
                 } else {
-                    // Cálculo de trayectoria curva sinuosa (vuelo realista)
                     const currentY = startY + (endY - startY) * progress;
                     const currentX = startX + (endX - startX) * progress + Math.sin(progress * Math.PI * 10 * waveFrequency) * (amplitude / 10);
                     
                     butterfly.style.top = `${currentY}px`;
                     butterfly.style.left = `${currentX}vw`;
-                    butterfly.style.opacity = progress < 0.1 ? progress * 10 : (progress > 0.8 ? (1 - progress) * 5 : 0.85);
+                    // Suavizado de entrada y salida
+                    butterfly.style.opacity = progress < 0.1 ? progress * 10 : (progress > 0.85 ? (1 - progress) * 6.6 : 0.9);
 
-                    // Aleteo 3D simulado escalando el eje X alternadamente
-                    const flap = Math.sin(Date.now() * 0.02) * 0.7 + 0.8;
-                    butterfly.style.transform = `scaleX(${flap}) rotate(${Math.sin(progress * 5) * 15}deg)`;
+                    const flap = Math.sin(Date.now() * 0.025) * 0.7 + 0.8;
+                    butterfly.style.transform = `scaleX(${flap}) rotate(${Math.sin(progress * 4) * 20}deg)`;
 
-                    // Generar destellos/estrellitas a su paso
-                    if (Math.random() < 0.15) { 
+                    // Rastro de destellos brillantes
+                    if (Math.random() < 0.25) { 
                         createSparkleTrail(currentX, currentY, size);
                     }
 
                     requestAnimationFrame(animate);
                 }
             }
-
             requestAnimationFrame(animate);
         }
 
@@ -596,23 +639,18 @@
             const trail = document.createElement('div');
             trail.classList.add('butterfly-trail');
             
-            const tSize = Math.random() * 4 + 2; // Tamaño de estrellitas
+            const tSize = Math.random() * 5 + 3; 
             trail.style.width = `${tSize}px`;
             trail.style.height = `${tSize}px`;
             
-            // Posicionar el destello exactamente detrás de la mariposa
-            trail.style.left = `calc(${xPercent}vw + ${Math.random() * offset}px)`;
-            trail.style.top = `${yPx + (Math.random() * offset)}px`;
+            trail.style.left = `calc(${xPercent}vw + ${Math.random() * (offset / 2)}px)`;
+            trail.style.top = `${yPx + (Math.random() * (offset / 2))}px`;
             
             butterflyContainer.appendChild(trail);
             
-            setTimeout(() => {
-                trail.remove();
-            }, 1000);
+            setTimeout(() => { trail.remove(); }, 800);
         }
 
-        // Intervalo continuo para ir poblando toda la invitación con mariposas doradas
-        setInterval(createButterfly, 600);
 
         // --- 3. MANEJO INTERACTIVO DEL SOBRE (CLICK) ---
         const wrapper = document.getElementById('envelopeWrapper');
@@ -620,6 +658,10 @@
 
         wrapper.addEventListener('click', () => {
             wrapper.classList.add('open');
+            
+            // CORRECCIÓN CLAVE: Activamos las mariposas justo al dar clic, rompiendo el desfase del scroll bloqueado
+            startButterflies();
+
             setTimeout(() => {
                 overlay.classList.add('fade-out');
                 document.body.classList.remove('locked');
