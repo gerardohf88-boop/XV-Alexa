@@ -129,19 +129,22 @@
             border-radius: 0 0 8px 8px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.6);
             transform-style: preserve-3d;
-            transition: transform 0.5s;
         }
 
-        /* Animación de apertura del sobre */
+        /* --- ANIMACIONES DE APERTURA NATIVAS CSS --- */
         .envelope-wrapper.open .flap {
             transform: rotateX(180deg);
             z-index: 1;
-            border-top-color: var(--envelope-inside);
         }
 
         .envelope-wrapper.open .letter {
-            transform: translateY(-80px);
-            z-index: 2;
+            transform: translateY(-90px) translateZ(10px);
+            z-index: 4;
+        }
+
+        .envelope-wrapper.open .seal-css {
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
         }
 
         .envelope-deco-bg {
@@ -167,7 +170,7 @@
             transform-origin: top;
             pointer-events: none;
             z-index: 3;
-            transition: transform 0.6s ease, border-top-color 0.6s;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .flap::after {
@@ -200,8 +203,9 @@
 
         .seal-css {
             position: absolute;
-            top: 75px;
-            left: 125px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             width: 50px;
             height: 50px;
             background: radial-gradient(circle, #f3e5ab 0%, var(--accent-color) 100%);
@@ -211,12 +215,7 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            transition: transform 0.5s ease, opacity 0.3s ease;
-        }
-
-        .envelope-wrapper.open .seal-css {
-            transform: translateY(-50px) scale(0);
-            opacity: 0;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
         }
 
         .seal-css::before {
@@ -246,7 +245,6 @@
             box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
         }
 
-        /* ELEMENTO DE LA CORONA CORREGIDO */
         .real-crown {
             width: 90px;
             height: auto;
@@ -261,7 +259,6 @@
             100% { transform: scale(1.05); filter: drop-shadow(0 0 14px rgba(255,243,168,1)); }
         }
 
-        /* TEXTO INTERIOR NEÓN */
         .neon-gold-text {
             font-size: 2.2rem;
             margin: 2px 0;
@@ -450,7 +447,7 @@
                 <div class="pocket"></div>
                 <div class="seal-css"></div>
                 
-                <!-- ENLACE DIRECTO CORREGIDO PARA LA CORONA REAL -->
+                <!-- TARJETA INTERNA CON LA IMAGEN DE LA CORONA CORREGIDA -->
                 <div class="letter">
                     <img src="https://img.freepik.com/free-psd/gold-tiara-with-clear-crystals-royal-headpiece_23-2151173259.jpg" alt="Corona Real Dorada" class="real-crown">
                     <p class="subtitle" style="font-size: 0.75rem; margin: 0;">MIS XV AÑOS</p>
@@ -632,14 +629,16 @@
             setTimeout(() => { trail.remove(); }, 800);
         }
 
-        // --- 3. MANEJO INTERACTIVO DEL SOBRE ---
+        // --- 3. CORRECCIÓN: MANEJO INTERACTIVO DEL SOBRE ---
         const wrapper = document.getElementById('envelopeWrapper');
         const overlay = document.getElementById('envelopeOverlay');
 
         wrapper.addEventListener('click', () => {
+            // Añade formalmente la clase de apertura al contenedor
             wrapper.classList.add('open');
             startButterflies();
 
+            // Retraso controlado para permitir que la animación CSS termine de ejecutarse
             setTimeout(() => {
                 overlay.classList.add('fade-out');
                 document.body.classList.remove('locked');
