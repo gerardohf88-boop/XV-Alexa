@@ -393,9 +393,8 @@
 
     <div class="gold-particles"></div>
 
-    <!-- REPRODUCTOR ENLAZADO A TU CANCIÓN SOLICITADA -->
+    <!-- ENLACE RELATIVO PERFECTO PARA GITHUB PAGES -->
     <audio id="bgMusic" loop preload="auto">
-        <source src="https://www.youtube.com/shakee/kPa7bsKwL-c/audio.mp3" type="audio/mpeg">
         <source src="die-with-a-smile.mp3" type="audio/mpeg">
     </audio>
 
@@ -407,11 +406,9 @@
     <div class="envelope-wrapper" id="envelope">
         <div class="envelope-flap"></div>
         <div class="gold-seal">
-            <!-- Corona Sello Real Externa (Tu corona.png) -->
             <img src="corona.png" alt="Corona Sello">
         </div>
         <div class="inner-card-preview">
-            <!-- Corona Interior (Tu corona.png) -->
             <img class="custom-crown" src="corona.png" alt="Corona Alexa">
             <p class="subtitle" style="font-size: 0.7rem; margin: 0;">MIS XV AÑOS</p>
             <h3 class="neon-gold-text">Alexa</h3>
@@ -423,7 +420,6 @@
     <!-- VISTA 2: INVITACIÓN PRINCIPAL COMPLETA -->
     <div class="main-invitation-content" id="mainContent">
         <header>
-            <!-- Corona Principal de la invitación adentro (Tu corona.png) -->
             <img class="custom-crown" style="width: 100px; margin-bottom: 5px;" src="corona.png" alt="Corona Principal">
             <p class="subtitle">MIS QUINCE AÑOS</p>
             <h1 class="shine-text">Alexa</h1>
@@ -484,15 +480,18 @@
         const bgMusic = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
 
-        // Manejo interactivo de apertura del sobre con audio inmediato incorporado
+        // Manejo interactivo de apertura del sobre con reproducción forzada
         envelope.addEventListener('click', () => {
-            // Disparar reproducción instantánea aprovechando el evento de clic directo del usuario
-            bgMusic.play();
+            // El clic del usuario le da permiso al navegador de reproducir sonido local
+            bgMusic.play().then(() => {
+                console.log("Música iniciada correctamente.");
+            }).catch(err => {
+                console.log("Error de reproducción:", err);
+            });
             
             envelope.classList.add('open');
             createButterflyBurst();
 
-            // Mostrar control flotante
             musicBtn.style.display = 'flex';
             musicBtn.style.color = 'var(--gold-primary)';
 
@@ -502,7 +501,7 @@
             }, 1200);
         });
 
-        // Botón de Play/Pausa de Música manual por si desean silenciarla
+        // Botón de Play/Pausa de Música
         musicBtn.addEventListener('click', () => {
             if (bgMusic.paused) {
                 bgMusic.play();
@@ -513,7 +512,6 @@
             }
         });
 
-        // Animación de ráfaga de mariposas
         function createButterflyBurst() {
             const container = document.body;
             for (let i = 0; i < 18; i++) {
@@ -539,7 +537,6 @@
             }
         }
 
-        // Cuenta regresiva real para el 19 de Septiembre de 2026
         const eventDate = new Date('September 19, 2026 16:00:00').getTime();
 
         const timer = setInterval(() => {
