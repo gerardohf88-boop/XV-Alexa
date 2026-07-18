@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis XV Años - Alexa</title>
+    <!-- Iconos FontAwesome para los botones, copa y WhatsApp -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fuentes Elegantes -->
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -16,7 +18,11 @@
             --text-light: #f5f5f5;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             background-color: var(--grey-dark);
@@ -27,91 +33,545 @@
             justify-content: center;
             align-items: center;
             overflow-x: hidden;
+            perspective: 1000px;
         }
 
-        /* --- Sello Sobre --- */
-        .envelope-wrapper { position: relative; width: 380px; height: 280px; background-color: #252629; cursor: pointer; transition: 0.8s; border: 1px solid rgba(212, 175, 55, 0.15); }
-        .gold-seal { position: absolute; top: 140px; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; background: var(--gold-primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; animation: pulse-seal 2s infinite; }
-        
-        /* CORONAS SVG PURAS */
-        .svg-crown { width: 35px; height: 35px; color: #111; }
-        .real-crown { width: 80px; height: 80px; color: var(--gold-primary); margin-bottom: 5px; animation: float-crown 3s infinite; }
-        @keyframes float-crown { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-        
-        .main-invitation-content { position: relative; width: 100%; max-width: 450px; background: #17181a; border: 3px double var(--gold-primary); padding: 35px 20px; text-align: center; display: none; opacity: 0; transition: all 1s; z-index: 20; margin: 20px 10px; }
-        .main-invitation-content.visible { display: block; opacity: 1; }
+        /* Brillos de Fondo Estilo Partículas */
+        .gold-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.06) 0%, transparent 45%),
+                        radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.06) 0%, transparent 45%);
+            z-index: 1;
+        }
 
-        /* MARIPOSAS ANIMADAS */
-        .card-butterfly { position: absolute; width: 30px; height: 30px; background: var(--gold-light); clip-path: polygon(50% 45%, 0% 0%, 15% 70%, 50% 60%, 85% 70%, 100% 0%); z-index: 25; animation: float-card-bf 4s infinite; }
-        .cb-left { top: 25px; left: 15px; }
-        .cb-right { top: 60px; right: 20px; }
-        @keyframes float-card-bf { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        
-        .sparkle { position: absolute; width: 4px; height: 4px; background: #fff; border-radius: 50%; animation: fall-fade 1.5s linear forwards; }
-        @keyframes fall-fade { to { transform: translateY(50px); opacity: 0; } }
+        /* --- VISTA 1: INTERFAZ DEL SOBRE INTERACTIVO --- */
+        .envelope-wrapper {
+            position: relative;
+            width: 380px;
+            height: 280px;
+            background-color: #252629;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7), inset 0 0 20px rgba(0,0,0,0.5);
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+            border-radius: 4px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
 
-        /* COPA ANIMADA */
-        .fa-wine-glass-alt { animation: tilt-shake 2s infinite ease-in-out; }
-        @keyframes tilt-shake { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-15deg); } 75% { transform: rotate(15deg); } }
+        .envelope-wrapper:hover {
+            transform: scale(1.03) rotateX(5deg);
+        }
 
-        /* ESTILOS GENERALES */
-        .shine-text { font-family: 'Great Vibes', cursive; font-size: 3.5rem; color: var(--gold-primary); margin: 10px 0; }
-        .btn-gold { background: var(--gold-primary); color: #111; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block; margin-top: 10px; font-weight: bold; }
-        .info-card { background: #2c2d30; padding: 15px; margin: 10px 0; border: 1px solid #444; }
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 190px solid transparent;
+            border-right: 190px solid transparent;
+            border-top: 140px solid #2e3033;
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.4));
+            transform-origin: top center;
+            transition: transform 0.6s ease-in-out;
+            z-index: 5;
+        }
+
+        .envelope-body {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 190px solid #2a2b2e;
+            border-right: 190px solid #2a2b2e;
+            border-bottom: 140px solid #2c2e30;
+            z-index: 4;
+            border-radius: 0 0 4px 4px;
+        }
+
+        /* Sello de Oro Pulsante */
+        .gold-seal {
+            position: absolute;
+            top: 140px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, var(--gold-light) 0%, var(--gold-primary) 70%, var(--gold-dark) 100%);
+            border-radius: 50%;
+            z-index: 6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5), 0 0 15px rgba(212, 175, 55, 0.5);
+            animation: pulse-seal 2s infinite ease-in-out;
+        }
+
+        .gold-seal svg {
+            width: 35px;
+            height: 35px;
+            color: #111;
+            filter: drop-shadow(0 1px 2px rgba(255,255,255,0.4));
+        }
+
+        @keyframes pulse-seal {
+            0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 4px 10px rgba(0,0,0,0.5), 0 0 10px rgba(212, 175, 55, 0.4); }
+            50% { transform: translate(-50%, -50%) scale(1.08); box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 25px rgba(212, 175, 55, 0.8); }
+            100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 4px 10px rgba(0,0,0,0.5), 0 0 10px rgba(212, 175, 55, 0.4); }
+        }
+
+        /* Tarjeta Previa de Adentro */
+        .inner-card-preview {
+            position: absolute;
+            bottom: 10px;
+            left: 20px;
+            width: 340px;
+            height: 240px;
+            background-color: var(--grey-light);
+            border: 2px solid var(--gold-primary);
+            border-radius: 4px;
+            z-index: 2;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+        }
+
+        /* Corona Flotante Local */
+        .real-crown {
+            width: 80px;
+            height: auto;
+            color: var(--gold-primary);
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.7));
+            margin-bottom: 5px;
+            animation: float-crown 3s infinite ease-in-out;
+        }
+
+        @keyframes float-crown {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); filter: drop-shadow(0 0 14px rgba(212, 175, 55, 0.95)); }
+            100% { transform: translateY(0); }
+        }
+
+        .neon-gold-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            color: #fff;
+            text-shadow: 0 0 5px #fff, 0 0 10px var(--gold-primary), 0 0 20px var(--gold-primary);
+            margin: 5px 0;
+        }
+
+        .subtitle {
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            color: var(--gold-primary);
+            text-transform: uppercase;
+        }
+
+        /* Animación de apertura */
+        .envelope-wrapper.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .envelope-wrapper.open .gold-seal {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .envelope-wrapper.open .inner-card-preview {
+            transform: translateY(-160px) scale(1.05);
+            z-index: 8;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.8);
+        }
+
+        /* --- VISTA 2: INVITACIÓN COMPLETA (PRINCIPAL) --- */
+        .main-invitation-content {
+            width: 100%;
+            max-width: 450px;
+            background: linear-gradient(135deg, #222326 0%, #17181a 100%);
+            border: 3px double var(--gold-primary);
+            border-radius: 8px;
+            padding: 35px 20px;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+            display: none;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 1s ease-in-out;
+            z-index: 20;
+            margin: 20px 10px;
+        }
+
+        .main-invitation-content.visible {
+            display: block;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .shine-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.8rem;
+            background: linear-gradient(to right, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa7c11 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 5px 0 15px 0;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+        }
+
+        /* Galería de Fotos Locales */
+        .photo-gallery {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .client-photo {
+            width: 45%;
+            height: 200px;
+            object-fit: cover;
+            border: 2px solid var(--gold-primary);
+            border-radius: 4px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.5);
+            transition: transform 0.4s ease;
+        }
+
+        .client-photo:hover {
+            transform: scale(1.04) rotate(1deg);
+        }
+
+        /* Contador Regresivo */
+        .countdown-container {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .countdown-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .countdown-number {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gold-light);
+            display: block;
+        }
+
+        .countdown-label {
+            font-size: 0.65rem;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Módulos Informativos */
+        .info-card {
+            background: rgba(44, 45, 48, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .info-card i {
+            font-size: 1.8rem;
+            color: var(--gold-primary);
+            margin-bottom: 10px;
+        }
+
+        .info-card h4 {
+            color: var(--gold-light);
+            margin-bottom: 8px;
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .info-card p {
+            font-size: 0.85rem;
+            color: #ccc;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        /* Botones Premium */
+        .btn-gold {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+            color: #111;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4);
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-primary) 100%);
+        }
+
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+            width: 100%;
+            justify-content: center;
+            font-size: 1rem;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .btn-whatsapp:hover {
+            background: #20ba5a;
+            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
+        }
+
+        /* Mariposas Mágicas */
+        .butterfly {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: radial-gradient(circle, var(--gold-light) 0%, var(--gold-primary) 100%);
+            clip-path: polygon(50% 45%, 0% 0%, 15% 70%, 50% 60%, 85% 70%, 100% 0%);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 15;
+        }
+
+        @keyframes fly-away {
+            0% { transform: translate(0, 0) scale(0.5) rotate(0deg); opacity: 1; }
+            50% { transform: translate(var(--x1), var(--y1)) scale(1) rotate(45deg); opacity: 0.8; }
+            100% { transform: translate(var(--x2), var(--y2)) scale(0.2) rotate(90deg); opacity: 0; }
+        }
+
+        /* Botón de Música Flotante */
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background: rgba(0,0,0,0.7);
+            border: 1px solid var(--gold-primary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--gold-primary);
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
     </style>
 </head>
 <body>
 
-    <!-- REPRODUCTOR -->
-    <audio id="bgMusic" loop><source src="die-with-a-smile.mp3" type="audio/mpeg"></audio>
+    <div class="gold-particles"></div>
 
-    <!-- SOBRE -->
-    <div class="envelope-wrapper" id="envelope">
-        <div class="gold-seal">
-            <svg class="svg-crown" viewBox="0 0 24 24" fill="currentColor"><path d="M2 16.5l3-9.5 4.5 5 2.5-7 2.5 7 4.5-5 3 9.5z"/></svg>
-        </div>
+    <!-- REPRODUCTOR CONFIGURADO CON SU CANCIÓN -->
+    <audio id="bgMusic" loop>
+        <source src="die-with-a-smile.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="music-control" id="musicBtn" style="display: none;">
+        <i class="fas fa-music"></i>
     </div>
 
-    <!-- INVITACIÓN -->
-    <div class="main-invitation-content" id="mainContent">
-        <div class="card-butterfly cb-left" id="bfLeft"></div>
-        <div class="card-butterfly cb-right" id="bfRight"></div>
+    <!-- VISTA 1: EL SOBRE VIRTUAL -->
+    <div class="envelope-wrapper" id="envelope">
+        <div class="envelope-flap"></div>
+        <div class="gold-seal">
+            <!-- Corona Sello Real SVG -->
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M2 16.5l3-9.5 4.5 5 2.5-7 2.5 7 4.5-5 3 9.5z"/>
+            </svg>
+        </div>
+        <div class="inner-card-preview">
+            <!-- Corona Interior SVG -->
+            <svg class="real-crown" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M2 16.5l3-9.5 4.5 5 2.5-7 2.5 7 4.5-5 3 9.5z"/>
+            </svg>
+            <p class="subtitle" style="font-size: 0.7rem; margin: 0;">MIS XV AÑOS</p>
+            <h3 class="neon-gold-text">Alexa</h3>
+            <p style="font-size: 0.7rem; color: rgba(255,255,255,0.6); margin-top: 3px;">¡Toca para abrir!</p>
+        </div>
+        <div class="envelope-body"></div>
+    </div>
 
+    <!-- VISTA 2: INVITACIÓN PRINCIPAL COMPLETA -->
+    <div class="main-invitation-content" id="mainContent">
         <header>
-            <svg class="real-crown" viewBox="0 0 24 24" fill="currentColor"><path d="M2 16.5l3-9.5 4.5 5 2.5-7 2.5 7 4.5-5 3 9.5z"/></svg>
+            <!-- Corona Principal SVG -->
+            <svg class="real-crown" style="width: 100px; margin-bottom: 5px;" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M2 16.5l3-9.5 4.5 5 2.5-7 2.5 7 4.5-5 3 9.5z"/>
+            </svg>
+            <p class="subtitle">MIS QUINCE AÑOS</p>
             <h1 class="shine-text">Alexa</h1>
         </header>
 
-        <div class="info-card">
-            <h4>Pase Familiar</h4>
-            <i class="fas fa-wine-glass-alt"></i>
-            <p>Pases: 4 Personas</p>
+        <!-- Galería de Fotos -->
+        <div class="photo-gallery">
+            <img src="foto1.jpeg" alt="Alexa Foto 1" class="client-photo">
+            <img src="foto2.jpeg" alt="Alexa Foto 2" class="client-photo">
         </div>
-        
-        <a href="https://wa.me/525564855060" class="btn-gold">Confirmar Asistencia</a>
+
+        <p style="font-style: italic; font-size: 0.85rem; color: #ccc; margin: 15px 0;">
+            "Hay momentos en la vida que son inolvidables, pero compartirlos con quienes más amas los hace eternos."
+        </p>
+
+        <!-- Contador Regresivo Enlazado a la Fecha Real -->
+        <div class="countdown-container">
+            <div class="countdown-item"><span class="countdown-number" id="days">00</span><span class="countdown-label">Días</span></div>
+            <div class="countdown-item"><span class="countdown-number" id="hours">00</span><span class="countdown-label">Hrs</span></div>
+            <div class="countdown-item"><span class="countdown-number" id="minutes">00</span><span class="countdown-label">Min</span></div>
+            <div class="countdown-item"><span class="countdown-number" id="seconds">00</span><span class="countdown-label">Seg</span></div>
+        </div>
+
+        <!-- Módulo: Ceremonia Religiosa con su Horario -->
+        <div class="info-card">
+            <i class="fas fa-church"></i>
+            <h4>Sagrada Ceremonia</h4>
+            <p>Acompáñanos a dar gracias en nuestra misa especial religiosa.<br><strong>Hora: 4:00 PM</strong></p>
+            <a href="https://maps.google.com" target="_blank" class="btn-gold"><i class="fas fa-map-marker-alt"></i> Ver Ubicación de Iglesia</a>
+        </div>
+
+        <!-- Módulo: Recepción con su Horario -->
+        <div class="info-card">
+            <i class="fas fa-glass-cheers"></i>
+            <h4>Gran Recepción</h4>
+            <p>¡Celebremos en grande esta noche mágica e inolvidable!<br><strong>Hora: 5:30 PM</strong></p>
+            <a href="https://maps.google.com" target="_blank" class="btn-gold"><i class="fas fa-map-marker-alt"></i> Ver Ubicación del Salón</a>
+        </div>
+
+        <!-- Módulo de la Copa -->
+        <div class="info-card">
+            <i class="fas fa-wine-glass-alt"></i>
+            <h4>Pase Familiar Exclusivo</h4>
+            <p>Hemos reservado con mucho cariño:<br><strong style="font-size: 1.1rem; color: var(--gold-light);">Pases: 4 Personas</strong></p>
+        </div>
+
+        <!-- Confirmación Vía WhatsApp con tu número real -->
+        <div class="info-card" style="border-color: rgba(37, 211, 102, 0.3);">
+            <i class="fab fa-whatsapp" style="color: #25d366;"></i>
+            <h4>Confirmar Asistencia</h4>
+            <p>Por favor confírmanos antes del 31 de Agosto para asegurar tu lugar en nuestra mesa.</p>
+            <a href="https://wa.me/525564855060?text=Hola%20Alexa,%20confirmo%20mi%20asistencia%20a%20tus%20XV%20Años" target="_blank" class="btn-gold btn-whatsapp">
+                <i class="fab fa-whatsapp"></i> Confirmar por WhatsApp
+            </a>
+        </div>
+
+        <footer style="margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(212, 175, 55, 0.15);">
+            <p style="font-size: 0.75rem; color: rgba(255,255,255,0.4); letter-spacing: 1px;">SÁBADO, 19 DE SEPTIEMBRE DE 2026</p>
+        </footer>
     </div>
 
     <script>
         const envelope = document.getElementById('envelope');
         const mainContent = document.getElementById('mainContent');
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
 
+        // Manejo interactivo de apertura del sobre
         envelope.addEventListener('click', () => {
-            envelope.style.display = 'none';
-            mainContent.classList.add('visible');
-            startSparkles();
+            envelope.classList.add('open');
+            createButterflyBurst();
+
+            // Arrancar el tema Die with a Smile
+            bgMusic.play().then(() => {
+                musicBtn.style.display = 'flex';
+            }).catch(err => console.log("Audio esperando interacción"));
+
+            setTimeout(() => {
+                envelope.style.display = 'none';
+                mainContent.classList.add('visible');
+            }, 1200);
         });
 
-        function startSparkles() {
-            setInterval(() => {
-                const bf = Math.random() > 0.5 ? document.getElementById('bfLeft') : document.getElementById('bfRight');
-                const s = document.createElement('div');
-                s.className = 'sparkle';
-                s.style.left = (bf.offsetLeft + 15) + 'px';
-                s.style.top = (bf.offsetTop + 30) + 'px';
-                mainContent.appendChild(s);
-                setTimeout(() => s.remove(), 1500);
-            }, 300);
+        // Botón de Play/Pausa de Música
+        musicBtn.addEventListener('click', () => {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                musicBtn.style.color = 'var(--gold-primary)';
+            } else {
+                bgMusic.pause();
+                musicBtn.style.color = '#777';
+            }
+        });
+
+        // Animación de ráfaga de mariposas
+        function createButterflyBurst() {
+            const container = document.body;
+            for (let i = 0; i < 18; i++) {
+                const b = document.createElement('div');
+                b.classList.add('butterfly');
+                b.style.left = '50%';
+                b.style.top = '50%';
+                
+                const x1 = (Math.random() - 0.5) * 350;
+                const y1 = (Math.random() - 0.5) * 350 - 100;
+                const x2 = (Math.random() - 0.5) * 700;
+                const y2 = (Math.random() - 0.5) * 700 - 200;
+                
+                b.style.setProperty('--x1', `${x1}px`);
+                b.style.setProperty('--y1', `${y1}px`);
+                b.style.setProperty('--x2', `${x2}px`);
+                b.style.setProperty('--y2', `${y2}px`);
+                
+                b.style.animation = `fly-away ${1.4 + Math.random()}s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
+                
+                container.appendChild(b);
+                setTimeout(() => b.remove(), 2500);
+            }
         }
+
+        // Cuenta regresiva real para el 19 de Septiembre de 2026
+        const eventDate = new Date('September 19, 2026 16:00:00').getTime();
+
+        const timer = setInterval(() => {
+            const now = new Date().getTime();
+            const diff = eventDate - now;
+
+            if (diff <= 0) {
+                clearInterval(timer);
+                document.querySelector('.countdown-container').innerHTML = "<p style='color:var(--gold-light); width:100%; text-align:center;'>¡HOY SON LOS XV!</p>";
+                return;
+            }
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = d < 10 ? '0' + d : d;
+            document.getElementById('hours').textContent = h < 10 ? '0' + h : h;
+            document.getElementById('minutes').textContent = m < 10 ? '0' + m : m;
+            document.getElementById('seconds').textContent = s < 10 ? '0' + s : s;
+        }, 1000);
     </script>
 </body>
 </html>
