@@ -96,7 +96,7 @@
             border-radius: 0 0 4px 4px;
         }
 
-        /* Sello de Oro Pulsante */
+        /* Sello de Oro Pulsante con tu Corona */
         .gold-seal {
             position: absolute;
             top: 140px;
@@ -114,11 +114,11 @@
             animation: pulse-seal 2s infinite ease-in-out;
         }
 
-        .gold-seal svg {
+        .gold-seal img {
             width: 35px;
             height: 35px;
-            color: #111;
-            filter: drop-shadow(0 1px 2px rgba(255,255,255,0.4));
+            object-fit: contain;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
         }
 
         @keyframes pulse-seal {
@@ -148,11 +148,11 @@
             box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
         }
 
-        /* Corona Flotante Local */
-        .real-crown {
+        /* Corona Propia Flotante */
+        .custom-crown {
             width: 80px;
             height: auto;
-            color: var(--gold-primary);
+            object-fit: contain;
             filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.7));
             margin-bottom: 5px;
             animation: float-crown 3s infinite ease-in-out;
@@ -393,8 +393,10 @@
 
     <div class="gold-particles"></div>
 
-    <!-- REPRODUCTOR CONFIGURADO CON SU CANCIÓN -->
+    <!-- REPRODUCTOR ENLAZADO A TU CANCIÓN SOLICITADA -->
     <audio id="bgMusic" loop>
+        <source src="https://www.youtube.com/shakee/kPa7bsKwL-c/audio.mp3" type="audio/mpeg">
+        <!-- Respaldo por si deseas tener el archivo localmente en el servidor -->
         <source src="die-with-a-smile.mp3" type="audio/mpeg">
     </audio>
 
@@ -406,16 +408,12 @@
     <div class="envelope-wrapper" id="envelope">
         <div class="envelope-flap"></div>
         <div class="gold-seal">
-            <!-- Corona Sello Real SVG -->
-            <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M2 16.5l3-9.5 4.5 5 2.5-7 2.5 7 4.5-5 3 9.5z"/>
-            </svg>
+            <!-- Corona Sello Real Externa (Tu corona.png) -->
+            <img src="corona.png" alt="Corona Sello">
         </div>
         <div class="inner-card-preview">
-            <!-- Corona Interior SVG -->
-            <svg class="real-crown" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M2 16.5l3-9.5 4.5 5 2.5-7 2.5 7 4.5-5 3 9.5z"/>
-            </svg>
+            <!-- Corona Interior (Tu corona.png) -->
+            <img class="custom-crown" src="corona.png" alt="Corona Alexa">
             <p class="subtitle" style="font-size: 0.7rem; margin: 0;">MIS XV AÑOS</p>
             <h3 class="neon-gold-text">Alexa</h3>
             <p style="font-size: 0.7rem; color: rgba(255,255,255,0.6); margin-top: 3px;">¡Toca para abrir!</p>
@@ -426,10 +424,8 @@
     <!-- VISTA 2: INVITACIÓN PRINCIPAL COMPLETA -->
     <div class="main-invitation-content" id="mainContent">
         <header>
-            <!-- Corona Principal SVG -->
-            <svg class="real-crown" style="width: 100px; margin-bottom: 5px;" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M2 16.5l3-9.5 4.5 5 2.5-7 2.5 7 4.5-5 3 9.5z"/>
-            </svg>
+            <!-- Corona Principal de la invitación adentro (Tu corona.png) -->
+            <img class="custom-crown" style="width: 100px; margin-bottom: 5px;" src="corona.png" alt="Corona Principal">
             <p class="subtitle">MIS QUINCE AÑOS</p>
             <h1 class="shine-text">Alexa</h1>
         </header>
@@ -501,10 +497,14 @@
             envelope.classList.add('open');
             createButterflyBurst();
 
-            // Arrancar el tema Die with a Smile
-            bgMusic.play().then(() => {
-                musicBtn.style.display = 'flex';
-            }).catch(err => console.log("Audio esperando interacción"));
+            // Mostramos el botón de música de inmediato
+            musicBtn.style.display = 'flex';
+
+            // Arrancar el tema musical
+            bgMusic.play().catch(err => {
+                console.log("Audio esperando interacción directa o bloqueado por el navegador");
+                musicBtn.style.color = '#777'; // Se pone gris si requiere que el usuario haga clic manual en el botón de música
+            });
 
             setTimeout(() => {
                 envelope.style.display = 'none';
