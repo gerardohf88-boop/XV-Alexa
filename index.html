@@ -73,7 +73,7 @@
             100% { transform: translateY(-10vh) scale(1.3); opacity: 0; }
         }
 
-        /* --- ESTRUCTURA DEL SOBRE INTERACTIVO VALIJA --- */
+        /* --- ESTRUCTURA DEL SOBRE INTERACTIVO --- */
         .envelope-wrapper {
             position: relative;
             cursor: pointer;
@@ -93,13 +93,15 @@
             transform-style: preserve-3d;
         }
 
-        /* Reemplazo de flores doradas de fondo con ICONO */
-        .envelope-flower-icon {
+        /* Adorno geométrico de fondo en el sobre usando CSS puro */
+        .envelope-deco-bg {
             position: absolute;
-            font-size: 8rem;
-            color: rgba(212,175,55,0.1);
-            bottom: 20px;
-            left: calc(50% - 4rem);
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0.08;
+            background: repeating-linear-gradient(45deg, var(--accent-color), var(--accent-color) 10px, transparent 10px, transparent 20px);
             pointer-events: none;
         }
 
@@ -119,7 +121,6 @@
             transition: transform 0.5s ease, border-top-color 0.5s;
         }
 
-        /* Contorno o "sombra" dorada para que resalte la solapa */
         .flap::after {
             content: '';
             position: absolute;
@@ -133,7 +134,7 @@
             z-index: -1;
         }
 
-        /* Laterales internos del sobre (Efecto bolsillo) */
+        /* Laterales internos del sobre */
         .pocket {
             position: absolute;
             top: 0;
@@ -149,23 +150,29 @@
             pointer-events: none;
         }
 
-        /* Reemplazo de sello de corona con ICONO */
-        .seal-icon {
+        /* Sello hecho con CSS (Corona geométrica estilizada) */
+        .seal-css {
             position: absolute;
-            top: 80px;
-            left: calc(50% - 25px);
+            top: 75px;
+            left: 125px;
             width: 50px;
             height: 50px;
-            font-size: 3rem;
-            color: var(--accent-color);
+            background: radial-gradient(circle, #f3e5ab 0%, var(--accent-color) 100%);
+            border-radius: 50%;
             z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             transition: transform 0.5s ease, opacity 0.3s ease;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
-            text-align: center;
-            line-height: 50px;
         }
 
-        /* Tarjeta pequeña que asoma y luego sale */
+        .seal-css::before {
+            content: '👑';
+            font-size: 1.5rem;
+        }
+
+        /* Tarjeta pequeña interna */
         .letter {
             position: absolute;
             bottom: 10px;
@@ -186,14 +193,14 @@
             text-align: center;
         }
 
-        /* --- ANIMACIONES AL HACER CLIC --- */
+        /* --- ANIMACIONES AL ABRIR --- */
         .envelope-wrapper.open .flap {
             transform: rotateX(180deg);
             z-index: 1;
             border-top-color: var(--envelope-inside);
         }
 
-        .envelope-wrapper.open .seal-icon {
+        .envelope-wrapper.open .seal-css {
             transform: translateY(-50px) scale(0);
             opacity: 0;
         }
@@ -218,32 +225,48 @@
             opacity: 1;
         }
 
-        /* Reemplazo de corona de princesa con ICONO */
-        .luxury-crown-icon {
-            font-size: 5rem;
-            color: var(--accent-color);
-            margin-bottom: 10px;
-            filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.5));
+        /* Corona Vectorial en el Encabezado (CSS puro) */
+        .crown-vector {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 50px;
+            background: var(--accent-color);
+            clip-path: polygon(0% 100%, 100% 100%, 90% 40%, 70% 80%, 50% 10%, 30% 80%, 10% 40%);
+            margin-bottom: 15px;
+            filter: drop-shadow(0px 4px 10px rgba(212,175,55,0.4));
             animation: crownGlow 3s ease-in-out infinite alternate;
         }
 
         @keyframes crownGlow {
             0% { transform: scale(1); filter: drop-shadow(0 4px 8px rgba(212,175,55,0.3)); }
-            100% { transform: scale(1.04); filter: drop-shadow(0 6px 15px rgba(255,255,255,0.6)); }
+            100% { transform: scale(1.05); filter: drop-shadow(0 6px 15px rgba(255,255,255,0.6)); }
         }
 
-        /* Reemplazo de tulipanes dorados con ICONO */
-        .tulip-icon-divider {
-            font-size: 2.5rem;
-            color: rgba(212,175,55,0.85);
-            margin: -10px auto 10px auto;
-            display: block;
-            animation: tulipSway 4s ease-in-out infinite alternate;
+        /* Separador Elegante CSS Línea Dorada con Rombo */
+        .gold-divider-css {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px auto;
+            width: 80%;
         }
 
-        @keyframes tulipSway {
-            0% { transform: rotate(-3deg) scale(0.98); opacity: 0.8; }
-            100% { transform: rotate(3deg) scale(1.02); opacity: 1; }
+        .gold-divider-css::before, .gold-divider-css::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to var(--direction, right), transparent, var(--accent-color));
+        }
+
+        .gold-divider-css::after { --direction: left; }
+
+        .gold-divider-css span {
+            width: 10px;
+            height: 10px;
+            background: var(--accent-color);
+            transform: rotate(45deg);
+            margin: 0 10px;
         }
 
         .shine-text {
@@ -368,20 +391,20 @@
                 <!-- Solapa -->
                 <div class="flap"></div>
                 
-                <!-- Flores de Fondo del sobre (ICONO) -->
-                <i class="fas fa-leaf envelope-flower-icon"></i>
+                <!-- Textura decorativa CSS en el fondo del sobre -->
+                <div class="envelope-deco-bg"></div>
                 
                 <!-- Bolsillo -->
                 <div class="pocket"></div>
                 
-                <!-- Sello de Corona Dorada de Princesa (ICONO) -->
-                <i class="fas fa-crown seal-icon"></i>
+                <!-- Sello de Lacre con Corona CSS -->
+                <div class="seal-css"></div>
                 
-                <!-- Tarjeta que saldrá del interior -->
+                <!-- Tarjeta interna que se desliza -->
                 <div class="letter">
                     <p class="subtitle" style="font-size: 0.7rem; margin: 0;">MIS XV AÑOS</p>
                     <h3 class="shine-text" style="font-size: 1.8rem; margin: 5px 0;">Alexa</h3>
-                    <p style="font-size: 0.75rem; color: #fff; margin: 0;">¡Cargando tu invitación de gala!</p>
+                    <p style="font-size: 0.75rem; color: #fff; margin: 0;">¡Abriendo invitación!</p>
                 </div>
             </div>
         </div>
@@ -398,8 +421,8 @@
     <!-- CONTENIDO GENERAL DE LA INVITACIÓN -->
     <div class="container">
         <header>
-            <!-- CORONA DE PRINCESA CON DIAMANTES (ICONO) -->
-            <i class="fas fa-crown luxury-crown-icon"></i>
+            <!-- Corona estilizada CSS -->
+            <div class="crown-vector"></div>
             <p class="subtitle" style="margin-top: 10px;">MIS QUINCE AÑOS</p>
             <h1 class="shine-text">Alexa</h1>
         </header>
@@ -419,8 +442,8 @@
 
         <!-- MISA -->
         <div class="card">
-            <!-- EMBLEMA DE TULIPANES DORADOS (ICONO) -->
-            <i class="fas fa-leaf tulip-icon-divider"></i>
+            <!-- Separador elegante CSS -->
+            <div class="gold-divider-css"><span></span></div>
             <div style="font-size: 1.8rem; color: var(--accent-color); margin-bottom: 10px;"><i class="fas fa-church"></i></div>
             <h2 class="shine-text">Ceremonia Religiosa</h2>
             <p><strong>Fecha:</strong> 19 de Septiembre de 2026</p>
@@ -434,8 +457,8 @@
 
         <!-- RECEPCIÓN -->
         <div class="card">
-            <!-- EMBLEMA DE TULIPANES DORADOS (ICONO) -->
-            <i class="fas fa-leaf tulip-icon-divider"></i>
+            <!-- Separador elegante CSS -->
+            <div class="gold-divider-css"><span></span></div>
             <div class="cheers-animation"><i class="fas fa-glass-cheers"></i></div>
             <h2 class="shine-text">Recepción</h2>
             <p><strong>Fecha:</strong> 19 de Septiembre de 2026</p>
