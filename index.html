@@ -3,212 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invitación de XV Años</title>
-    <!-- Iconos decorativos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>XV Alexa - Invitación Especial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --color-principal: #2e7d32; /* Cambia este color para el tema general (ej. #1e3a8a para azul) */
-            --color-fondo: #f9f9f9;
-            --color-tarjeta: #ffffff;
-            --texto-oscuro: #333333;
-            --texto-claro: #666666;
-            --fuente-elegante: 'Playfair Display', 'Georgia', serif;
-            --fuente-base: 'Montserrat', 'Arial', sans-serif;
+            --gold: #d4af37;
+            --dark: #1a1a1a;
+        }
+        body { 
+            margin: 0; padding: 0; background-color: #000; height: 100vh; 
+            display: flex; justify-content: center; align-items: center; 
+            overflow: hidden; font-family: 'Montserrat', sans-serif; 
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        /* Sobre 3D */
+        .envelope-container { perspective: 1000px; cursor: pointer; position: relative; }
+        .envelope {
+            width: 300px; height: 200px; background: #e0e0e0;
+            position: relative; transition: transform 0.6s ease;
+            border-radius: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
+        .envelope::before {
+            content: ''; position: absolute; top: 0; left: 0; border-style: solid;
+            border-width: 100px 150px 0 150px; border-color: #c0c0c0 transparent transparent transparent;
+        }
+        .envelope.open { transform: translateY(-150%) rotateX(-10deg); }
 
-        body {
-            font-family: var(--fuente-base);
-            background-color: var(--color-fondo);
-            color: var(--texto-oscuro);
-            line-height: 1.6;
-            display: flex;
-            justify-content: center;
+        /* Invitación dentro del sobre */
+        .card {
+            position: absolute; top: 0; left: 0; width: 300px; height: 200px;
+            background: linear-gradient(135deg, #2c2c2c, #171717);
+            color: #fff; text-align: center; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; border: 2px solid var(--gold);
+            transform: translateY(0); transition: transform 0.8s ease;
+            z-index: -1;
         }
+        .envelope.open + .card { transform: translateY(-100%); z-index: 1; }
 
-        /* Contenedor tipo Landing Page Móvil */
-        .invitation-container {
-            width: 100%;
-            max-width: 480px;
-            background-color: var(--color-tarjeta);
-            min-height: 100vh;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
-            position: relative;
-            padding-bottom: 60px;
+        /* Contenido */
+        .crown { width: 50px; margin-bottom: 5px; }
+        .photo-frame { 
+            width: 60px; height: 60px; border-radius: 50%; 
+            border: 2px solid var(--gold); overflow: hidden; margin: 5px; 
         }
-
-        /* Secciones Generales */
-        section {
-            padding: 40px 20px;
-            text-align: center;
-            border-bottom: 1px solid #eaeaea;
-        }
-
-        .divider {
-            color: var(--color-principal);
-            font-size: 1.2rem;
-            margin: 20px 0;
-        }
-
-        h1, h2, h3 {
-            font-family: var(--fuente-elegante);
-            color: var(--color-principal);
-            margin-bottom: 10px;
-        }
-
-        p {
-            color: var(--texto-claro);
-            font-size: 0.95rem;
-            margin-bottom: 8px;
-        }
-
-        /* Portada */
-        .hero {
-            background: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)), url('https://images.unsplash.com/photo-1549417229-aa67d3263c09?q=80&w=500') no-repeat center/cover;
-            padding: 80px 20px;
-        }
-
-        .hero h2 {
-            font-size: 1.5rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin: 15px 0;
-        }
-
-        /* Botones de Acción */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background-color: var(--color-principal);
-            color: white;
-            text-decoration: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-top: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .btn-whatsapp {
-            background-color: #25D366;
-        }
-
-        /* Tarjetas de detalles */
-        .info-card {
-            background: #fafafa;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 15px 0;
-            border: 1px solid #f0f0f0;
-        }
-
-        .info-card i {
-            font-size: 2rem;
-            color: var(--color-principal);
-            margin-bottom: 10px;
-        }
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+        h1 { font-family: 'Alex Brush'; color: var(--gold); margin: 5px 0; font-size: 2em; }
     </style>
 </head>
 <body>
 
-    <div class="invitation-container">
-
-        <!-- PORTADA -->
-        <section class="hero">
-            <h2>Mis XV Años</h2>
-            <h1>Sofía Valentina</h1>
-            <div class="divider"><i class="fa-solid fa-crown"></i></div>
-            <p>17 de Octubre de 2026</p>
-        </section>
-
-        <!-- PENSAMIENTO -->
-        <section>
-            <p><i>"Hoy empiezo una nueva etapa en mi vida, guiada por el amor de mi familia y la bendición de Dios. Gracias por acompañarme en este momento tan especial."</i></p>
-        </section>
-
-        <!-- PADRES Y PADRINOS -->
-        <section>
-            <h3>Mis Padres</h3>
-            <p><strong>Carlos Mendoza R.</strong></p>
-            <p><strong>Elena Gomez S.</strong></p>
-            <br>
-            <h3>Mis Padrinos</h3>
-            <p><strong>Luis Fernando Gomez</strong></p>
-            <p><strong>Patricia Silva M.</strong></p>
-        </section>
-
-        <!-- UBICACIONES -->
-        <section>
-            <h2>¿Dónde y Cuándo?</h2>
-            
-            <div class="info-card">
-                <i class="fa-solid fa-church"></i>
-                <h3>Ceremonia Religiosa</h3>
-                <p><strong>14:00 hrs</strong></p>
-                <p>Parroquia de Santa María</p>
-                <p>Av. Benito Juárez #123, Centro</p>
-                <!-- Reemplazar enlace con el mapa real -->
-                <a href="https://maps.google.com" target="_blank" class="btn"><i class="fa-solid fa-location-dot"></i> Ver Mapa</a>
+    <div class="envelope-container" onclick="openInvitation()">
+        <div class="envelope" id="env"></div>
+        <div class="card">
+            <img src="corona.png" alt="Corona" class="crown">
+            <div style="display: flex;">
+                <div class="photo-frame"><img src="foto1.jpeg" alt="Foto 1"></div>
+                <div class="photo-frame"><img src="foto2.jpeg" alt="Foto 2"></div>
             </div>
-
-            <div class="info-card">
-                <i class="fa-solid fa-champagne-glasses"></i>
-                <h3>Recepción</h3>
-                <p><strong>16:00 hrs</strong></p>
-                <p>Jardín de los Girasoles</p>
-                <p>Camino Real a Cholula #45, Col. El Ángel</p>
-                <!-- Reemplazar enlace con el mapa real -->
-                <a href="https://maps.google.com" target="_blank" class="btn"><i class="fa-solid fa-location-dot"></i> Ver Mapa</a>
-            </div>
-        </section>
-
-        <!-- DETALLES ADICIONALES -->
-        <section>
-            <h2>Detalles Importantes</h2>
-
-            <div class="info-card">
-                <i class="fa-solid fa-shirt"></i>
-                <h3>Código de Vestimenta</h3>
-                <p>Formal</p>
-                <p><small style="color: #b81414;">*Favor de reservar el color Azul Marino para la Quinceañera</small></p>
-            </div>
-
-            <div class="info-card">
-                <i class="fa-solid fa-envelope-open-text"></i>
-                <h3>Sugerencia de Regalos</h3>
-                <p><strong>Lluvia de Sobres</strong></p>
-                <p>Tu presencia es mi mejor regalo, pero si deseas tener un detalle conmigo, puedes colocarlo en efectivo dentro de un sobre el día del evento.</p>
-            </div>
-        </section>
-
-        <!-- CONFIRMACIÓN -->
-        <section>
-            <h2>Confirmación de Asistencia</h2>
-            <p>Por favor ayúdanos a confirmar tu lugar antes del 15 de Septiembre.</p>
-            <!-- Reemplazar phone= con el número real (con código de país) y el texto deseado -->
-            <a href="https://api.whatsapp.com/send?phone=521234567890&text=Hola!%20Quiero%20confirmar%20mi%20asistencia%20a%20los%20XV%20de%20Sofia" target="_blank" class="btn btn-whatsapp">
-                <i class="fa-brands fa-whatsapp"></i> Confirmar por WhatsApp
-            </a>
-        </section>
-
+            <h1>Alexa</h1>
+            <p>Mis XV Años</p>
+        </div>
     </div>
 
+    <script>
+        function openInvitation() {
+            document.getElementById('env').classList.add('open');
+        }
+    </script>
 </body>
-</html>
+    </html>
+    
