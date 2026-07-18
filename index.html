@@ -352,18 +352,15 @@
             box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
         }
 
-        /* CONTENEDOR Y CONFIGURACIÓN DE MARIPOSAS SVG */
+        /* --- CONFIGURACIÓN DE MARIPOSAS SVG --- */
         .butterfly-svg {
-            position: absolute;
-            width: 32px; /* Un poco más grandes para apreciar el detalle SVG */
-            height: 32px;
-            opacity: 0;
+            position: fixed;
             pointer-events: none;
             z-index: 15;
             transform-origin: center;
         }
 
-        /* Efecto Combinado: Vuelo + Aleteo de alas en 3D */
+        /* Animación de Aleteo 3D genérica */
         .butterfly-svg svg {
             width: 100%;
             height: 100%;
@@ -372,13 +369,32 @@
 
         @keyframes butterfly-flap {
             0% { transform: scaleX(1); }
-            100% { transform: scaleX(0.2); } /* Simula que se cierran las alas */
+            100% { transform: scaleX(0.25); }
         }
 
+        /* 1. Animación exclusiva para la ráfaga inicial del sobre */
         @keyframes fly-away {
             0% { transform: translate(0, 0) scale(0.4) rotate(var(--rot0)); opacity: 1; }
             50% { transform: translate(var(--x1), var(--y1)) scale(1.1) rotate(var(--rot1)); opacity: 0.9; }
             100% { transform: translate(var(--x2), var(--y2)) scale(0.1) rotate(var(--rot2)); opacity: 0; }
+        }
+
+        /* 2. Animación exclusiva para las mariposas interiores de fondo */
+        @keyframes float-up-ambient {
+            0% {
+                transform: translateY(110vh) translateX(0) scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-10vh) translateX(var(--drift-x)) scale(0.8) rotate(var(--drift-rot));
+                opacity: 0;
+            }
         }
 
         /* Botón de Música Flotante */
@@ -453,11 +469,11 @@
     <div class="envelope-wrapper" id="envelope">
         <div class="envelope-flap"></div>
         <div class="gold-seal">
-            <!-- Corona Sello Real Externa (Tu corona.png) -->
+            <!-- Corona Sello Real Externa -->
             <img src="corona.png" alt="Corona Sello">
         </div>
         <div class="inner-card-preview">
-            <!-- Corona Interior (Tu corona.png) -->
+            <!-- Corona Interior -->
             <img class="custom-crown" src="corona.png" alt="Corona Alexa">
             <p class="subtitle" style="font-size: 0.7rem; margin: 0;">MIS XV AÑOS</p>
             <h3 class="neon-gold-text">Alexa</h3>
@@ -469,7 +485,7 @@
     <!-- VISTA 2: INVITACIÓN PRINCIPAL COMPLETA -->
     <div class="main-invitation-content" id="mainContent">
         <header>
-            <!-- Corona Principal de la invitación adentro (Tu corona.png) -->
+            <!-- Corona Principal de la invitación adentro -->
             <img class="custom-crown" style="width: 100px; margin-bottom: 5px;" src="corona.png" alt="Corona Principal">
             <p class="subtitle">MIS QUINCE AÑOS</p>
             <h1 class="shine-text">Alexa</h1>
@@ -485,7 +501,7 @@
             "Hay momentos en la vida que son inolvidables, pero compartirlos con quienes más amas los hace eternos."
         </p>
 
-        <!-- Contador Regresivo Enlazado a la Fecha Real -->
+        <!-- Contador Regresivo -->
         <div class="countdown-container">
             <div class="countdown-item"><span class="countdown-number" id="days">00</span><span class="countdown-label">Días</span></div>
             <div class="countdown-item"><span class="countdown-number" id="hours">00</span><span class="countdown-label">Hrs</span></div>
@@ -493,7 +509,7 @@
             <div class="countdown-item"><span class="countdown-number" id="seconds">00</span><span class="countdown-label">Seg</span></div>
         </div>
 
-        <!-- Módulo: Ceremonia Religiosa con su Horario -->
+        <!-- Módulo: Ceremonia Religiosa -->
         <div class="info-card">
             <i class="fas fa-church"></i>
             <h4>Sagrada Ceremonia</h4>
@@ -501,7 +517,7 @@
             <a href="https://maps.google.com" target="_blank" class="btn-gold"><i class="fas fa-map-marker-alt"></i> Ver Ubicación de Iglesia</a>
         </div>
 
-        <!-- Módulo: Recepción con su Horario -->
+        <!-- Módulo: Recepción -->
         <div class="info-card">
             <i class="fas fa-glass-cheers"></i>
             <h4>Gran Recepción</h4>
@@ -509,7 +525,7 @@
             <a href="https://maps.google.com" target="_blank" class="btn-gold"><i class="fas fa-map-marker-alt"></i> Ver Ubicación del Salón</a>
         </div>
 
-        <!-- Confirmación Vía WhatsApp con tu número real -->
+        <!-- Confirmación Vía WhatsApp -->
         <div class="info-card" style="border-color: rgba(37, 211, 102, 0.3);">
             <i class="fab fa-whatsapp" style="color: #25d366;"></i>
             <h4>Confirmar Asistencia</h4>
@@ -530,12 +546,34 @@
         const bgMusic = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
 
-        // Manejo interactivo de apertura del sobre con audio inmediato incorporado
+        // Paleta de colores Premium Elegante
+        const butterflyColors = [
+            '#d4af37', // Oro clásico
+            '#f3e5ab', // Champaña claro
+            '#f4c2c2', // Oro Rosa
+            '#e5e5e5', // Plata
+            '#b87333'  // Bronce
+        ];
+
+        // Plantilla del Path del SVG de mariposa estilizada
+        function getButterflySVG(color) {
+            return `
+                <svg viewBox="0 0 50 50">
+                    <path fill="${color}" d="M25,18 C23,10 12,8 8,15 C5,20 8,28 24,33 C24,25 25,22 25,18 Z"/>
+                    <path fill="${color}" d="M25,18 C27,10 38,8 42,15 C45,20 42,28 26,33 C26,25 25,22 25,18 Z"/>
+                    <path fill="${color}" opacity="0.85" d="M25,33 C15,30 10,34 9,39 C8,44 14,46 24,37 C24,35 25,34 25,33 Z"/>
+                    <path fill="${color}" opacity="0.85" d="M25,33 C35,30 40,34 41,39 C42,44 36,46 26,37 C26,35 25,34 25,33 Z"/>
+                    <path fill="#222" d="M24.5,12 L25.5,12 L25.5,38 L24.5,38 Z"/>
+                </svg>
+            `;
+        }
+
+        // Manejo interactivo de apertura del sobre
         envelope.addEventListener('click', () => {
             bgMusic.play().catch(error => console.log("La reproducción automática requiere interacción previa"));
             
             envelope.classList.add('open');
-            createButterflyBurst();
+            createInitialBurst(); // Ráfaga explosiva desde el centro
 
             musicBtn.style.display = 'flex';
             musicBtn.style.color = 'var(--gold-primary)';
@@ -543,6 +581,7 @@
             setTimeout(() => {
                 envelope.style.display = 'none';
                 mainContent.classList.add('visible');
+                startAmbientButterflies(); // Iniciar flujo continuo al interior
             }, 1200);
         });
 
@@ -556,60 +595,33 @@
             }
         });
 
-        // ANIMACIÓN DE RÁFAGA CON MARIPOSAS SVG REALES MULTICOLOR
-        function createButterflyBurst() {
+        // 1. RÁFAGA INICIAL (EXPLOSIÓN AL ABRIR EL SOBRE)
+        function createInitialBurst() {
             const container = document.body;
-            
-            // Paleta de colores seleccionados (Gama Premium elegante)
-            const colors = [
-                '#d4af37', // Oro clásico
-                '#f3e5ab', // Vainilla / Champaña claro
-                '#f4c2c2', // Oro Rosa suave
-                '#e5e5e5', // Plata brillante
-                '#b87333'  // Bronce cálido
-            ];
-
-            // Aumentamos a 24 mariposas para cubrir más trayectorias aleatorias
             for (let i = 0; i < 24; i++) {
                 const b = document.createElement('div');
                 b.classList.add('butterfly-svg');
+                b.style.width = '32px';
+                b.style.height = '32px';
                 b.style.left = '50%';
                 b.style.top = '50%';
                 
-                // Seleccionar un color al azar de la paleta premium
-                const randomColor = colors[Math.floor(Math.random() * colors.length)];
-
-                // Inyección del Vector SVG estilizado de una mariposa real
-                b.innerHTML = `
-                    <svg viewBox="0 0 50 50">
-                        <path fill="${randomColor}" d="M25,18 C23,10 12,8 8,15 C5,20 8,28 24,33 C24,25 25,22 25,18 Z"/>
-                        <path fill="${randomColor}" d="M25,18 C27,10 38,8 42,15 C45,20 42,28 26,33 C26,25 25,22 25,18 Z"/>
-                        <path fill="${randomColor}" opacity="0.85" d="M25,33 C15,30 10,34 9,39 C8,44 14,46 24,37 C24,35 25,34 25,33 Z"/>
-                        <path fill="${randomColor}" opacity="0.85" d="M25,33 C35,30 40,34 41,39 C42,44 36,46 26,37 C26,35 25,34 25,33 Z"/>
-                        <path fill="#222" d="M24.5,12 L25.5,12 L25.5,38 L24.5,38 Z"/>
-                    </svg>
-                `;
+                const randomColor = butterflyColors[Math.floor(Math.random() * butterflyColors.length)];
+                b.innerHTML = getButterflySVG(randomColor);
                 
-                // Puntos intermedios y de destino completamente desordenados en 360 grados
                 const x1 = (Math.random() - 0.5) * 400;
                 const y1 = (Math.random() - 0.5) * 400 - 150;
                 const x2 = (Math.random() - 0.5) * 850;
                 const y2 = (Math.random() - 0.5) * 850 - 250;
                 
-                // Rotaciones aleatorias para simular cambios de dirección naturales en el vuelo
-                const rot0 = `${Math.random() * 360}deg`;
-                const rot1 = `${Math.random() * 360}deg`;
-                const rot2 = `${Math.random() * 360}deg`;
-                
                 b.style.setProperty('--x1', `${x1}px`);
                 b.style.setProperty('--y1', `${y1}px`);
                 b.style.setProperty('--x2', `${x2}px`);
                 b.style.setProperty('--y2', `${y2}px`);
-                b.style.setProperty('--rot0', rot0);
-                b.style.setProperty('--rot1', rot1);
-                b.style.setProperty('--rot2', rot2);
+                b.style.setProperty('--rot0', `${Math.random() * 360}deg`);
+                b.style.setProperty('--rot1', `${Math.random() * 360}deg`);
+                b.style.setProperty('--rot2', `${Math.random() * 360}deg`);
                 
-                // Variación sutil en tiempos de vuelo para dispersión orgánica
                 const duration = 1.2 + Math.random() * 0.8;
                 b.style.animation = `fly-away ${duration}s cubic-bezier(0.1, 0.4, 0.2, 1) forwards`;
                 
@@ -618,9 +630,46 @@
             }
         }
 
-        // Cuenta regresiva real para el 19 de Septiembre de 2026
-        const eventDate = new Date('September 19, 2026 16:00:00').getTime();
+        // 2. AMBIENTACIÓN INTERIOR (MARIPOSAS CONSTANTES DE FONDO)
+        let ambientInterval;
+        function startAmbientButterflies() {
+            // Crea una mariposa cada 1.5 segundos para no saturar el rendimiento visual
+            ambientInterval = setInterval(() => {
+                const container = document.body;
+                const b = document.createElement('div');
+                b.classList.add('butterfly-svg');
+                
+                // Tamaños aleatorios sutiles para dar profundidad (entre 20px y 30px)
+                const size = 20 + Math.random() * 10;
+                b.style.width = `${size}px`;
+                b.style.height = `${size}px`;
+                
+                // Posición horizontal inicial aleatoria a lo ancho de la pantalla
+                b.style.left = `${Math.random() * 100}vw`;
+                b.style.top = '0'; // Se controla la altura por CSS Translate Y
+                
+                const randomColor = butterflyColors[Math.floor(Math.random() * butterflyColors.length)];
+                b.innerHTML = getButterflySVG(randomColor);
+                
+                // Desplazamiento horizontal (bamboleo) y rotación final al azar durante el viaje
+                const driftX = (Math.random() - 0.5) * 250;
+                const driftRot = (Math.random() - 0.5) * 90;
+                b.style.setProperty('--drift-x', `${driftX}px`);
+                b.style.setProperty('--drift-rot', `${driftRot}deg`);
+                
+                // Duración de subida lenta (entre 6 y 10 segundos)
+                const duration = 6 + Math.random() * 4;
+                b.style.animation = `float-up-ambient ${duration}s linear forwards`;
+                
+                container.appendChild(b);
+                
+                // Limpieza del elemento al terminar el recorrido
+                setTimeout(() => b.remove(), duration * 1000);
+            }, 1500);
+        }
 
+        // Cuenta regresiva real
+        const eventDate = new Date('September 19, 2026 16:00:00').getTime();
         const timer = setInterval(() => {
             const now = new Date().getTime();
             const diff = eventDate - now;
