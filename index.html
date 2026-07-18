@@ -129,6 +129,19 @@
             border-radius: 0 0 8px 8px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.6);
             transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+
+        /* Animación de apertura del sobre */
+        .envelope-wrapper.open .flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+            border-top-color: var(--envelope-inside);
+        }
+
+        .envelope-wrapper.open .letter {
+            transform: translateY(-80px);
+            z-index: 2;
         }
 
         .envelope-deco-bg {
@@ -154,7 +167,7 @@
             transform-origin: top;
             pointer-events: none;
             z-index: 3;
-            transition: transform 0.5s ease, border-top-color 0.5s;
+            transition: transform 0.6s ease, border-top-color 0.6s;
         }
 
         .flap::after {
@@ -201,6 +214,11 @@
             transition: transform 0.5s ease, opacity 0.3s ease;
         }
 
+        .envelope-wrapper.open .seal-css {
+            transform: translateY(-50px) scale(0);
+            opacity: 0;
+        }
+
         .seal-css::before {
             content: '👑';
             font-size: 1.5rem;
@@ -217,7 +235,7 @@
             border: 2px solid var(--accent-color);
             border-radius: 6px;
             z-index: 2;
-            transition: transform 0.7s ease;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -228,19 +246,19 @@
             box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
         }
 
-        /* FILTRO ENLACE DE CORONA DIRECTA */
+        /* ELEMENTO DE LA CORONA CORREGIDO */
         .real-crown {
-            width: 85px;
+            width: 90px;
             height: auto;
             object-fit: contain;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             filter: drop-shadow(0 0 8px rgba(212,175,55,0.85));
             animation: crownPulse 3s ease-in-out infinite alternate;
         }
 
         @keyframes crownPulse {
             0% { transform: scale(1); filter: drop-shadow(0 0 6px rgba(212,175,55,0.7)); }
-            100% { transform: scale(1.04); filter: drop-shadow(0 0 12px rgba(255,243,168,0.9)); }
+            100% { transform: scale(1.05); filter: drop-shadow(0 0 14px rgba(255,243,168,1)); }
         }
 
         /* TEXTO INTERIOR NEÓN */
@@ -432,9 +450,9 @@
                 <div class="pocket"></div>
                 <div class="seal-css"></div>
                 
-                <!-- TARJETA INTERNA CON ENLACE WEB DIRECTO A LA CORONA -->
+                <!-- ENLACE DIRECTO CORREGIDO PARA LA CORONA REAL -->
                 <div class="letter">
-                    <img src="https://img.freepik.com/psd-gratis/tiara-oro-cristales-claros-tocado-real_405491381.htm" onerror="this.src='https://img.freepik.com/free-psd/gold-tiara-with-clear-crystals-royal-headpiece_23-2151173259.jpg';" alt="Corona Real Dorada" class="real-crown">
+                    <img src="https://img.freepik.com/free-psd/gold-tiara-with-clear-crystals-royal-headpiece_23-2151173259.jpg" alt="Corona Real Dorada" class="real-crown">
                     <p class="subtitle" style="font-size: 0.75rem; margin: 0;">MIS XV AÑOS</p>
                     <h3 class="neon-gold-text">Alexa</h3>
                     <p style="font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 3px;">¡Abriendo invitación!</p>
@@ -454,7 +472,6 @@
     <!-- CONTENIDO GENERAL DE LA INVITACIÓN -->
     <div class="container">
         <header>
-            <!-- Enlace directo aplicado a la corona de la interfaz principal exterior -->
             <img src="https://img.freepik.com/free-psd/gold-tiara-with-clear-crystals-royal-headpiece_23-2151173259.jpg" alt="Corona Real Principal" class="real-crown" style="width: 105px; margin-bottom: 8px;">
             <p class="subtitle" style="margin-top: 5px;">MIS QUINCE AÑOS</p>
             <h1 class="shine-text">Alexa</h1>
@@ -547,4 +564,147 @@
             const documentHeight = Math.max(
                 document.body.scrollHeight, 
                 document.documentElement.scrollHeight,
-    
+                document.body.offsetHeight,
+                document.documentElement.offsetHeight
+            );
+            
+            const butterfly = document.createElement('div');
+            butterfly.classList.add('golden-butterfly');
+            butterfly.innerHTML = butterflySVG;
+
+            const startX = Math.random() * 100; 
+            const startY = Math.random() * documentHeight;
+            const endX = startX + (Math.random() * 40 - 20); 
+            const endY = startY - (Math.random() * 300 + 200);
+
+            const size = Math.random() * 22 + 18; 
+            butterfly.style.width = `${size}px`;
+            butterfly.style.height = `${size}px`;
+            
+            butterfly.style.left = `${startX}vw`;
+            butterfly.style.top = `${startY}px`;
+
+            butterflyContainer.appendChild(butterfly);
+
+            let progress = 0;
+            const speed = Math.random() * 0.0025 + 0.002; 
+            const amplitude = Math.random() * 40 + 15; 
+            const waveFrequency = Math.random() * 0.08 + 0.04;
+
+            function animate() {
+                progress += speed;
+                if (progress >= 1) {
+                    butterfly.remove();
+                } else {
+                    const currentY = startY + (endY - startY) * progress;
+                    const currentX = startX + (endX - startX) * progress + Math.sin(progress * Math.PI * 10 * waveFrequency) * (amplitude / 10);
+                    
+                    butterfly.style.top = `${currentY}px`;
+                    butterfly.style.left = `${currentX}vw`;
+                    butterfly.style.opacity = progress < 0.1 ? progress * 10 : (progress > 0.85 ? (1 - progress) * 6.6 : 0.9);
+
+                    const flap = Math.sin(Date.now() * 0.025) * 0.7 + 0.8;
+                    butterfly.style.transform = `scaleX(${flap}) rotate(${Math.sin(progress * 4) * 20}deg)`;
+
+                    if (Math.random() < 0.25) { 
+                        createSparkleTrail(currentX, currentY, size);
+                    }
+
+                    requestAnimationFrame(animate);
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        function createSparkleTrail(xPercent, yPx, offset) {
+            const trail = document.createElement('div');
+            trail.classList.add('butterfly-trail');
+            
+            const tSize = Math.random() * 5 + 3; 
+            trail.style.width = `${tSize}px`;
+            trail.style.height = `${tSize}px`;
+            
+            trail.style.left = `calc(${xPercent}vw + ${Math.random() * (offset / 2)}px)`;
+            trail.style.top = `${yPx + (Math.random() * (offset / 2))}px`;
+            
+            butterflyContainer.appendChild(trail);
+            
+            setTimeout(() => { trail.remove(); }, 800);
+        }
+
+        // --- 3. MANEJO INTERACTIVO DEL SOBRE ---
+        const wrapper = document.getElementById('envelopeWrapper');
+        const overlay = document.getElementById('envelopeOverlay');
+
+        wrapper.addEventListener('click', () => {
+            wrapper.classList.add('open');
+            startButterflies();
+
+            setTimeout(() => {
+                overlay.classList.add('fade-out');
+                document.body.classList.remove('locked');
+                setTimeout(() => {
+                    if(!isPlaying) toggleMusic();
+                }, 200);
+            }, 1400);
+        });
+
+        // --- 4. API REPRODUCTOR YOUTUBE ---
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0', width: '0', videoId: 'kPa7bsKwL-c', 
+                playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'kPa7bsKwL-c' }
+            });
+        }
+
+        const musicControl = document.getElementById('musicControl');
+        const musicIcon = document.getElementById('musicIcon');
+        const musicStatus = document.getElementById('musicStatus');
+        let isPlaying = false;
+
+        function toggleMusic() {
+            if (!isPlaying) {
+                player.playVideo();
+                musicIcon.className = 'fas fa-pause';
+                musicStatus.innerText = 'Música Activada';
+                isPlaying = true;
+            } else {
+                player.pauseVideo();
+                musicIcon.className = 'fas fa-play';
+                musicStatus.innerText = 'Música Pausada';
+                isPlaying = false;
+            }
+        }
+
+        musicControl.addEventListener('click', toggleMusic);
+
+        // --- 5. CUENTA REGRESIVA ---
+        const eventDate = new Date(2026, 8, 19, 16, 0, 0).getTime();
+
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days < 10 ? "0" + days : days;
+            document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
+            document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+
+            if (distance < 0) {
+                clearInterval(timer);
+                document.querySelector(".countdown").innerHTML = "¡Hoy es mi gran día!";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
