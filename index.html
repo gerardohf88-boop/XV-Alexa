@@ -6,7 +6,7 @@
     <title>Mis XV Años - Alexa</title>
     <!-- Iconos FontAwesome para los botones, copa y WhatsApp -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Fuentes Elegantes (Añadida Alex Brush para una 'A' legible y fluida) -->
+    <!-- Fuentes Elegantes -->
     <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -155,13 +155,13 @@
             100% { transform: translateY(0); }
         }
 
-        /* Fuente Script con Excelente Legibilidad en la Letra A */
+        /* Fuente Script de Alta Legibilidad */
         .neon-gold-text {
             font-family: 'Alex Brush', cursive;
             font-size: 3.2rem;
             color: #fff;
             text-shadow: 0 0 5px #fff, 0 0 10px var(--gold-primary), 0 0 20px var(--gold-primary);
-            margin: 0px 0;
+            margin: 0;
             font-weight: 400;
         }
 
@@ -214,7 +214,7 @@
             transform: scale(1);
         }
 
-        /* Mariposas que arrojan destellos en la tarjeta */
+        /* Mariposas laterales integradas que flotan y sueltan destellos */
         .card-butterfly {
             position: absolute;
             width: 24px;
@@ -395,7 +395,7 @@
             box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
         }
 
-        /* Mariposas Mágicas Flotantes */
+        /* Ráfaga burst de mariposas iniciales */
         .butterfly {
             position: absolute;
             width: 22px;
@@ -413,7 +413,7 @@
             100% { transform: translate(var(--x2), var(--y2)) scale(0.2) rotate(90deg); opacity: 0; }
         }
 
-        /* Botón de Música Flotante */
+        /* Botón de Control Música Fijo */
         .music-control {
             position: fixed;
             bottom: 20px;
@@ -431,16 +431,23 @@
             z-index: 100;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
+
+        /* Contenedor invisible para la API de YouTube */
+        #yt-player {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
 
     <div class="gold-particles"></div>
 
-    <!-- REPRODUCTOR LOCAL CONFIGURADO -->
-    <audio id="bgMusic" loop>
-        <source src="die-with-a-smile.mp3" type="audio/mpeg">
-    </audio>
+    <!-- REPRODUCTOR EN SEGUNDO PLANO DE YOUTUBE (Carga el video de "Die with a smile") -->
+    <div id="yt-player"></div>
 
     <div class="music-control" id="musicBtn" style="display: none;">
         <i class="fas fa-music"></i>
@@ -450,11 +457,11 @@
     <div class="envelope-wrapper" id="envelope">
         <div class="envelope-flap"></div>
         <div class="gold-seal">
-            <!-- TU CORONA PNG EN EL SELLO DEL SOBRE -->
+            <!-- TU CORONA PNG EN EL SELLO -->
             <img src="corona.png" alt="Corona Sello" style="width: 38px; height: auto;">
         </div>
         <div class="inner-card-preview">
-            <!-- TU CORONA PNG INTERIOR -->
+            <!-- TU CORONA PNG EN LA VISTA PREVIA -->
             <img src="corona.png" alt="Corona Vista Previa" class="user-png-crown">
             <p class="subtitle" style="font-size: 0.7rem; margin: 0;">MIS XV AÑOS</p>
             <h3 class="neon-gold-text">Alexa</h3>
@@ -465,12 +472,11 @@
 
     <!-- VISTA 2: INVITACIÓN PRINCIPAL COMPLETA -->
     <div class="main-invitation-content" id="mainContent">
-        <!-- Mariposas laterales integradas en el panel principal -->
         <div class="card-butterfly cb-left" id="bfLeft"></div>
         <div class="card-butterfly cb-right" id="bfRight"></div>
 
         <header>
-            <!-- TU CORONA PNG EN LA INVITACIÓN COMPLETA -->
+            <!-- TU CORONA PNG EN LA CABECERA PRINCIPAL -->
             <img src="corona.png" alt="Corona Principal" class="user-png-crown" style="width: 100px; margin-bottom: 0;">
             <p class="subtitle">MIS QUINCE AÑOS</p>
             <h1 class="shine-text">Alexa</h1>
@@ -486,7 +492,7 @@
             "Hay momentos en la vida que son inolvidables, pero compartirlos con quienes más amas los hace eternos."
         </p>
 
-        <!-- Contador Regresivo Enlazado a la Fecha Real -->
+        <!-- Contador Regresivo -->
         <div class="countdown-container">
             <div class="countdown-item"><span class="countdown-number" id="days">00</span><span class="countdown-label">Días</span></div>
             <div class="countdown-item"><span class="countdown-number" id="hours">00</span><span class="countdown-label">Hrs</span></div>
@@ -494,7 +500,7 @@
             <div class="countdown-item"><span class="countdown-number" id="seconds">00</span><span class="countdown-label">Seg</span></div>
         </div>
 
-        <!-- Módulo: Ceremonia Religiosa con su Horario -->
+        <!-- Módulo: Ceremonia Religiosa -->
         <div class="info-card">
             <i class="fas fa-church"></i>
             <h4>Sagrada Ceremonia</h4>
@@ -502,7 +508,7 @@
             <a href="https://maps.google.com" target="_blank" class="btn-gold"><i class="fas fa-map-marker-alt"></i> Ver Ubicación de Iglesia</a>
         </div>
 
-        <!-- Módulo: Recepción con su Horario -->
+        <!-- Módulo: Recepción -->
         <div class="info-card">
             <i class="fas fa-glass-cheers"></i>
             <h4>Gran Recepción</h4>
@@ -510,7 +516,7 @@
             <a href="https://maps.google.com" target="_blank" class="btn-gold"><i class="fas fa-map-marker-alt"></i> Ver Ubicación del Salón</a>
         </div>
 
-        <!-- Módulo de la Copa TOTALMENTE LIMPIO Y ANIMADO -->
+        <!-- Módulo de la Copa (CORREGIDO Y LIMPIO) -->
         <div class="info-card">
             <i class="fas fa-wine-glass-alt"></i>
             <p style="margin: 5px 0 0 0; font-size: 1.1rem; color: var(--gold-light); font-weight: 600;">Pases: 4 Personas</p>
@@ -531,21 +537,46 @@
         </footer>
     </div>
 
+    <!-- SCRIPT DE CARGA PARA LA API DE YOUTUBE -->
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
         const envelope = document.getElementById('envelope');
         const mainContent = document.getElementById('mainContent');
-        const bgMusic = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
+        let player;
+
+        // Inicializar el reproductor de YouTube con la canción ("Die with a smile")
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('yt-player', {
+                height: '1',
+                width: '1',
+                videoId: 'Kz8T_w8KeeY', // ID oficial del tema en YouTube
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': 'Kz8T_w8KeeY'
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            // El reproductor ya está listo para accionarse cuando se abra el sobre
+        }
 
         // Manejo interactivo de apertura del sobre
         envelope.addEventListener('click', () => {
             envelope.classList.add('open');
             createButterflyBurst();
 
-            // Arrancar el tema musical local
-            bgMusic.play().then(() => {
+            // Activar la reproducción desde YouTube al hacer clic
+            if (player && typeof player.playVideo === 'function') {
+                player.playVideo();
                 musicBtn.style.display = 'flex';
-            }).catch(err => console.log("Audio esperando interacción del dispositivo"));
+            }
 
             setTimeout(() => {
                 envelope.style.display = 'none';
@@ -554,14 +585,15 @@
             }, 1200);
         });
 
-        // Botón de Play/Pausa de Música
+        // Botón Flotante para pausar/reproducir la música de YouTube
         musicBtn.addEventListener('click', () => {
-            if (bgMusic.paused) {
-                bgMusic.play();
-                musicBtn.style.color = 'var(--gold-primary)';
-            } else {
-                bgMusic.pause();
+            const playerState = player.getPlayerState();
+            if (playerState === YT.PlayerState.PLAYING) {
+                player.pauseVideo();
                 musicBtn.style.color = '#777';
+            } else {
+                player.playVideo();
+                musicBtn.style.color = 'var(--gold-primary)';
             }
         });
 
