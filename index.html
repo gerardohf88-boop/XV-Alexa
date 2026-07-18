@@ -4,564 +4,177 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis XV Años - Alexa</title>
-    <!-- Iconos FontAwesome para los botones, copa y WhatsApp -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Fuentes Elegantes -->
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --gold-primary: #d4af37;
             --gold-light: #f3e5ab;
-            --gold-dark: #aa7c11;
             --grey-dark: #1c1d1f;
-            --grey-light: #2c2d30;
-            --text-light: #f5f5f5;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: var(--grey-dark);
-            color: var(--text-light);
-            font-family: 'Montserrat', sans-serif;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: var(--grey-dark); 
+            color: #f5f5f5; 
+            font-family: 'Montserrat', sans-serif; 
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow-x: hidden;
-            perspective: 1000px;
+            display: flex; justify-content: center; align-items: center;
+            overflow-x: hidden; perspective: 1000px;
         }
 
-        /* Brillos de Fondo Estilo Partículas */
-        .gold-particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            background: radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.06) 0%, transparent 45%),
-                        radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.06) 0%, transparent 45%);
-            z-index: 1;
+        /* --- SISTEMA DE BRILLOS Y MARIPOSAS --- */
+        #sparkle-container, #butterfly-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 99;
         }
 
-        /* --- VISTA 1: INTERFAZ DEL SOBRE INTERACTIVO --- */
-        .envelope-wrapper {
-            position: relative;
-            width: 380px;
-            height: 280px;
-            background-color: #252629;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7), inset 0 0 20px rgba(0,0,0,0.5);
-            cursor: pointer;
-            z-index: 10;
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform-style: preserve-3d;
-            border-radius: 4px;
-            border: 1px solid rgba(212, 175, 55, 0.15);
+        .sparkle {
+            position: absolute; width: 4px; height: 4px; background: white; border-radius: 50%;
+            animation: twinkle 2s infinite ease-in-out;
         }
 
-        .envelope-wrapper:hover {
-            transform: scale(1.03) rotateX(5deg);
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.2); }
         }
 
-        .envelope-flap {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-left: 190px solid transparent;
-            border-right: 190px solid transparent;
-            border-top: 140px solid #2e3033;
-            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.4));
-            transform-origin: top center;
-            transition: transform 0.6s ease-in-out;
-            z-index: 5;
-        }
-
-        .envelope-body {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-left: 190px solid #2a2b2e;
-            border-right: 190px solid #2a2b2e;
-            border-bottom: 140px solid #2c2e30;
-            z-index: 4;
-            border-radius: 0 0 4px 4px;
-        }
-
-        /* Sello de Oro Pulsante */
-        .gold-seal {
-            position: absolute;
-            top: 140px;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
-            background: radial-gradient(circle, var(--gold-light) 0%, var(--gold-primary) 70%, var(--gold-dark) 100%);
-            border-radius: 50%;
-            z-index: 6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5), 0 0 15px rgba(212, 175, 55, 0.5);
-            animation: pulse-seal 2s infinite ease-in-out;
-        }
-
-        .gold-seal img {
-            width: 35px;
-            height: 35px;
-            object-fit: contain;
-        }
-
-        @keyframes pulse-seal {
-            0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 4px 10px rgba(0,0,0,0.5), 0 0 10px rgba(212, 175, 55, 0.4); }
-            50% { transform: translate(-50%, -50%) scale(1.08); box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 25px rgba(212, 175, 55, 0.8); }
-            100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 4px 10px rgba(0,0,0,0.5), 0 0 10px rgba(212, 175, 55, 0.4); }
-        }
-
-        /* Tarjeta Previa de Adentro */
-        .inner-card-preview {
-            position: absolute;
-            bottom: 10px;
-            left: 20px;
-            width: 340px;
-            height: 240px;
-            background-color: var(--grey-light);
-            border: 2px solid var(--gold-primary);
-            border-radius: 4px;
-            z-index: 2;
-            padding: 20px;
-            text-align: center;
-            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
-        }
-
-        /* Corona Flotante Local */
-        .real-crown {
-            width: 80px;
-            height: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.7));
-            margin-bottom: 5px;
-            animation: float-crown 3s infinite ease-in-out;
-        }
-
-        @keyframes float-crown {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-5px); filter: drop-shadow(0 0 14px rgba(212, 175, 55, 0.95)); }
-            100% { transform: translateY(0); }
-        }
-
-        .neon-gold-text {
-            font-family: 'Great Vibes', cursive;
-            font-size: 2.5rem;
-            color: #fff;
-            text-shadow: 0 0 5px #fff, 0 0 10px var(--gold-primary), 0 0 20px var(--gold-primary);
-            margin: 5px 0;
-        }
-
-        .subtitle {
-            font-size: 0.75rem;
-            letter-spacing: 4px;
-            color: var(--gold-primary);
-            text-transform: uppercase;
-        }
-
-        /* Animación de apertura */
-        .envelope-wrapper.open .envelope-flap {
-            transform: rotateX(180deg);
-            z-index: 1;
-        }
-
-        .envelope-wrapper.open .gold-seal {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0);
-        }
-
-        .envelope-wrapper.open .inner-card-preview {
-            transform: translateY(-160px) scale(1.05);
-            z-index: 8;
-            box-shadow: 0 10px 35px rgba(0,0,0,0.8);
-        }
-
-        /* --- VISTA 2: INVITACIÓN COMPLETA (PRINCIPAL) --- */
-        .main-invitation-content {
-            width: 100%;
-            max-width: 450px;
-            background: linear-gradient(135deg, #222326 0%, #17181a 100%);
-            border: 3px double var(--gold-primary);
-            border-radius: 8px;
-            padding: 35px 20px;
-            text-align: center;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
-            display: none;
-            opacity: 0;
-            transform: scale(0.9);
-            transition: all 1s ease-in-out;
-            z-index: 20;
-            margin: 20px 10px;
-        }
-
-        .main-invitation-content.visible {
-            display: block;
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .shine-text {
-            font-family: 'Great Vibes', cursive;
-            font-size: 3.8rem;
-            background: linear-gradient(to right, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa7c11 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 5px 0 15px 0;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
-        }
-
-        /* Galería de Fotos Locales */
-        .photo-gallery {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .client-photo {
-            width: 45%;
-            height: 200px;
-            object-fit: cover;
-            border: 2px solid var(--gold-primary);
-            border-radius: 4px;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.5);
-            transition: transform 0.4s ease;
-        }
-
-        .client-photo:hover {
-            transform: scale(1.04) rotate(1deg);
-        }
-
-        /* Contador Regresivo */
-        .countdown-container {
-            display: flex;
-            justify-content: space-between;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 6px;
-            padding: 15px;
-            margin: 20px 0;
-        }
-
-        .countdown-item {
-            flex: 1;
-            text-align: center;
-        }
-
-        .countdown-number {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--gold-light);
-            display: block;
-        }
-
-        .countdown-label {
-            font-size: 0.65rem;
-            color: #aaa;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Módulos Informativos */
-        .info-card {
-            background: rgba(44, 45, 48, 0.6);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 6px;
-            padding: 20px;
-            margin: 15px 0;
-            text-align: center;
-        }
-
-        .info-card i {
-            font-size: 1.8rem;
-            color: var(--gold-primary);
-            margin-bottom: 10px;
-        }
-
-        .info-card h4 {
-            color: var(--gold-light);
-            margin-bottom: 8px;
-            font-size: 1rem;
-            letter-spacing: 1px;
-        }
-
-        .info-card p {
-            font-size: 0.85rem;
-            color: #ccc;
-            line-height: 1.4;
-            margin-bottom: 12px;
-        }
-
-        /* Botones Premium */
-        .btn-gold {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
-            color: #111;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-gold:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4);
-            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-primary) 100%);
-        }
-
-        .btn-whatsapp {
-            background: #25d366;
-            color: white;
-            width: 100%;
-            justify-content: center;
-            font-size: 1rem;
-            padding: 12px;
-            margin-top: 10px;
-        }
-
-        .btn-whatsapp:hover {
-            background: #20ba5a;
-            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
-        }
-
-        /* Mariposas Mágicas */
         .butterfly {
-            position: absolute;
-            width: 22px;
-            height: 22px;
+            position: absolute; width: 25px; height: 25px;
             background: radial-gradient(circle, var(--gold-light) 0%, var(--gold-primary) 100%);
             clip-path: polygon(50% 45%, 0% 0%, 15% 70%, 50% 60%, 85% 70%, 100% 0%);
-            opacity: 0;
-            pointer-events: none;
-            z-index: 15;
+            box-shadow: 0 0 15px var(--gold-primary);
+            transition: transform 5s linear;
         }
 
-        @keyframes fly-away {
-            0% { transform: translate(0, 0) scale(0.5) rotate(0deg); opacity: 1; }
-            50% { transform: translate(var(--x1), var(--y1)) scale(1) rotate(45deg); opacity: 0.8; }
-            100% { transform: translate(var(--x2), var(--y2)) scale(0.2) rotate(90deg); opacity: 0; }
+        /* --- COMPONENTES INTERACTIVOS --- */
+        .clink-animation { animation: clink 2s infinite ease-in-out; display: inline-block; }
+        @keyframes clink {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(15deg); }
         }
 
-        /* Botón de Música Flotante */
-        .music-control {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 45px;
-            height: 45px;
-            background: rgba(0,0,0,0.7);
+        .envelope-wrapper { /* ... Mismo estilo del sobre previo ... */
+            position: relative; width: 380px; height: 280px; background-color: #252629;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7); cursor: pointer; transition: 0.8s;
+        }
+
+        .main-invitation-content {
+            display: none; width: 100%; max-width: 450px; background: #222326;
+            border: 3px double var(--gold-primary); padding: 35px 20px; text-align: center;
+        }
+
+        .main-invitation-content.visible { display: block; }
+
+        .btn-map {
+            transition: all 0.3s ease;
             border: 1px solid var(--gold-primary);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--gold-primary);
-            cursor: pointer;
-            z-index: 100;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            background: rgba(212, 175, 55, 0.1);
         }
+        .btn-map:hover {
+            transform: scale(1.05);
+            background: var(--gold-primary);
+            color: black;
+            box-shadow: 0 0 20px var(--gold-primary);
+        }
+
+        .neon-gold-text { font-family: 'Great Vibes', cursive; color: #fff; text-shadow: 0 0 10px var(--gold-primary); }
     </style>
 </head>
 <body>
 
-    <div class="gold-particles"></div>
+    <div id="sparkle-container"></div>
+    <div id="butterfly-container"></div>
 
-    <!-- REPRODUCTOR CONFIGURADO CON SU CANCIÓN -->
-    <audio id="bgMusic" loop>
-        <source src="die-with-a-smile.mp3" type="audio/mpeg">
-    </audio>
+    <!-- YouTube Player -->
+    <div id="player" style="display:none;"></div>
 
-    <div class="music-control" id="musicBtn" style="display: none;">
-        <i class="fas fa-music"></i>
-    </div>
-
-    <!-- VISTA 1: EL SOBRE VIRTUAL -->
+    <!-- Sobre -->
     <div class="envelope-wrapper" id="envelope">
-        <div class="envelope-flap"></div>
-        <div class="gold-seal">
-            <img src="corona.png" alt="Sello Corona Real">
+        <div style="text-align: center; padding-top: 50px;">
+            <img src="corona.png" style="width: 80px;">
+            <h3>Alexa</h3>
+            <p>Toca para abrir</p>
         </div>
-        <div class="inner-card-preview">
-            <img src="corona.png" alt="Corona Real Dorada" class="real-crown">
-            <p class="subtitle" style="font-size: 0.7rem; margin: 0;">MIS XV AÑOS</p>
-            <h3 class="neon-gold-text">Alexa</h3>
-            <p style="font-size: 0.7rem; color: rgba(255,255,255,0.6); margin-top: 3px;">¡Toca para abrir!</p>
-        </div>
-        <div class="envelope-body"></div>
     </div>
 
-    <!-- VISTA 2: INVITACIÓN PRINCIPAL COMPLETA -->
+    <!-- Contenido Principal -->
     <div class="main-invitation-content" id="mainContent">
-        <header>
-            <img src="corona.png" alt="Corona Real Principal" class="real-crown" style="width: 100px; margin-bottom: 5px;">
-            <p class="subtitle">MIS QUINCE AÑOS</p>
-            <h1 class="shine-text">Alexa</h1>
-        </header>
-
-        <!-- Galería de Fotos -->
-        <div class="photo-gallery">
-            <img src="foto1.jpeg" alt="Alexa Foto 1" class="client-photo">
-            <img src="foto2.jpeg" alt="Alexa Foto 2" class="client-photo">
+        <img src="corona.png" style="width: 80px;">
+        <h1 class="neon-gold-text" style="font-size: 3rem;">Alexa</h1>
+        
+        <div style="display: flex; justify-content: center; gap: 10px;">
+            <img src="foto1.jpeg" style="width: 150px; height: 200px; object-fit: cover;">
+            <img src="foto2.jpeg" style="width: 150px; height: 200px; object-fit: cover;">
         </div>
 
-        <p style="font-style: italic; font-size: 0.85rem; color: #ccc; margin: 15px 0;">
-            "Hay momentos en la vida que son inolvidables, pero compartirlos con quienes más amas los hace eternos."
-        </p>
-
-        <!-- Contador Regresivo Enlazado a la Fecha Real -->
-        <div class="countdown-container">
-            <div class="countdown-item"><span class="countdown-number" id="days">00</span><span class="countdown-label">Días</span></div>
-            <div class="countdown-item"><span class="countdown-number" id="hours">00</span><span class="countdown-label">Hrs</span></div>
-            <div class="countdown-item"><span class="countdown-number" id="minutes">00</span><span class="countdown-label">Min</span></div>
-            <div class="countdown-item"><span class="countdown-number" id="seconds">00</span><span class="countdown-label">Seg</span></div>
-        </div>
-
-        <!-- Módulo: Ceremonia Religiosa con su Horario -->
         <div class="info-card">
-            <i class="fas fa-church"></i>
-            <h4>Sagrada Ceremonia</h4>
-            <p>Acompáñanos a dar gracias en nuestra misa especial religiosa.<br><strong>Hora: 4:00 PM</strong></p>
-            <a href="https://maps.google.com" target="_blank" class="btn-gold"><i class="fas fa-map-marker-alt"></i> Ver Ubicación de Iglesia</a>
+            <h4>Ceremonia Religiosa (4:00 PM)</h4>
+            <a href="https://maps.google.com" class="btn-map">Ver Ubicación Iglesia</a>
         </div>
 
-        <!-- Módulo: Recepción con su Horario -->
         <div class="info-card">
-            <i class="fas fa-glass-cheers"></i>
-            <h4>Gran Recepción</h4>
-            <p>¡Celebremos en grande esta noche mágica e inolvidable!<br><strong>Hora: 5:30 PM</strong></p>
-            <a href="https://maps.google.com" target="_blank" class="btn-gold"><i class="fas fa-map-marker-alt"></i> Ver Ubicación del Salón</a>
+            <h4>Recepción (5:30 PM)</h4>
+            <a href="https://maps.google.com" class="btn-map">Ver Ubicación Salón</a>
         </div>
 
-        <!-- Módulo de la Copa -->
         <div class="info-card">
-            <i class="fas fa-wine-glass-alt"></i>
-            <h4>Pase Familiar Exclusivo</h4>
-            <p>Hemos reservado con mucho cariño:<br><strong style="font-size: 1.1rem; color: var(--gold-light);">Pases: 4 Personas</strong></p>
+            <i class="fas fa-wine-glass-alt clink-animation"></i>
+            <h4>Pases: 4 Personas</h4>
         </div>
 
-        <!-- Confirmación Vía WhatsApp con tu número real -->
-        <div class="info-card" style="border-color: rgba(37, 211, 102, 0.3);">
-            <i class="fab fa-whatsapp" style="color: #25d366;"></i>
-            <h4>Confirmar Asistencia</h4>
-            <p>Por favor confírmanos antes del 31 de Agosto para asegurar tu lugar en nuestra mesa.</p>
-            <a href="https://wa.me/525564855060?text=Hola%20Alexa,%20confirmo%20mi%20asistencia%20a%20tus%20XV%20Años" target="_blank" class="btn-gold btn-whatsapp">
-                <i class="fab fa-whatsapp"></i> Confirmar por WhatsApp
-            </a>
-        </div>
-
-        <footer style="margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(212, 175, 55, 0.15);">
-            <p style="font-size: 0.75rem; color: rgba(255,255,255,0.4); letter-spacing: 1px;">SÁBADO, 19 DE SEPTIEMBRE DE 2026</p>
-        </footer>
+        <a href="https://wa.me/525564855060?text=Confirmo%20asistencia%20XV%20Alexa" class="btn-map" style="padding: 15px; display: block; margin-top: 20px;">
+            Confirmar por WhatsApp
+        </a>
     </div>
 
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        const envelope = document.getElementById('envelope');
-        const mainContent = document.getElementById('mainContent');
-        const bgMusic = document.getElementById('bgMusic');
-        const musicBtn = document.getElementById('musicBtn');
+        // --- LÓGICA DE EFECTOS ---
+        
+        // Destellos (Sparkles)
+        const sContainer = document.getElementById('sparkle-container');
+        setInterval(() => {
+            const s = document.createElement('div');
+            s.className = 'sparkle';
+            s.style.left = Math.random() * 100 + '%';
+            s.style.top = Math.random() * 100 + '%';
+            sContainer.appendChild(s);
+            setTimeout(() => s.remove(), 2000);
+        }, 300);
 
-        // Manejo interactivo de apertura del sobre
-        envelope.addEventListener('click', () => {
-            envelope.classList.add('open');
-            createButterflyBurst();
-
-            // Arrancar el tema Die with a Smile
-            bgMusic.play().then(() => {
-                musicBtn.style.display = 'flex';
-            }).catch(err => console.log("Audio esperando interacción"));
-
-            setTimeout(() => {
-                envelope.style.display = 'none';
-                mainContent.classList.add('visible');
-            }, 1200);
-        });
-
-        // Botón de Play/Pausa de Música
-        musicBtn.addEventListener('click', () => {
-            if (bgMusic.paused) {
-                bgMusic.play();
-                musicBtn.style.color = 'var(--gold-primary)';
-            } else {
-                bgMusic.pause();
-                musicBtn.style.color = '#777';
-            }
-        });
-
-        // Animación de ráfaga de mariposas
-        function createButterflyBurst() {
-            const container = document.body;
-            for (let i = 0; i < 18; i++) {
-                const b = document.createElement('div');
-                b.classList.add('butterfly');
-                b.style.left = '50%';
-                b.style.top = '50%';
-                
-                const x1 = (Math.random() - 0.5) * 350;
-                const y1 = (Math.random() - 0.5) * 350 - 100;
-                const x2 = (Math.random() - 0.5) * 700;
-                const y2 = (Math.random() - 0.5) * 700 - 200;
-                
-                b.style.setProperty('--x1', `${x1}px`);
-                b.style.setProperty('--y1', `${y1}px`);
-                b.style.setProperty('--x2', `${x2}px`);
-                b.style.setProperty('--y2', `${y2}px`);
-                
-                b.style.animation = `fly-away ${1.4 + Math.random()}s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
-                
-                container.appendChild(b);
-                setTimeout(() => b.remove(), 2500);
-            }
+        // Mariposas persistentes (Sistema de vuelo)
+        const bContainer = document.getElementById('butterfly-container');
+        function spawnButterfly() {
+            const b = document.createElement('div');
+            b.className = 'butterfly';
+            b.style.left = '-50px';
+            b.style.top = Math.random() * 100 + '%';
+            bContainer.appendChild(b);
+            
+            const duration = 5000 + Math.random() * 5000;
+            b.animate([
+                { transform: 'translate(0, 0) rotate(0deg)' },
+                { transform: `translate(100vw, ${(Math.random()-0.5)*200}px) rotate(360deg)` }
+            ], { duration: duration, easing: 'linear' });
+            
+            setTimeout(() => b.remove(), duration);
         }
+        setInterval(spawnButterfly, 2000);
 
-        // Cuenta regresiva real para el 19 de Septiembre de 2026
-        const eventDate = new Date('September 19, 2026 16:00:00').getTime();
+        // --- LÓGICA DE APERTURA ---
+        let player;
+        document.getElementById('envelope').addEventListener('click', () => {
+            document.getElementById('envelope').style.display = 'none';
+            document.getElementById('mainContent').classList.add('visible');
+            if(player) player.playVideo();
+        });
 
-        const timer = setInterval(() => {
-            const now = new Date().getTime();
-            const diff = eventDate - now;
-
-            if (diff <= 0) {
-                clearInterval(timer);
-                document.querySelector('.countdown-container').innerHTML = "<p style='color:var(--gold-light)'>¡HOY SON LOS XV!</p>";
-                return;
-            }
-
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
-
-            document.getElementById('days').innerText = d < 10 ? '0' + d : d;
-            document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
-            document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
-            document.getElementById('seconds').innerText = s < 10 ? '0' + s : s;
-        }, 1000);
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                videoId: 'kPa7bsKwL-c',
+                playerVars: { 'autoplay': 0, 'loop': 1, 'playlist': 'kPa7bsKwL-c' }
+            });
+        }
     </script>
 </body>
 </html>
