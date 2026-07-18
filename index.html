@@ -198,6 +198,7 @@
 
         /* --- VISTA 2: INVITACIÓN COMPLETA (PRINCIPAL) --- */
         .main-invitation-content {
+            position: relative;
             width: 100%;
             max-width: 450px;
             background: linear-gradient(135deg, #222326 0%, #17181a 100%);
@@ -218,6 +219,67 @@
             display: block;
             opacity: 1;
             transform: scale(1);
+        }
+
+        /* --- MARIPOSAS AMBIENTALES DE LA INVITACIÓN --- */
+        .card-butterfly {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, var(--gold-light) 0%, var(--gold-primary) 100%);
+            clip-path: polygon(50% 45%, 0% 0%, 15% 70%, 50% 60%, 85% 70%, 100% 0%);
+            filter: drop-shadow(0 0 8px var(--gold-primary));
+            opacity: 0.8;
+            z-index: 25;
+            animation: float-card-bf 4s infinite ease-in-out, flutter-wings 0.3s infinite alternate;
+        }
+        .cb-left { top: 25px; left: 15px; transform: rotate(-15deg); }
+        .cb-right { top: 60px; right: 20px; transform: rotate(20deg); animation-delay: 1.5s; }
+
+        @keyframes float-card-bf {
+            0% { translateY(0px); }
+            50% { transform: translateY(-8px) scale(1.05); }
+            100% { translateY(0px); }
+        }
+        @keyframes flutter-wings {
+            0% { opacity: 0.6; }
+            100% { opacity: 0.9; filter: drop-shadow(0 0 12px var(--gold-light)); }
+        }
+
+        /* Destellos cayendo de las mariposas */
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 6px 2px var(--gold-light), 0 0 2px #fff;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 24;
+            animation: fall-fade 1.8s linear forwards;
+        }
+
+        @keyframes fall-fade {
+            0% { transform: translateY(0) scale(0) rotate(0deg); opacity: 0; }
+            20% { opacity: 1; transform: translateY(5px) scale(1); }
+            100% { transform: translateY(55px) scale(0.2) rotate(180deg); opacity: 0; }
+        }
+
+        /* --- ANIMACIÓN DE COPA (BRINDIS SUAVE) --- */
+        .fa-wine-glass-alt {
+            display: inline-block;
+            animation: tilt-shake 2.5s infinite ease-in-out;
+            transform-origin: bottom center;
+        }
+
+        @keyframes tilt-shake {
+            0% { transform: rotate(0deg); }
+            20% { transform: rotate(-12deg); }
+            40% { transform: rotate(10deg); }
+            60% { transform: rotate(-6deg); }
+            80% { transform: rotate(4deg); }
+            100% { transform: rotate(0deg); }
         }
 
         .shine-text {
@@ -351,7 +413,7 @@
             box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
         }
 
-        /* Mariposas Mágicas */
+        /* Mariposas Mágicas de Ráfaga inicial */
         .butterfly {
             position: absolute;
             width: 22px;
@@ -425,6 +487,11 @@
 
     <!-- VISTA 2: INVITACIÓN PRINCIPAL COMPLETA -->
     <div class="main-invitation-content" id="mainContent">
+        
+        <!-- Mariposas con destellos sobre la invitación -->
+        <div class="card-butterfly cb-left" id="bfLeft"></div>
+        <div class="card-butterfly cb-right" id="bfRight"></div>
+
         <header>
             <!-- Corona Principal SVG -->
             <svg class="real-crown" style="width: 100px; margin-bottom: 5px;" viewBox="0 0 24 24" fill="currentColor">
@@ -468,7 +535,7 @@
             <a href="https://maps.google.com" target="_blank" class="btn-gold"><i class="fas fa-map-marker-alt"></i> Ver Ubicación del Salón</a>
         </div>
 
-        <!-- Módulo de la Copa -->
+        <!-- Módulo de la Copa (Animado Balanceándose) -->
         <div class="info-card">
             <i class="fas fa-wine-glass-alt"></i>
             <h4>Pase Familiar Exclusivo</h4>
@@ -509,6 +576,8 @@
             setTimeout(() => {
                 envelope.style.display = 'none';
                 mainContent.classList.add('visible');
+                // Iniciar motor de destellos de las mariposas fijas
+                startSparkles();
             }, 1200);
         });
 
@@ -523,7 +592,7 @@
             }
         });
 
-        // Animación de ráfaga de mariposas
+        // Animación de ráfaga de mariposas (al abrir)
         function createButterflyBurst() {
             const container = document.body;
             for (let i = 0; i < 18; i++) {
@@ -547,6 +616,37 @@
                 container.appendChild(b);
                 setTimeout(() => b.remove(), 2500);
             }
+        }
+
+        // Generador continuo de destellos para las mariposas fijas de la invitación
+        function startSparkles() {
+            const bfLeft = document.getElementById('bfLeft');
+            const bfRight = document.getElementById('bfRight');
+
+            setInterval(() => {
+                if(mainContent.classList.contains('visible')) {
+                    createSparkleFromElement(bfLeft);
+                    createSparkleFromElement(bfRight);
+                }
+            }, 350); // Frecuencia de caída de los destellos
+        }
+
+        function createSparkleFromElement(element) {
+            const rect = element.getBoundingClientRect();
+            const containerRect = mainContent.getBoundingClientRect();
+            
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            
+            // Posicionar el destello relativo al contenedor principal
+            const leftOffset = (rect.left - containerRect.left) + (rect.width / 2) + (Math.random() * 10 - 5);
+            const topOffset = (rect.top - containerRect.top) + rect.height;
+            
+            sparkle.style.left = `${leftOffset}px`;
+            sparkle.style.top = `${topOffset}px`;
+            
+            mainContent.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 1800);
         }
 
         // Cuenta regresiva real para el 19 de Septiembre de 2026
