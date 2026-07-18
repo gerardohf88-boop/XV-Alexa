@@ -12,6 +12,8 @@
             --accent-color: #d4af37;
             --text-color: #ffffff;
             --text-muted: #cccccc;
+            --envelope-bg: #1e1e1e;
+            --envelope-inside: #252525;
         }
 
         body.locked {
@@ -29,10 +31,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            touch-action: none; /* Controlado por JS en el sobre */
         }
 
-        /* --- INTERFAZ DEL SOBRE INTERACTIVO 3D --- */
+        /* --- CONTENEDOR DE LA PANTALLA INICIAL --- */
         .envelope-overlay {
             position: fixed;
             top: 0;
@@ -45,73 +46,161 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            perspective: 1000px;
             overflow: hidden;
-            transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: opacity 0.8s ease, visibility 0.8s;
         }
 
-        /* Fondo de partículas de diamante */
+        .envelope-overlay.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Destellos estilo Diamante */
         .diamond-sparkle {
             position: absolute;
-            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(212,175,55,0.3) 40%, rgba(212,175,55,0) 70%);
+            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(212,175,55,0.2) 40%, rgba(212,175,55,0) 70%);
             border-radius: 50%;
             pointer-events: none;
             animation: diamondLight 4s infinite ease-in-out;
             mix-blend-mode: screen;
+            z-index: 1;
         }
 
         @keyframes diamondLight {
-            0%, 100% { transform: translateY(100vh) scale(0) rotate(0deg); opacity: 0; }
+            0%, 100% { transform: translateY(100vh) scale(0); opacity: 0; }
             50% { opacity: 1; filter: drop-shadow(0 0 8px #fff); }
-            100% { transform: translateY(-10vh) scale(1.5) rotate(360deg); opacity: 0; }
+            100% { transform: translateY(-10vh) scale(1.3); opacity: 0; }
         }
 
-        /* Contenedor del sobre realista */
-        .envelope-container {
-            width: 90%;
-            max-width: 380px;
-            height: 480px;
+        /* --- ESTRUCTURA DEL SOBRE INTERACTIVO VALIJA --- */
+        .envelope-wrapper {
             position: relative;
-            transform-style: preserve-3d;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.6);
-            border-radius: 12px;
-            background: #1e1e1e;
+            cursor: pointer;
+            z-index: 5;
+            perspective: 1000px;
+            margin-top: 20px;
+        }
+
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background-color: var(--envelope-bg);
             border: 1px solid rgba(212,175,55,0.3);
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            transform-style: preserve-3d;
+        }
+
+        /* Reemplazo de flores doradas de fondo con ICONO */
+        .envelope-flower-icon {
+            position: absolute;
+            font-size: 8rem;
+            color: rgba(212,175,55,0.1);
+            bottom: 20px;
+            left: calc(50% - 4rem);
+            pointer-events: none;
+        }
+
+        /* Solapa superior del sobre */
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid var(--envelope-bg);
+            transform-origin: top;
+            pointer-events: none;
+            z-index: 3;
+            transition: transform 0.5s ease, border-top-color 0.5s;
+        }
+
+        /* Contorno o "sombra" dorada para que resalte la solapa */
+        .flap::after {
+            content: '';
+            position: absolute;
+            top: -103px;
+            left: -150px;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 102px solid rgba(212, 175, 55, 0.4);
+            z-index: -1;
+        }
+
+        /* Laterales internos del sobre (Efecto bolsillo) */
+        .pocket {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid rgba(37,37,37,0.9);
+            border-right: 150px solid rgba(37,37,37,0.9);
+            border-bottom: 100px solid rgba(30,30,30,0.95);
+            border-top: 100px solid transparent;
+            border-radius: 0 0 8px 8px;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        /* Reemplazo de sello de corona con ICONO */
+        .seal-icon {
+            position: absolute;
+            top: 80px;
+            left: calc(50% - 25px);
+            width: 50px;
+            height: 50px;
+            font-size: 3rem;
+            color: var(--accent-color);
+            z-index: 5;
+            transition: transform 0.5s ease, opacity 0.3s ease;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
+            text-align: center;
+            line-height: 50px;
+        }
+
+        /* Tarjeta pequeña que asoma y luego sale */
+        .letter {
+            position: absolute;
+            bottom: 10px;
+            left: 15px;
+            width: 270px;
+            height: 170px;
+            background-color: #2b2b2b;
+            border: 1px solid var(--accent-color);
+            border-radius: 6px;
+            z-index: 2;
+            transition: transform 0.7s ease;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            justify-content: space-between;
-            padding: 30px 20px;
+            padding: 10px;
             box-sizing: border-box;
-            cursor: grab;
-        }
-
-        /* Incrustación de marco floral dorado superior e inferior */
-        .envelope-flowers-top, .envelope-flowers-bottom {
-            width: 100%;
-            max-width: 320px;
-            height: auto;
-            pointer-events: none;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
-        }
-
-        .envelope-content {
             text-align: center;
+        }
+
+        /* --- ANIMACIONES AL HACER CLIC --- */
+        .envelope-wrapper.open .flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+            border-top-color: var(--envelope-inside);
+        }
+
+        .envelope-wrapper.open .seal-icon {
+            transform: translateY(-50px) scale(0);
+            opacity: 0;
+        }
+
+        .envelope-wrapper.open .letter {
+            transform: translateY(-130px);
             z-index: 5;
-            pointer-events: none;
-        }
-
-        /* Indicador animado de deslizar hacia arriba */
-        .swipe-indicator {
-            color: var(--accent-color);
-            font-size: 1.8rem;
-            animation: bounceUp 1.5s infinite;
-            margin-bottom: 5px;
-        }
-
-        @keyframes bounceUp {
-            0%, 100% { transform: translateY(0); opacity: 0.5; }
-            50% { transform: translateY(-12px); opacity: 1; filter: drop-shadow(0 0 8px var(--accent-color)); }
         }
 
         /* --- CONTENEDOR PRINCIPAL INTERIOR --- */
@@ -123,16 +212,16 @@
             text-align: center;
             opacity: 0;
             transition: opacity 1s ease-in-out;
-            transition-delay: 0.4s;
         }
 
         body:not(.locked) .container {
             opacity: 1;
         }
 
-        .luxury-crown {
-            width: 140px;
-            height: auto;
+        /* Reemplazo de corona de princesa con ICONO */
+        .luxury-crown-icon {
+            font-size: 5rem;
+            color: var(--accent-color);
             margin-bottom: 10px;
             filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.5));
             animation: crownGlow 3s ease-in-out infinite alternate;
@@ -143,19 +232,18 @@
             100% { transform: scale(1.04); filter: drop-shadow(0 6px 15px rgba(255,255,255,0.6)); }
         }
 
-        .tulip-divider {
-            width: 100%;
-            max-width: 280px;
-            height: auto;
+        /* Reemplazo de tulipanes dorados con ICONO */
+        .tulip-icon-divider {
+            font-size: 2.5rem;
+            color: rgba(212,175,55,0.85);
             margin: -10px auto 10px auto;
             display: block;
-            opacity: 0.85;
             animation: tulipSway 4s ease-in-out infinite alternate;
         }
 
         @keyframes tulipSway {
-            0% { transform: rotate(-1deg) scale(0.98); opacity: 0.8; }
-            100% { transform: rotate(1deg) scale(1.02); opacity: 1; }
+            0% { transform: rotate(-3deg) scale(0.98); opacity: 0.8; }
+            100% { transform: rotate(3deg) scale(1.02); opacity: 1; }
         }
 
         .shine-text {
@@ -268,23 +356,33 @@
 </head>
 <body class="locked">
 
-    <!-- PANTALLA DE SOBRE 3D CON RECONOCIMIENTO DE DESLIZAMIENTO -->
+    <!-- PANTALLA INICIAL: EL SOBRE INTERACTIVO 3D -->
     <div class="envelope-overlay" id="envelopeOverlay">
-        <div class="envelope-container" id="envelopeContainer">
-            <!-- Flores Doradas Superiores -->
-            <img src="https://i.ibb.co/Lvbq9gN/gold-tulips.png" alt="Flores Superiores" class="envelope-flowers-top">
-            
-            <div class="envelope-content">
-                <p class="subtitle" style="margin-bottom: 5px; color: var(--accent-color);">MIS QUINCE AÑOS</p>
-                <h2 class="shine-text" style="font-size: 2.8rem; margin: 0 0 10px 0;">Alexa</h2>
-                <div style="width: 50px; height: 1px; background-color: var(--accent-color); margin: 15px auto;"></div>
-                <p style="color: #ffffff; font-size: 0.85rem; font-style: italic; letter-spacing: 1px;">Desliza hacia arriba para abrir</p>
-            </div>
+        <div style="text-align: center; z-index: 10; margin-bottom: 10px; padding: 0 20px;">
+            <p class="subtitle" style="margin-bottom: 5px; color: var(--text-muted);">ESTA INVITACIÓN ES ESPECIAL PARA TI</p>
+            <p style="color: var(--accent-color); font-size: 0.9rem; font-style: italic;">Haz clic en el sobre para abrirlo</p>
+        </div>
 
-            <div class="envelope-content" style="margin-bottom: 10px;">
-                <div class="swipe-indicator"><i class="fas fa-chevron-up"></i></div>
-                <!-- Sello de Cera / Emblema -->
-                <img src="https://i.ibb.co/3TLbbyx/luxury-crown.png" alt="Sello Corona" style="width: 60px; height: auto; opacity: 0.9;">
+        <div class="envelope-wrapper" id="envelopeWrapper">
+            <div class="envelope">
+                <!-- Solapa -->
+                <div class="flap"></div>
+                
+                <!-- Flores de Fondo del sobre (ICONO) -->
+                <i class="fas fa-leaf envelope-flower-icon"></i>
+                
+                <!-- Bolsillo -->
+                <div class="pocket"></div>
+                
+                <!-- Sello de Corona Dorada de Princesa (ICONO) -->
+                <i class="fas fa-crown seal-icon"></i>
+                
+                <!-- Tarjeta que saldrá del interior -->
+                <div class="letter">
+                    <p class="subtitle" style="font-size: 0.7rem; margin: 0;">MIS XV AÑOS</p>
+                    <h3 class="shine-text" style="font-size: 1.8rem; margin: 5px 0;">Alexa</h3>
+                    <p style="font-size: 0.75rem; color: #fff; margin: 0;">¡Cargando tu invitación de gala!</p>
+                </div>
             </div>
         </div>
     </div>
@@ -300,15 +398,18 @@
     <!-- CONTENIDO GENERAL DE LA INVITACIÓN -->
     <div class="container">
         <header>
-            <img src="https://i.ibb.co/3TLbbyx/luxury-crown.png" alt="Corona Princesa" class="luxury-crown">
+            <!-- CORONA DE PRINCESA CON DIAMANTES (ICONO) -->
+            <i class="fas fa-crown luxury-crown-icon"></i>
             <p class="subtitle" style="margin-top: 10px;">MIS QUINCE AÑOS</p>
             <h1 class="shine-text">Alexa</h1>
         </header>
 
+        <!-- PRIMERA FOTO -->
         <img src="foto1.jpeg" alt="Alexa" class="invitation-img">
 
         <p>Hay momentos inolvidables que se quedan guardados en el corazón, y compartir mi felicidad contigo hará este día aún más especial.</p>
 
+        <!-- CUENTA REGRESIVA -->
         <div class="countdown">
             <div class="countdown-item"><span id="days">00</span>Días</div>
             <div class="countdown-item"><span id="hours">00</span>Horas</div>
@@ -318,7 +419,8 @@
 
         <!-- MISA -->
         <div class="card">
-            <img src="https://i.ibb.co/Lvbq9gN/gold-tulips.png" alt="Tulipanes Dorados" class="tulip-divider">
+            <!-- EMBLEMA DE TULIPANES DORADOS (ICONO) -->
+            <i class="fas fa-leaf tulip-icon-divider"></i>
             <div style="font-size: 1.8rem; color: var(--accent-color); margin-bottom: 10px;"><i class="fas fa-church"></i></div>
             <h2 class="shine-text">Ceremonia Religiosa</h2>
             <p><strong>Fecha:</strong> 19 de Septiembre de 2026</p>
@@ -327,11 +429,13 @@
             <a href="https://maps.app.goo.gl/mNXgSDCiLDPPqkJd7?g_st=awb" target="_blank" class="btn">Ver mapa de la iglesia</a>
         </div>
 
+        <!-- SEGUNDA FOTO -->
         <img src="foto2.jpeg" alt="Mis XV Años" class="invitation-img">
 
         <!-- RECEPCIÓN -->
         <div class="card">
-            <img src="https://i.ibb.co/Lvbq9gN/gold-tulips.png" alt="Tulipanes Dorados" class="tulip-divider">
+            <!-- EMBLEMA DE TULIPANES DORADOS (ICONO) -->
+            <i class="fas fa-leaf tulip-icon-divider"></i>
             <div class="cheers-animation"><i class="fas fa-glass-cheers"></i></div>
             <h2 class="shine-text">Recepción</h2>
             <p><strong>Fecha:</strong> 19 de Septiembre de 2026</p>
@@ -352,98 +456,33 @@
     </div>
 
     <script>
-        // --- 1. GENERACIÓN DE DESTELLOS DE DIAMANTE ANIMADOS ---
-        const overlay = document.getElementById('envelopeOverlay');
-        for (let i = 0; i < 25; i++) {
+        // --- 1. DESTELLOS DE DIAMANTE DE FONDO ---
+        const overlayBg = document.getElementById('envelopeOverlay');
+        for (let i = 0; i < 20; i++) {
             const sparkle = document.createElement('div');
             sparkle.classList.add('diamond-sparkle');
-            sparkle.style.width = Math.random() * 6 + 3 + 'px';
+            sparkle.style.width = Math.random() * 5 + 3 + 'px';
             sparkle.style.height = sparkle.style.width;
             sparkle.style.left = Math.random() * 100 + 'vw';
             sparkle.style.animationDelay = Math.random() * 5 + 's';
             sparkle.style.animationDuration = Math.random() * 3 + 4 + 's';
-            overlay.appendChild(sparkle);
+            overlayBg.appendChild(sparkle);
         }
 
-        // --- 2. LOGICA JAVASCRIPT GESTO SWIPE UP (DESLIZAR ARRIBA) ---
-        const container = document.getElementById('envelopeContainer');
-        let startY = 0;
-        let currentY = 0;
-        let isDragging = false;
+        // --- 2. MANEJO INTERACTIVO DEL SOBRE (CLICK) ---
+        const wrapper = document.getElementById('envelopeWrapper');
+        const overlay = document.getElementById('envelopeOverlay');
 
-        // Soporte táctil (Celulares)
-        container.addEventListener('touchstart', (e) => {
-            startY = e.touches[0].clientY;
-            isDragging = true;
-            container.style.transition = 'none';
-        }, {passive: true});
-
-        container.addEventListener('touchmove', (e) => {
-            if (!isDragging) return;
-            currentY = e.touches[0].clientY;
-            let deltaY = currentY - startY;
-            
-            // Permitir mover solo hacia arriba de forma fluida
-            if (deltaY < 0) {
-                let dragPercent = Math.abs(deltaY) / window.innerHeight;
-                container.style.transform = `translateY(${deltaY}px) rotateX(${dragPercent * 15}deg) scale(${1 - dragPercent * 0.1})`;
-                overlay.style.backgroundColor = `rgba(30, 30, 30, ${1 - dragPercent * 1.2})`;
-            }
-        }, {passive: true});
-
-        container.addEventListener('touchend', (e) => {
-            if (!isDragging) return;
-            isDragging = false;
-            let totalDeltaY = currentY - startY;
-
-            // Si se deslizó más de 120px hacia arriba, se ejecuta la apertura completa
-            if (totalDeltaY < -120) {
-                triggerOpenEnvelope();
-            } else {
-                // Si no fue suficiente, regresa el sobre a su posición original con rebote
-                container.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-                container.style.transform = 'translateY(0) rotateX(0deg) scale(1)';
-                overlay.style.backgroundColor = '#1e1e1e';
-            }
-        });
-
-        // Soporte para Mouse (PC/Pruebas)
-        container.addEventListener('mousedown', (e) => {
-            startY = e.clientY;
-            isDragging = true;
-            container.style.transition = 'none';
-        });
-
-        window.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            let deltaY = e.clientY - startY;
-            if (deltaY < 0) {
-                container.style.transform = `translateY(${deltaY}px)`;
-            }
-        });
-
-        window.addEventListener('mouseup', (e) => {
-            if (!isDragging) return;
-            isDragging = false;
-            let totalDeltaY = e.clientY - startY;
-            if (totalDeltaY < -100) {
-                triggerOpenEnvelope();
-            } else {
-                container.style.transition = 'transform 0.4s ease';
-                container.style.transform = 'translateY(0)';
-            }
-        });
-
-        function triggerOpenEnvelope() {
-            overlay.style.transition = 'transform 0.9s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease';
-            overlay.style.transform = 'translateY(-100%)';
-            document.body.classList.remove('locked');
-            document.body.style.touchAction = 'auto'; // Habilitar scroll de la página
+        wrapper.addEventListener('click', () => {
+            wrapper.classList.add('open');
             setTimeout(() => {
-                overlay.style.display = 'none';
-                if(!isPlaying) toggleMusic();
-            }, 900);
-        }
+                overlay.classList.add('fade-out');
+                document.body.classList.remove('locked');
+                setTimeout(() => {
+                    if(!isPlaying) toggleMusic();
+                }, 200);
+            }, 1400);
+        });
 
         // --- 3. API REPRODUCTOR YOUTUBE ---
         var tag = document.createElement('script');
