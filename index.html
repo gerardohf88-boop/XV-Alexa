@@ -222,8 +222,8 @@
             <h1>Alexa</h1>
         </header>
 
-        <!-- PRIMERA FOTO -->
-        <img src="foto1.jpg" alt="Alexa" class="invitation-img">
+        <!-- PRIMERA FOTO (CORREGIDA .JPEG) -->
+        <img src="foto1.jpeg" alt="Alexa" class="invitation-img">
 
         <p>Hay momentos inolvidables que se quedan guardados en el corazón, y compartir mi felicidad contigo hará este día aún más especial.</p>
 
@@ -245,8 +245,8 @@
             <a href="https://maps.app.goo.gl/mNXgSDCiLDPPqkJd7?g_st=awb" target="_blank" class="btn">Ver mapa de la iglesia</a>
         </div>
 
-        <!-- SEGUNDA FOTO -->
-        <img src="foto2.jpg" alt="Mis XV Años" class="invitation-img">
+        <!-- SEGUNDA FOTO (CORREGIDA .JPEG) -->
+        <img src="foto2.jpeg" alt="Mis XV Años" class="invitation-img">
 
         <!-- RECEPCIÓN -->
         <div class="card">
@@ -311,11 +311,8 @@
         const envelopeOverlay = document.getElementById('envelopeOverlay');
 
         openBtn.addEventListener('click', () => {
-            // Desliza el sobre hacia arriba
             envelopeOverlay.classList.add('open');
-            // Habilita el scroll de la pagina
             document.body.classList.remove('locked');
-            // Reproduce la musica inmediatamente con la interaccion
             setTimeout(() => {
                 if(!isPlaying) toggleMusic();
             }, 300);
