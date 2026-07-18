@@ -4,177 +4,479 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis XV Años - Alexa</title>
+    <!-- Iconos y Fuentes Premium -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --gold-primary: #d4af37;
             --gold-light: #f3e5ab;
-            --grey-dark: #1c1d1f;
+            --gold-dark: #aa7c11;
+            --grey-dark: #121214;
+            --grey-panel: #1c1d21;
+            --text-light: #f5f5f5;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            background-color: var(--grey-dark); 
-            color: #f5f5f5; 
-            font-family: 'Montserrat', sans-serif; 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            background-color: var(--grey-dark);
+            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
             min-height: 100vh;
-            display: flex; justify-content: center; align-items: center;
-            overflow-x: hidden; perspective: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            perspective: 1000px;
         }
 
-        /* --- SISTEMA DE BRILLOS Y MARIPOSAS --- */
-        #sparkle-container, #butterfly-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 99;
+        /* --- CAPAS DE EFECTOS MÁGICOS (FONDO) --- */
+        #sparkle-canvas, #butterfly-court {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
         }
 
-        .sparkle {
-            position: absolute; width: 4px; height: 4px; background: white; border-radius: 50%;
-            animation: twinkle 2s infinite ease-in-out;
+        /* Destellos dorados en el fondo */
+        .sparkle-glow {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 8px 2px var(--gold-light);
+            animation: flash 2.5s infinite ease-in-out;
         }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0; transform: scale(0.5); }
+        @keyframes flash {
+            0%, 100% { opacity: 0; transform: scale(0.3); }
             50% { opacity: 1; transform: scale(1.2); }
         }
 
-        .butterfly {
-            position: absolute; width: 25px; height: 25px;
-            background: radial-gradient(circle, var(--gold-light) 0%, var(--gold-primary) 100%);
-            clip-path: polygon(50% 45%, 0% 0%, 15% 70%, 50% 60%, 85% 70%, 100% 0%);
-            box-shadow: 0 0 15px var(--gold-primary);
-            transition: transform 5s linear;
+        /* Mariposas Voladoras con Estela */
+        .magic-butterfly {
+            position: absolute;
+            width: 24px;
+            height: 20px;
+            background: var(--gold-primary);
+            clip-path: polygon(50% 45%, 0% 0%, 20% 70%, 50% 55%, 80% 70%, 100% 0%);
+            box-shadow: 0 0 15px 4px var(--gold-light);
+            filter: drop-shadow(0 0 6px var(--gold-primary));
+            animation: flyUpward 9s linear infinite;
         }
 
-        /* --- COMPONENTES INTERACTIVOS --- */
-        .clink-animation { animation: clink 2s infinite ease-in-out; display: inline-block; }
-        @keyframes clink {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(15deg); }
+        @keyframes flyUpward {
+            0% {
+                transform: translateY(105vh) translateX(0) rotate(0deg) scale(0.4);
+                opacity: 0;
+            }
+            10% { opacity: 0.9; }
+            50% {
+                transform: translateY(50vh) translateX(60px) rotate(20deg) scale(0.9);
+            }
+            90% { opacity: 0.8; }
+            100% {
+                transform: translateY(-10vh) translateX(-40px) rotate(-10deg) scale(0.4);
+                opacity: 0;
+            }
         }
 
-        .envelope-wrapper { /* ... Mismo estilo del sobre previo ... */
-            position: relative; width: 380px; height: 280px; background-color: #252629;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7); cursor: pointer; transition: 0.8s;
+        /* --- FASE 1: SOBRE VIRTUAL DE APERTURA --- */
+        .envelope-container {
+            position: relative;
+            width: 360px;
+            height: 260px;
+            background-color: #222326;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.6s ease;
+            border-radius: 4px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
 
-        .main-invitation-content {
-            display: none; width: 100%; max-width: 450px; background: #222326;
-            border: 3px double var(--gold-primary); padding: 35px 20px; text-align: center;
+        .envelope-container:hover {
+            transform: scale(1.04);
         }
 
-        .main-invitation-content.visible { display: block; }
+        .seal-btn {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 20px var(--gold-primary);
+            margin-bottom: 15px;
+            animation: pulseSeal 2s infinite ease-in-out;
+        }
 
-        .btn-map {
-            transition: all 0.3s ease;
+        @keyframes pulseSeal {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 15px var(--gold-primary); }
+            50% { transform: scale(1.08); box-shadow: 0 0 25px var(--gold-light); }
+        }
+
+        .seal-btn img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .envelope-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.8rem;
+            color: #fff;
+            text-shadow: 0 0 10px var(--gold-primary);
+        }
+
+        /* --- FASE 2: PANEL DE INVITACIÓN PRINCIPAL --- */
+        .invitation-card {
+            display: none;
+            width: 92%;
+            max-width: 440px;
+            background: linear-gradient(180deg, #1a1b1e 0%, #111214 100%);
+            border: 3px double var(--gold-primary);
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.9);
+            z-index: 5;
+            margin: 20px 0;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease-out;
+        }
+
+        .invitation-card.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .main-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.8rem;
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #aa7c11);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 5px;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+        }
+
+        /* Galería de Fotos del Cliente */
+        .photo-wrapper {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 22px 0;
+        }
+
+        .photo-item {
+            width: 46%;
+            height: 210px;
+            object-fit: cover;
+            border: 2px solid var(--gold-primary);
+            border-radius: 6px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+            transition: transform 0.3s;
+        }
+
+        .photo-item:hover {
+            transform: scale(1.03) rotate(1deg);
+        }
+
+        /* Módulos de Información Interactivos */
+        .info-panel {
+            background: var(--grey-panel);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            padding: 18px;
+            margin: 16px 0;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        .info-panel h4 {
+            color: var(--gold-light);
+            font-size: 0.95rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .info-panel p {
+            font-size: 0.85rem;
+            color: #ccc;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        /* Botones Estilo Maps Metálicos */
+        .btn-maps-style {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #2c2d30 0%, #1a1b1c 100%);
+            color: var(--gold-light);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
             border: 1px solid var(--gold-primary);
-            background: rgba(212, 175, 55, 0.1);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
         }
-        .btn-map:hover {
+
+        .btn-maps-style:hover {
             transform: scale(1.05);
             background: var(--gold-primary);
-            color: black;
-            box-shadow: 0 0 20px var(--gold-primary);
+            color: #000;
+            box-shadow: 0 0 15px var(--gold-primary);
         }
 
-        .neon-gold-text { font-family: 'Great Vibes', cursive; color: #fff; text-shadow: 0 0 10px var(--gold-primary); }
+        /* Copas con Animación de Brindis Activa */
+        .toast-cup-moving {
+            font-size: 2.5rem;
+            color: var(--gold-primary);
+            display: inline-block;
+            animation: cupToast 2.5s infinite ease-in-out;
+            transform-origin: bottom center;
+            margin-bottom: 5px;
+        }
+
+        @keyframes cupToast {
+            0%, 100% { transform: rotate(0deg); }
+            33% { transform: rotate(-12deg) translateX(-2px); }
+            66% { transform: rotate(12deg) translateX(2px); }
+        }
+
+        /* Botón de Confirmación WhatsApp Premium */
+        .btn-whatsapp-confirm {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #25d366 0%, #1ebd59 100%);
+            color: #fff;
+            text-decoration: none;
+            padding: 14px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(37,211,102,0.3);
+            transition: 0.3s;
+        }
+
+        .btn-whatsapp-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37,211,102,0.5);
+        }
+
+        /* Botón de Control Multimedia Flotante */
+        #audio-trigger-ball {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 46px;
+            height: 46px;
+            background: rgba(0,0,0,0.8);
+            border: 1px solid var(--gold-primary);
+            border-radius: 50%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            color: var(--gold-primary);
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
     </style>
 </head>
 <body>
 
-    <div id="sparkle-container"></div>
-    <div id="butterfly-container"></div>
+    <!-- Capas de efectos globales -->
+    <div id="sparkle-canvas"></div>
+    <div id="butterfly-court"></div>
 
-    <!-- YouTube Player -->
-    <div id="player" style="display:none;"></div>
-
-    <!-- Sobre -->
-    <div class="envelope-wrapper" id="envelope">
-        <div style="text-align: center; padding-top: 50px;">
-            <img src="corona.png" style="width: 80px;">
-            <h3>Alexa</h3>
-            <p>Toca para abrir</p>
-        </div>
+    <!-- REPRODUCTOR SILENCIOSO DE RESPALDO API YOUTUBE -->
+    <div id="yt-hidden-frame" style="position: absolute; top: -9999px; left: -9999px;">
+        <div id="api-player"></div>
     </div>
 
-    <!-- Contenido Principal -->
-    <div class="main-invitation-content" id="mainContent">
-        <img src="corona.png" style="width: 80px;">
-        <h1 class="neon-gold-text" style="font-size: 3rem;">Alexa</h1>
-        
-        <div style="display: flex; justify-content: center; gap: 10px;">
-            <img src="foto1.jpeg" style="width: 150px; height: 200px; object-fit: cover;">
-            <img src="foto2.jpeg" style="width: 150px; height: 200px; object-fit: cover;">
-        </div>
-
-        <div class="info-card">
-            <h4>Ceremonia Religiosa (4:00 PM)</h4>
-            <a href="https://maps.google.com" class="btn-map">Ver Ubicación Iglesia</a>
-        </div>
-
-        <div class="info-card">
-            <h4>Recepción (5:30 PM)</h4>
-            <a href="https://maps.google.com" class="btn-map">Ver Ubicación Salón</a>
-        </div>
-
-        <div class="info-card">
-            <i class="fas fa-wine-glass-alt clink-animation"></i>
-            <h4>Pases: 4 Personas</h4>
-        </div>
-
-        <a href="https://wa.me/525564855060?text=Confirmo%20asistencia%20XV%20Alexa" class="btn-map" style="padding: 15px; display: block; margin-top: 20px;">
-            Confirmar por WhatsApp
-        </a>
+    <!-- Control Flotante de Audio -->
+    <div id="audio-trigger-ball">
+        <i class="fas fa-music"></i>
     </div>
 
+    <!-- FASE 1: APERTURA INTERACTIVA DEL SOBRE -->
+    <div class="envelope-container" id="box-envelope">
+        <div class="seal-btn">
+            <img src="corona.png" alt="Sello Corona">
+        </div>
+        <p style="font-size: 0.65rem; letter-spacing: 3px; color: var(--gold-light);">IN VITACIÓN</p>
+        <h3 class="envelope-title">Alexa</h3>
+        <p style="font-size: 0.7rem; color: #888; margin-top: 10px;">Toca el sello para abrir</p>
+    </div>
+
+    <!-- FASE 2: CONTENIDO DE LA INVITACIÓN DESPLEGADA -->
+    <div class="invitation-card" id="card-panel">
+        <header>
+            <img src="corona.png" style="width: 85px; filter: drop-shadow(0 0 5px var(--gold-primary));" alt="Corona Head">
+            <p style="font-size: 0.7rem; letter-spacing: 5px; color: var(--gold-primary); margin-top: 10px;">MIS QUINCE AÑOS</p>
+            <h1 class="main-title">Alexa</h1>
+        </header>
+
+        <!-- Galería de Fotos Relacionadas -->
+        <div class="photo-wrapper">
+            <img src="foto1.jpeg" alt="Alexa Foto Local 1" class="photo-item">
+            <img src="foto2.jpeg" alt="Alexa Foto Local 2" class="photo-item">
+        </div>
+
+        <p style="font-style: italic; font-size: 0.85rem; color: #bbb; padding: 0 10px; margin-bottom: 20px;">
+            "Hay momentos en la vida que son inolvidables, pero compartirlos con quienes más amas los hace eternos."
+        </p>
+
+        <!-- Módulo Iglesia (Estilo e Interacción de Mapas) -->
+        <div class="info-panel">
+            <i class="fas fa-church" style="font-size: 1.8rem; color: var(--gold-primary); margin-bottom: 8px;"></i>
+            <h4>Ceremonia Religiosa</h4>
+            <p>Acompáñanos a dar gracias en nuestra misa especial.<br><strong>Hora: 4:00 PM</strong></p>
+            <a href="https://maps.google.com" target="_blank" class="btn-maps-style">
+                <i class="fas fa-map-marked-alt"></i> Google Maps Iglesia
+            </a>
+        </div>
+
+        <!-- Módulo Salón (Estilo e Interacción de Mapas) -->
+        <div class="info-panel">
+            <i class="fas fa-glass-cheers" style="font-size: 1.8rem; color: var(--gold-primary); margin-bottom: 8px;"></i>
+            <h4>Gran Recepción</h4>
+            <p>¡Celebremos en grande esta noche mágica!<br><strong>Hora: 5:30 PM</strong></p>
+            <a href="https://maps.google.com" target="_blank" class="btn-maps-style">
+                <i class="fas fa-map-marked-alt"></i> Google Maps Salón
+            </a>
+        </div>
+
+        <!-- Módulo de Pases / Copas Animadas -->
+        <div class="info-panel">
+            <div class="toast-cup-moving">
+                <i class="fas fa-wine-glass-alt"></i>
+            </div>
+            <h4>Pase Familiar</h4>
+            <p>Hemos reservado con mucho cariño:<br>
+            <strong style="font-size: 1.2rem; color: var(--gold-light);">Pases: 4 Personas</strong></p>
+        </div>
+
+        <!-- Confirmación vía WhatsApp -->
+        <div class="info-panel" style="border-color: rgba(37,211,102,0.3);">
+            <i class="fab fa-whatsapp" style="font-size: 1.8rem; color: #25d366; margin-bottom: 5px;"></i>
+            <h4>Confirmar Asistencia</h4>
+            <p>Por favor, confírmanos antes del 31 de Agosto para asegurar tu lugar en nuestra mesa.</p>
+            <a href="https://wa.me/525564855060?text=Hola%20Alexa,%20confirmo%20mi%20asistencia%20a%20tus%20XV%20Años" target="_blank" class="btn-whatsapp-confirm">
+                <i class="fab fa-whatsapp"></i> Confirmar Asistencia
+            </a>
+        </div>
+
+        <footer style="margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(212,175,55,0.2);">
+            <p style="font-size: 0.75rem; color: rgba(255,255,255,0.4); letter-spacing: 2px;">SÁBADO, 19 DE SEPTIEMBRE DE 2026</p>
+        </footer>
+    </div>
+
+    <!-- API DE REPRODUCCIÓN AUTOMÁTICA DE YOUTUBE -->
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        // --- LÓGICA DE EFECTOS ---
-        
-        // Destellos (Sparkles)
-        const sContainer = document.getElementById('sparkle-container');
+        // --- PROCESADOR DE EFECTOS VISUALES EN TIEMPO REAL ---
+
+        // Generador Automático de Brillos de Fondo (Sparkles)
+        const canvas = document.getElementById('sparkle-canvas');
         setInterval(() => {
-            const s = document.createElement('div');
-            s.className = 'sparkle';
-            s.style.left = Math.random() * 100 + '%';
-            s.style.top = Math.random() * 100 + '%';
-            sContainer.appendChild(s);
-            setTimeout(() => s.remove(), 2000);
-        }, 300);
+            const spark = document.createElement('div');
+            spark.className = 'sparkle-glow';
+            spark.style.left = Math.random() * 100 + '%';
+            spark.style.top = Math.random() * 100 + '%';
+            canvas.appendChild(spark);
+            setTimeout(() => spark.remove(), 2500);
+        }, 250);
 
-        // Mariposas persistentes (Sistema de vuelo)
-        const bContainer = document.getElementById('butterfly-container');
-        function spawnButterfly() {
-            const b = document.createElement('div');
-            b.className = 'butterfly';
-            b.style.left = '-50px';
-            b.style.top = Math.random() * 100 + '%';
-            bContainer.appendChild(b);
-            
-            const duration = 5000 + Math.random() * 5000;
-            b.animate([
-                { transform: 'translate(0, 0) rotate(0deg)' },
-                { transform: `translate(100vw, ${(Math.random()-0.5)*200}px) rotate(360deg)` }
-            ], { duration: duration, easing: 'linear' });
-            
-            setTimeout(() => b.remove(), duration);
+        // Generador Continuo de Mariposas con Estela Dorada
+        const court = document.getElementById('butterfly-court');
+        function releaseButterfly() {
+            const butterfly = document.createElement('div');
+            butterfly.className = 'magic-butterfly';
+            butterfly.style.left = Math.random() * 90 + '%';
+            // Variación de velocidad aleatoria para naturalidad
+            butterfly.style.animationDuration = (6 + Math.random() * 5) + 's';
+            court.appendChild(butterfly);
+            setTimeout(() => butterfly.remove(), 10000);
         }
-        setInterval(spawnButterfly, 2000);
+        // Iniciar flujo constante
+        setInterval(releaseButterfly, 1800);
 
-        // --- LÓGICA DE APERTURA ---
-        let player;
-        document.getElementById('envelope').addEventListener('click', () => {
-            document.getElementById('envelope').style.display = 'none';
-            document.getElementById('mainContent').classList.add('visible');
-            if(player) player.playVideo();
-        });
+        // --- SISTEMA AUDIOVISUAL INTEGRADO (YOUTUBE API) ---
+        let ytPlayer;
+        let musicActive = false;
+        const triggerBall = document.getElementById('audio-trigger-ball');
 
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                videoId: 'kPa7bsKwL-c',
-                playerVars: { 'autoplay': 0, 'loop': 1, 'playlist': 'kPa7bsKwL-c' }
+            ytPlayer = new YT.Player('api-player', {
+                videoId: 'kPa7bsKwL-c', // ID Directo del Video de Youtube
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': 'kPa7bsKwL-c',
+                    'modestbranding': 1,
+                    'rel': 0
+                }
             });
         }
+
+        // --- MANEJADOR DE INTERACCIÓN DE APERTURA ---
+        const envelopeBox = document.getElementById('box-envelope');
+        const cardPanel = document.getElementById('card-panel');
+
+        envelopeBox.addEventListener('click', () => {
+            // Ocultar sobre y desplegar interfaz principal animada
+            envelopeBox.style.display = 'none';
+            cardPanel.classList.add('active');
+
+            // Forzar disparo y desmutear el reproductor multimedia de YouTube
+            if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+                ytPlayer.playVideo();
+                ytPlayer.unMute();
+                musicActive = true;
+                triggerBall.style.display = 'flex';
+                triggerBall.style.color = 'var(--gold-primary)';
+            }
+        });
+
+        // Botón Alternador Play/Pausa Flotante
+        triggerBall.addEventListener('click', () => {
+            if (musicActive) {
+                ytPlayer.pauseVideo();
+                musicActive = false;
+                triggerBall.style.color = '#666';
+            } else {
+                ytPlayer.playVideo();
+                musicActive = true;
+                triggerBall.style.color = 'var(--gold-primary)';
+            }
+        });
     </script>
 </body>
 </html>
