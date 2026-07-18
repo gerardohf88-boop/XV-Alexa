@@ -68,7 +68,7 @@
         }
 
         @keyframes trailFade {
-            0% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 2px #fff); }
+            0 { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 2px #fff); }
             100% { transform: scale(0); opacity: 0; }
         }
 
@@ -131,7 +131,7 @@
             transform-style: preserve-3d;
         }
 
-        /* --- ANIMACIONES DE APERTURA NATIVAS CSS --- */
+        /* ANIMACIONES DE APERTURA NATIVAS CSS */
         .envelope-wrapper.open .flap {
             transform: rotateX(180deg);
             z-index: 1;
@@ -245,20 +245,23 @@
             box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
         }
 
+        /* AJUSTES PARA LA NUEVA CORONA REAL */
         .real-crown {
-            width: 90px;
+            width: 100px;
             height: auto;
             object-fit: contain;
-            margin-bottom: 8px;
-            filter: drop-shadow(0 0 8px rgba(212,175,55,0.85));
+            margin-bottom: 6px;
+            /* Resalta los diamantes y añade un aura dorada */
+            filter: drop-shadow(0 0 10px rgba(212,175,55,0.6)) contrast(1.1);
             animation: crownPulse 3s ease-in-out infinite alternate;
         }
 
         @keyframes crownPulse {
-            0% { transform: scale(1); filter: drop-shadow(0 0 6px rgba(212,175,55,0.7)); }
-            100% { transform: scale(1.05); filter: drop-shadow(0 0 14px rgba(255,243,168,1)); }
+            0% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(212,175,55,0.5)) contrast(1.1); }
+            100% { transform: scale(1.04); filter: drop-shadow(0 0 16px rgba(255,243,168,0.85)) contrast(1.15); }
         }
 
+        /* TEXTO INTERIOR NEÓN */
         .neon-gold-text {
             font-size: 2.2rem;
             margin: 2px 0;
@@ -447,9 +450,9 @@
                 <div class="pocket"></div>
                 <div class="seal-css"></div>
                 
-                <!-- TARJETA INTERNA CON LA IMAGEN DE LA CORONA CORREGIDA -->
+                <!-- NUEVA CORONA ASIGNADA LOCALMENTE -->
                 <div class="letter">
-                    <img src="https://img.freepik.com/free-psd/gold-tiara-with-clear-crystals-royal-headpiece_23-2151173259.jpg" alt="Corona Real Dorada" class="real-crown">
+                    <img src="corona.png" alt="Corona Real Dorada" class="real-crown">
                     <p class="subtitle" style="font-size: 0.75rem; margin: 0;">MIS XV AÑOS</p>
                     <h3 class="neon-gold-text">Alexa</h3>
                     <p style="font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 3px;">¡Abriendo invitación!</p>
@@ -469,7 +472,8 @@
     <!-- CONTENIDO GENERAL DE LA INVITACIÓN -->
     <div class="container">
         <header>
-            <img src="https://img.freepik.com/free-psd/gold-tiara-with-clear-crystals-royal-headpiece_23-2151173259.jpg" alt="Corona Real Principal" class="real-crown" style="width: 105px; margin-bottom: 8px;">
+            <!-- NUEVA CORONA ASIGNADA EN LA SECCIÓN PRINCIPAL -->
+            <img src="corona.png" alt="Corona Real Principal" class="real-crown" style="width: 120px; margin-bottom: 8px;">
             <p class="subtitle" style="margin-top: 5px;">MIS QUINCE AÑOS</p>
             <h1 class="shine-text">Alexa</h1>
         </header>
@@ -622,23 +626,21 @@
             trail.style.height = `${tSize}px`;
             
             trail.style.left = `calc(${xPercent}vw + ${Math.random() * (offset / 2)}px)`;
-            trail.style.top = `${yPx + (Math.random() * (offset / 2))}px`;
+            trail.style.top = `${yPx + (Math.random() * (offset / 2))}`;
             
             butterflyContainer.appendChild(trail);
             
             setTimeout(() => { trail.remove(); }, 800);
         }
 
-        // --- 3. CORRECCIÓN: MANEJO INTERACTIVO DEL SOBRE ---
+        // --- 3. MANEJO INTERACTIVO DEL SOBRE ---
         const wrapper = document.getElementById('envelopeWrapper');
         const overlay = document.getElementById('envelopeOverlay');
 
         wrapper.addEventListener('click', () => {
-            // Añade formalmente la clase de apertura al contenedor
             wrapper.classList.add('open');
             startButterflies();
 
-            // Retraso controlado para permitir que la animación CSS termine de ejecutarse
             setTimeout(() => {
                 overlay.classList.add('fade-out');
                 document.body.classList.remove('locked');
