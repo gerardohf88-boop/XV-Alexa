@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis XV Años - Alexa</title>
+    <!-- Iconos FontAwesome para la Copa, WhatsApp y Ubicaciones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fuentes Elegantes -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --gold-primary: #d4af37;
@@ -18,12 +22,12 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Playfair Display', 'Didot', 'Georgia', serif;
         }
 
         body {
             background-color: var(--grey-dark);
             color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -32,7 +36,7 @@
             perspective: 1000px;
         }
 
-        /* Sistema de Brillos de Fondo */
+        /* Sistema de Brillos de Fondo Estilo Partículas */
         .gold-particles {
             position: fixed;
             top: 0;
@@ -40,18 +44,18 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            background: radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
-                        radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.05) 0%, transparent 40%);
+            background: radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.06) 0%, transparent 45%),
+                        radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.06) 0%, transparent 45%);
             z-index: 1;
         }
 
-        /* CONTENEDOR INTERACTIVO DEL SOBRE */
+        /* --- VISTA 1: INTERFAZ DEL SOBRE INTERACTIVO --- */
         .envelope-wrapper {
             position: relative;
             width: 380px;
             height: 280px;
             background-color: #252629;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,0,0,0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7), inset 0 0 20px rgba(0,0,0,0.5);
             cursor: pointer;
             z-index: 10;
             transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -61,10 +65,9 @@
         }
 
         .envelope-wrapper:hover {
-            transform: scale(1.02) rotateX(5deg);
+            transform: scale(1.03) rotateX(5deg);
         }
 
-        /* Solapa Superior */
         .envelope-flap {
             position: absolute;
             top: 0;
@@ -74,13 +77,12 @@
             border-left: 190px solid transparent;
             border-right: 190px solid transparent;
             border-top: 140px solid #2e3033;
-            filter: drop-shadow(0 4px 5px rgba(0,0,0,0.4));
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.4));
             transform-origin: top center;
             transition: transform 0.6s ease-in-out;
             z-index: 5;
         }
 
-        /* Cuerpo del Sobre Inferior/Laterales */
         .envelope-body {
             position: absolute;
             bottom: 0;
@@ -94,38 +96,37 @@
             border-radius: 0 0 4px 4px;
         }
 
-        /* Sello de Oro que parpadea/pulsa */
+        /* Sello de Oro Pulsante */
         .gold-seal {
             position: absolute;
             top: 140px;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 55px;
-            height: 55px;
+            width: 60px;
+            height: 60px;
             background: radial-gradient(circle, var(--gold-light) 0%, var(--gold-primary) 70%, var(--gold-dark) 100%);
             border-radius: 50%;
             z-index: 6;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5), 0 0 15px rgba(212, 175, 55, 0.4);
-            transition: all 0.5s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5), 0 0 15px rgba(212, 175, 55, 0.5);
             animation: pulse-seal 2s infinite ease-in-out;
         }
 
         .gold-seal img {
-            width: 32px;
-            height: 32px;
+            width: 35px;
+            height: 35px;
             object-fit: contain;
         }
 
         @keyframes pulse-seal {
             0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 4px 10px rgba(0,0,0,0.5), 0 0 10px rgba(212, 175, 55, 0.4); }
-            50% { transform: translate(-50%, -50%) scale(1.06); box-shadow: 0 4px 15px rgba(0,0,0,0.4), 0 0 25px rgba(212, 175, 55, 0.8); }
+            50% { transform: translate(-50%, -50%) scale(1.08); box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 25px rgba(212, 175, 55, 0.8); }
             100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 4px 10px rgba(0,0,0,0.5), 0 0 10px rgba(212, 175, 55, 0.4); }
         }
 
-        /* Tarjeta Interior Asomándose */
+        /* Tarjeta Previa de Adentro */
         .inner-card-preview {
             position: absolute;
             bottom: 10px;
@@ -143,42 +144,41 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
         }
 
-        /* Efecto de Corona de Alta Fidelidad */
+        /* Corona Flotante de Alta Fidelidad */
         .real-crown {
-            width: 75px;
+            width: 80px;
             height: auto;
             object-fit: contain;
-            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.7));
             margin-bottom: 5px;
             animation: float-crown 3s infinite ease-in-out;
         }
 
         @keyframes float-crown {
             0% { transform: translateY(0); }
-            50% { transform: translateY(-4px); filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.9)); }
+            50% { transform: translateY(-5px); filter: drop-shadow(0 0 14px rgba(212, 175, 55, 0.95)); }
             100% { transform: translateY(0); }
         }
 
-        /* Textos de Neón Dorado */
         .neon-gold-text {
-            font-size: 2.2rem;
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
             color: #fff;
-            text-shadow: 0 0 5px #fff, 0 0 10px var(--gold-primary), 0 0 20px var(--gold-primary), 0 0 30px var(--gold-dark);
+            text-shadow: 0 0 5px #fff, 0 0 10px var(--gold-primary), 0 0 20px var(--gold-primary);
             margin: 5px 0;
-            font-family: 'Great Vibes', 'Bickham Script Pro', cursive, serif;
         }
 
         .subtitle {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             letter-spacing: 4px;
             color: var(--gold-primary);
             text-transform: uppercase;
         }
 
-        /* ESTADO ABIERTO (ANIMACIÓN DEL SOBRE) */
+        /* Transición de Apertura */
         .envelope-wrapper.open .envelope-flap {
             transform: rotateX(180deg);
             z-index: 1;
@@ -187,64 +187,59 @@
         .envelope-wrapper.open .gold-seal {
             opacity: 0;
             transform: translate(-50%, -50%) scale(0);
-            pointer-events: none;
         }
 
         .envelope-wrapper.open .inner-card-preview {
             transform: translateY(-160px) scale(1.05);
             z-index: 8;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.8);
         }
 
-        /* CONTENIDO PRINCIPAL DE LA INVITACIÓN (OCULTO AL INICIO) */
+        /* --- VISTA 2: INVITACIÓN COMPLETA (PRINCIPAL) --- */
         .main-invitation-content {
-            position: absolute;
-            top: 40px;
             width: 100%;
-            max-width: 500px;
+            max-width: 450px;
             background: linear-gradient(135deg, #222326 0%, #17181a 100%);
             border: 3px double var(--gold-primary);
             border-radius: 8px;
-            padding: 40px 30px;
+            padding: 35px 20px;
             text-align: center;
             box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+            display: none; /* Se activa con JS */
             opacity: 0;
-            transform: scale(0.8) translateY(50px);
-            transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            pointer-events: none;
-            z-index: -1;
+            transform: scale(0.9);
+            transition: all 1s ease-in-out;
+            z-index: 20;
+            margin: 20px 10px;
         }
 
         .main-invitation-content.visible {
-            position: relative;
+            display: block;
             opacity: 1;
-            transform: scale(1) translateY(0);
-            pointer-events: auto;
-            z-index: 20;
+            transform: scale(1);
         }
 
-        /* Cabecera Principal */
         .shine-text {
-            font-size: 3.5rem;
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.8rem;
             background: linear-gradient(to right, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa7c11 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin: 10px 0;
-            font-family: 'Great Vibes', 'Bickham Script Pro', cursive, serif;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+            margin: 5px 0 15px 0;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
         }
 
-        /* Galería de Fotos del Cliente */
+        /* Galería de Fotos */
         .photo-gallery {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             justify-content: center;
-            margin: 25px 0;
+            margin: 20px 0;
         }
 
         .client-photo {
-            width: 130px;
-            height: 180px;
+            width: 45%;
+            height: 200px;
             object-fit: cover;
             border: 2px solid var(--gold-primary);
             border-radius: 4px;
@@ -253,30 +248,113 @@
         }
 
         .client-photo:hover {
-            transform: scale(1.05) rotate(2deg);
-            border-color: var(--gold-light);
+            transform: scale(1.04) rotate(1deg);
         }
 
-        /* Detalles del Evento */
-        .details-box {
-            border-top: 1px dashed rgba(212, 175, 55, 0.4);
-            border-bottom: 1px dashed rgba(212, 175, 55, 0.4);
-            padding: 20px 0;
+        /* Contador Regresivo */
+        .countdown-container {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 6px;
+            padding: 15px;
             margin: 20px 0;
         }
 
-        .date-highlight {
-            font-size: 1.3rem;
-            color: var(--gold-light);
-            letter-spacing: 2px;
-            margin-bottom: 5px;
+        .countdown-item {
+            flex: 1;
+            text-align: center;
         }
 
-        /* Sistema de Mariposas Voladoras */
+        .countdown-number {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gold-light);
+            display: block;
+        }
+
+        .countdown-label {
+            font-size: 0.65rem;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Tarjetas de Módulos (Ubicaciones, Copa, etc.) */
+        .info-card {
+            background: rgba(44, 45, 48, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .info-card i {
+            font-size: 1.8rem;
+            color: var(--gold-primary);
+            margin-bottom: 10px;
+        }
+
+        .info-card h4 {
+            color: var(--gold-light);
+            margin-bottom: 8px;
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .info-card p {
+            font-size: 0.85rem;
+            color: #ccc;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        /* Botones Dorados Premium */
+        .btn-gold {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+            color: #111;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4);
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-primary) 100%);
+        }
+
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+            width: 100%;
+            justify-content: center;
+            font-size: 1rem;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .btn-whatsapp:hover {
+            background: #20ba5a;
+            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
+        }
+
+        /* Sistema de Mariposas Al Volar */
         .butterfly {
             position: absolute;
-            width: 25px;
-            height: 25px;
+            width: 22px;
+            height: 22px;
             background: radial-gradient(circle, var(--gold-light) 0%, var(--gold-primary) 100%);
             clip-path: polygon(50% 45%, 0% 0%, 15% 70%, 50% 60%, 85% 70%, 100% 0%);
             opacity: 0;
@@ -289,23 +367,47 @@
             50% { transform: translate(var(--x1), var(--y1)) scale(1) rotate(45deg); opacity: 0.8; }
             100% { transform: translate(var(--x2), var(--y2)) scale(0.2) rotate(90deg); opacity: 0; }
         }
+
+        /* Control de Música Floating */
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background: rgba(0,0,0,0.7);
+            border: 1px solid var(--gold-primary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--gold-primary);
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
     </style>
-    <!-- Importación de fuente elegante de Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <div class="gold-particles"></div>
 
+    <!-- REPRODUCTOR DE AUDIO LOCAL O ENLACE -->
+    <audio id="bgMusic" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="music-control" id="musicBtn" style="display: none;">
+        <i class="fas fa-music"></i>
+    </div>
+
     <!-- VISTA 1: EL SOBRE VIRTUAL -->
     <div class="envelope-wrapper" id="envelope">
         <div class="envelope-flap"></div>
         <div class="gold-seal">
-            <!-- La corona de alta resolución local en el sello -->
             <img src="corona.png" alt="Sello Corona Real">
         </div>
         <div class="inner-card-preview">
-            <!-- La corona de alta resolución local adentro de la tarjeta -->
             <img src="corona.png" alt="Corona Real Dorada" class="real-crown">
             <p class="subtitle" style="font-size: 0.7rem; margin: 0;">MIS XV AÑOS</p>
             <h3 class="neon-gold-text">Alexa</h3>
@@ -317,77 +419,150 @@
     <!-- VISTA 2: INVITACIÓN PRINCIPAL COMPLETA -->
     <div class="main-invitation-content" id="mainContent">
         <header>
-            <!-- La corona de alta resolución en la cabecera principal -->
-            <img src="corona.png" alt="Corona Real Principal" class="real-crown" style="width: 110px; margin-bottom: 5px;">
+            <img src="corona.png" alt="Corona Real Principal" class="real-crown" style="width: 100px; margin-bottom: 5px;">
             <p class="subtitle">MIS QUINCE AÑOS</p>
             <h1 class="shine-text">Alexa</h1>
         </header>
 
-        <!-- Sección de Fotografías Locales -->
+        <!-- Galería de Fotos Reintegrada -->
         <div class="photo-gallery">
             <img src="foto1.jpeg" alt="Alexa Foto 1" class="client-photo">
             <img src="foto2.jpeg" alt="Alexa Foto 2" class="client-photo">
         </div>
 
-        <section class="details-box">
-            <p style="font-style: italic; margin-bottom: 15px; color: #ccc;">
-                "Hay momentos en la vida que son inolvidables, pero compartirlos con quienes más amas los hace eternos."
-            </p>
-            <p class="date-highlight">SÁBADO, 19 DE SEPTIEMBRE DE 2026</p>
-            <p style="color: var(--gold-primary); letter-spacing: 1px;">RECEPCIÓN EXCLUSIVA</p>
-        </section>
+        <p style="font-style: italic; font-size: 0.85rem; color: #ccc; margin: 15px 0;">
+            "Hay momentos en la vida que son inolvidables, pero compartirlos con quienes más amas los hace eternos."
+        </p>
 
-        <footer>
-            <p style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">Te esperamos con elegancia y alegría.</p>
+        <!-- Contador Regresivo Activo -->
+        <div class="countdown-container">
+            <div class="countdown-item"><span class="countdown-number" id="days">00</span><span class="countdown-label">Días</span></div>
+            <div class="countdown-item"><span class="countdown-number" id="hours">00</span><span class="countdown-label">Hrs</span></div>
+            <div class="countdown-item"><span class="countdown-number" id="minutes">00</span><span class="countdown-label">Min</span></div>
+            <div class="countdown-item"><span class="countdown-number" id="seconds">00</span><span class="countdown-label">Seg</span></div>
+        </div>
+
+        <!-- Módulo: Ubicación de la Ceremonia -->
+        <div class="info-card">
+            <i class="fas fa-church"></i>
+            <h4>Sagrada Ceremonia</h4>
+            <p>Acompáñanos a dar gracias en nuestra misa especial religiosa.<br><strong>Hora: 4:00 PM</strong></p>
+            <a href="https://maps.google.com" target="_blank" class="btn-gold"><i class="fas fa-map-marker-alt"></i> Ver Mapa de Iglesia</a>
+        </div>
+
+        <!-- Módulo: Ubicación de la Recepción -->
+        <div class="info-card">
+            <i class="fas fa-glass-cheers"></i>
+            <h4>Gran Recepción</h4>
+            <p>¡Celebremos en grande esta noche mágica e inolvidable!<br><strong>Hora: 6:00 PM</strong></p>
+            <a href="https://maps.google.com" target="_blank" class="btn-gold"><i class="fas fa-map-marker-alt"></i> Ver Mapa del Salón</a>
+        </div>
+
+        <!-- Módulo de la Copa (Pase de Invitados) -->
+        <div class="info-card">
+            <i class="fas fa-wine-glass-alt"></i>
+            <h4>Pase Familiar Exclusivo</h4>
+            <p>Hemos reservado con mucho cariño:<br><strong style="font-size: 1.1rem; color: var(--gold-light);">Pases: 4 Personas</strong></p>
+        </div>
+
+        <!-- Confirmación Vía WhatsApp -->
+        <div class="info-card" style="border-color: rgba(37, 211, 102, 0.3);">
+            <i class="fab fa-whatsapp" style="color: #25d366;"></i>
+            <h4>Confirmar Asistencia</h4>
+            <p>Por favor confírmanos antes del 31 de Agosto para asegurar tu lugar en nuestra mesa.</p>
+            <a href="https://wa.me/521234567890?text=Hola%20Alexa,%20confirmo%20mi%20asistencia%20a%20tus%20XV%20Años" target="_blank" class="btn-gold btn-whatsapp">
+                <i class="fab fa-whatsapp"></i> Confirmar por WhatsApp
+            </a>
+        </div>
+
+        <footer style="margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(212, 175, 55, 0.15);">
+            <p style="font-size: 0.75rem; color: rgba(255,255,255,0.4); letter-spacing: 1px;">SÁBADO, 19 DE SEPTIEMBRE DE 2026</p>
         </footer>
     </div>
 
     <script>
         const envelope = document.getElementById('envelope');
         const mainContent = document.getElementById('mainContent');
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
 
+        // Evento Principal al Tocar el Sobre
         envelope.addEventListener('click', () => {
-            // 1. Activar animación tridimensional del sobre
             envelope.classList.add('open');
-            
-            // 2. Disparar ráfaga mágica de mariposas de oro desde el centro
             createButterflyBurst();
 
-            // 3. Desvanecer el sobre y presentar la invitación majestuosa de Alexa
+            // Activar música de fondo de forma fluida
+            bgMusic.play().then(() => {
+                musicBtn.style.display = 'flex';
+            }).catch(err => console.log("Audio en espera de interacción de usuario"));
+
+            // Transición a la Invitación
             setTimeout(() => {
                 envelope.style.display = 'none';
                 mainContent.classList.add('visible');
             }, 1200);
         });
 
+        // Botón flotante para pausar/reproducir música
+        musicBtn.addEventListener('click', () => {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                musicBtn.style.color = 'var(--gold-primary)';
+            } else {
+                bgMusic.pause();
+                musicBtn.style.color = '#777';
+            }
+        });
+
+        // Ráfaga Mágica de Mariposas Doradas
         function createButterflyBurst() {
             const container = document.body;
-            for (let i = 0; i < 15; i++) {
+            for (let i = 0; i < 18; i++) {
                 const b = document.createElement('div');
                 b.classList.add('butterfly');
-                
-                // Posicionar en el núcleo del sobre
                 b.style.left = '50%';
                 b.style.top = '50%';
                 
-                // Generar rumbos aleatorios dinámicos para las mariposas
-                const x1 = (Math.random() - 0.5) * 300;
-                const y1 = (Math.random() - 0.5) * 300 - 100;
-                const x2 = (Math.random() - 0.5) * 600;
-                const y2 = (Math.random() - 0.5) * 600 - 200;
+                const x1 = (Math.random() - 0.5) * 350;
+                const y1 = (Math.random() - 0.5) * 350 - 100;
+                const x2 = (Math.random() - 0.5) * 700;
+                const y2 = (Math.random() - 0.5) * 700 - 200;
                 
                 b.style.setProperty('--x1', `${x1}px`);
                 b.style.setProperty('--y1', `${y1}px`);
                 b.style.setProperty('--x2', `${x2}px`);
                 b.style.setProperty('--y2', `${y2}px`);
                 
-                // Velocidades asíncronas para realismo
-                b.style.animation = `fly-away ${1.5 + Math.random()}s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
+                b.style.animation = `fly-away ${1.4 + Math.random()}s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
                 
                 container.appendChild(b);
                 setTimeout(() => b.remove(), 2500);
             }
         }
+
+        // Sistema Automático del Contador Regresivo (Setiembre 19, 2026)
+        const eventDate = new Date('September 19, 2026 16:00:00').getTime();
+
+        const timer = setInterval(() => {
+            const now = new Date().getTime();
+            const diff = eventDate - now;
+
+            if (diff <= 0) {
+                clearInterval(timer);
+                document.querySelector('.countdown-container').innerHTML = "<p style='color:var(--gold-light)'>¡HOY ES EL GRAN DÍA!</p>";
+                return;
+            }
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = d < 10 ? '0' + d : d;
+            document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
+            document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
+            document.getElementById('seconds').innerText = s < 10 ? '0' + s : s;
+        }, 1000);
     </script>
 </body>
 </html>
