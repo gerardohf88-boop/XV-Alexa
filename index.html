@@ -214,7 +214,7 @@
             transform: scale(1);
         }
 
-        /* Mariposas laterales integradas que flotan y sueltan destellos */
+        /* Mariposas laterales */
         .card-butterfly {
             position: absolute;
             width: 24px;
@@ -395,7 +395,7 @@
             box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
         }
 
-        /* Ráfaga burst de mariposas iniciales */
+        /* Ráfaga burst de mariposas */
         .butterfly {
             position: absolute;
             width: 22px;
@@ -446,7 +446,7 @@
 
     <div class="gold-particles"></div>
 
-    <!-- REPRODUCTOR EN SEGUNDO PLANO DE YOUTUBE (Carga el video de "Die with a smile") -->
+    <!-- REPRODUCTOR EN SEGUNDO PLANO DE YOUTUBE -->
     <div id="yt-player"></div>
 
     <div class="music-control" id="musicBtn" style="display: none;">
@@ -516,7 +516,7 @@
             <a href="https://maps.google.com" target="_blank" class="btn-gold"><i class="fas fa-map-marker-alt"></i> Ver Ubicación del Salón</a>
         </div>
 
-        <!-- Módulo de la Copa (CORREGIDO Y LIMPIO) -->
+        <!-- Módulo de la Copa (LIMPIO Y ANIMADO) -->
         <div class="info-card">
             <i class="fas fa-wine-glass-alt"></i>
             <p style="margin: 5px 0 0 0; font-size: 1.1rem; color: var(--gold-light); font-weight: 600;">Pases: 4 Personas</p>
@@ -545,12 +545,12 @@
         const musicBtn = document.getElementById('musicBtn');
         let player;
 
-        // Inicializar el reproductor de YouTube con la canción ("Die with a smile")
+        // Carga la canción vinculada por medio del ID del enlace de YouTube
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('yt-player', {
                 height: '1',
                 width: '1',
-                videoId: 'Kz8T_w8KeeY', // ID oficial del tema en YouTube
+                videoId: 'Kz8T_w8KeeY', // ID de la canción integrada
                 playerVars: {
                     'autoplay': 0,
                     'controls': 0,
@@ -564,7 +564,7 @@
         }
 
         function onPlayerReady(event) {
-            // El reproductor ya está listo para accionarse cuando se abra el sobre
+            // El reproductor queda en espera de la acción del usuario
         }
 
         // Manejo interactivo de apertura del sobre
@@ -572,7 +572,7 @@
             envelope.classList.add('open');
             createButterflyBurst();
 
-            // Activar la reproducción desde YouTube al hacer clic
+            // Lanza la canción desde YouTube al interactuar con el sobre
             if (player && typeof player.playVideo === 'function') {
                 player.playVideo();
                 musicBtn.style.display = 'flex';
@@ -581,11 +581,11 @@
             setTimeout(() => {
                 envelope.style.display = 'none';
                 mainContent.classList.add('visible');
-                startSparkles(); // Activa caída continua de destellos de las mariposas
+                startSparkles(); 
             }, 1200);
         });
 
-        // Botón Flotante para pausar/reproducir la música de YouTube
+        // Botón Flotante para controlar play/pausa del video de YouTube
         musicBtn.addEventListener('click', () => {
             const playerState = player.getPlayerState();
             if (playerState === YT.PlayerState.PLAYING) {
@@ -597,7 +597,7 @@
             }
         });
 
-        // Animación de ráfaga burst de mariposas iniciales
+        // Animación ráfaga burst de mariposas
         function createButterflyBurst() {
             const container = document.body;
             for (let i = 0; i < 18; i++) {
@@ -623,7 +623,7 @@
             }
         }
 
-        // Motor de destellos continuos para las mariposas fijas laterales
+        // Motor de destellos continuos
         function startSparkles() {
             setInterval(() => {
                 createSparkleFromElement(document.getElementById('bfLeft'));
