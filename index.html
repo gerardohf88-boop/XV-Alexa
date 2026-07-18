@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis XV Años - Alexa</title>
-    <!-- Iconos FontAwesome para botones y música -->
+    <!-- Iconos FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Fuentes Elegantes -->
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
@@ -32,7 +32,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow-x: hidden;
+            overflow: hidden;
             perspective: 1000px;
         }
 
@@ -49,7 +49,7 @@
             z-index: 1;
         }
 
-        /* --- VISTA 1: INTERFAZ DEL SOBRE INTERACTIVO --- */
+        /* --- INTERFAZ DEL SOBRE INTERACTIVO --- */
         .envelope-wrapper {
             position: relative;
             width: 380px;
@@ -196,37 +196,11 @@
             box-shadow: 0 10px 35px rgba(0,0,0,0.8);
         }
 
-        /* --- VISTA 2: CONTENEDOR DE LA ESTRUCTURA DE CANVA --- */
-        .main-invitation-content {
-            width: 100vw;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            display: none;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-            z-index: 10; /* Queda detrás de las mariposas voladoras */
-        }
-
-        .main-invitation-content.visible {
-            display: block;
-            opacity: 1;
-        }
-
-        /* Iframe adaptado a pantalla completa para Canva */
-        .canva-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background-color: var(--grey-dark);
-        }
-
         /* --- CONFIGURACIÓN DE MARIPOSAS SVG DELANTE --- */
         .butterfly-svg {
             position: fixed;
             pointer-events: none;
-            z-index: 50; /* Por encima de la estructura de Canva */
+            z-index: 50;
             transform-origin: center;
         }
 
@@ -245,38 +219,6 @@
             0% { transform: translate(0, 0) scale(0.4) rotate(var(--rot0)); opacity: 1; }
             50% { transform: translate(var(--x1), var(--y1)) scale(1.1) rotate(var(--rot1)); opacity: 0.9; }
             100% { transform: translate(var(--x2), var(--y2)) scale(0.1) rotate(var(--rot2)); opacity: 0; }
-        }
-
-        @keyframes float-up-ambient {
-            0% {
-                transform: translateY(110vh) translateX(0) scale(0.5) rotate(0deg);
-                opacity: 0;
-            }
-            10% { opacity: 0.85; }
-            90% { opacity: 0.85; }
-            100% {
-                transform: translateY(-10vh) translateX(var(--drift-x)) scale(0.85) rotate(var(--drift-rot));
-                opacity: 0;
-            }
-        }
-
-        /* Botón de Música Flotante */
-        .music-control {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 45px;
-            height: 45px;
-            background: rgba(0,0,0,0.85);
-            border: 1px solid var(--gold-primary);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--gold-primary);
-            cursor: pointer;
-            z-index: 100; /* Siempre visible arriba de todo */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
         @media (max-width: 400px) {
@@ -316,10 +258,6 @@
         <source src="die-with-a-smile.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="music-control" id="musicBtn" style="display: none;">
-        <i class="fas fa-music"></i>
-    </div>
-
     <!-- VISTA 1: EL SOBRE VIRTUAL -->
     <div class="envelope-wrapper" id="envelope">
         <div class="envelope-flap"></div>
@@ -335,18 +273,9 @@
         <div class="envelope-body"></div>
     </div>
 
-    <!-- VISTA 2: INTEGRACIÓN DE ESTRUCTURA CANVA -->
-    <div class="main-invitation-content" id="mainContent">
-        <!-- El iframe carga de forma responsiva la URL exacta que solicitaste -->
-        <iframe class="canva-iframe" src="https://mis-xv-a%C3%B1os-19.my.canva.site/alexa" allow="autoplay"></iframe>
-    </div>
-
     <script>
         const envelope = document.getElementById('envelope');
-        const mainContent = document.getElementById('mainContent');
         const bgMusic = document.getElementById('bgMusic');
-        const musicBtn = document.getElementById('musicBtn');
-
         const butterflyColors = ['#d4af37', '#f3e5ab', '#f4c2c2', '#e5e5e5', '#b87333'];
 
         function getButterflySVG(color) {
@@ -362,33 +291,21 @@
         }
 
         envelope.addEventListener('click', () => {
+            // Intenta reproducir el audio local al hacer clic
             bgMusic.play().catch(error => console.log("Interacción requerida para audio."));
             
             envelope.classList.add('open');
             createInitialBurst(); 
 
-            musicBtn.style.display = 'flex';
-
+            // Redirección fluida hacia la estructura de Canva después de que abra el sobre
             setTimeout(() => {
-                envelope.style.display = 'none';
-                mainContent.classList.add('visible');
-                startAmbientButterflies(); 
-            }, 1200);
-        });
-
-        musicBtn.addEventListener('click', () => {
-            if (bgMusic.paused) {
-                bgMusic.play();
-                musicBtn.style.color = 'var(--gold-primary)';
-            } else {
-                bgMusic.pause();
-                musicBtn.style.color = '#777';
-            }
+                window.location.href = "https://mis-xv-años-19.my.canva.site/alexa";
+            }, 1250);
         });
 
         function createInitialBurst() {
             const container = document.body;
-            for (let i = 0; i < 24; i++) {
+            for (let i = 0; i < 28; i++) {
                 const b = document.createElement('div');
                 b.classList.add('butterfly-svg');
                 b.style.width = '32px';
@@ -398,10 +315,10 @@
                 
                 b.innerHTML = getButterflySVG(butterflyColors[Math.floor(Math.random() * butterflyColors.length)]);
                 
-                const x1 = (Math.random() - 0.5) * 400;
-                const y1 = (Math.random() - 0.5) * 400 - 150;
-                const x2 = (Math.random() - 0.5) * 850;
-                const y2 = (Math.random() - 0.5) * 850 - 250;
+                const x1 = (Math.random() - 0.5) * 450;
+                const y1 = (Math.random() - 0.5) * 450 - 150;
+                const x2 = (Math.random() - 0.5) * 900;
+                const y2 = (Math.random() - 0.5) * 900 - 250;
                 
                 b.style.setProperty('--x1', `${x1}px`);
                 b.style.setProperty('--y1', `${y1}px`);
@@ -417,33 +334,6 @@
                 container.appendChild(b);
                 setTimeout(() => b.remove(), 2500);
             }
-        }
-
-        function startAmbientButterflies() {
-            setInterval(() => {
-                const container = document.body;
-                const b = document.createElement('div');
-                b.classList.add('butterfly-svg');
-                
-                const size = 22 + Math.random() * 12;
-                b.style.width = `${size}px`;
-                b.style.height = `${size}px`;
-                b.style.left = `${Math.random() * 100}vw`;
-                b.style.top = '0';
-                
-                b.innerHTML = getButterflySVG(butterflyColors[Math.floor(Math.random() * butterflyColors.length)]);
-                
-                const driftX = (Math.random() - 0.5) * 280;
-                const driftRot = (Math.random() - 0.5) * 110;
-                b.style.setProperty('--drift-x', `${driftX}px`);
-                b.style.setProperty('--drift-rot', `${driftRot}deg`);
-                
-                const duration = 5.5 + Math.random() * 3.5;
-                b.style.animation = `float-up-ambient ${duration}s linear forwards`;
-                
-                container.appendChild(b);
-                setTimeout(() => b.remove(), duration * 1000);
-            }, 1200);
         }
     </script>
 </body>
