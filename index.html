@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis XV Años - Alexa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #2b2b2b; /* Fondo Gris Obscuro */
+            --card-bg: #3a3a3a;  /* Tarjetas Gris */
+            --accent-color: #d4af37; /* Dorado */
+            --text-color: #ffffff;
+            --text-muted: #cccccc;
+        }
+
+        /* EVITA EL SCROLL MIENTRAS EL SOBRE ESTÉ CERRADO */
+        body.locked {
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* PANTALLA DE BIENVENIDA (EL SOBRE) */
+        .envelope-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1e1e1e;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        /* Cuando se abre, se desliza hacia arriba */
+        .envelope-overlay.open {
+            transform: translateY(-100%);
+        }
+
+        .envelope-box {
+            text-align: center;
+            padding: 30px;
+            max-width: 400px;
+            width: 80%;
+            border: 2px dashed var(--accent-color);
+            border-radius: 15px;
+            background: #2b2b2b;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        .envelope-box i.fa-envelope-open {
+            font-size: 4rem;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* CONTENEDOR PRINCIPAL */
+        .container {
+            max-width: 450px;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            transition-delay: 0.5s;
+        }
+
+        body:not(.locked) .container {
+            opacity: 1;
+        }
+
+        /* REPRODUCTOR FLOTANTE EN LA ESQUINA */
+        .music-player {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(58, 58, 58, 0.9);
+            border: 1px solid var(--accent-color);
+            padding: 10px 15px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+
+        .music-player i { color: var(--accent-color); font-size: 1.2rem; }
+        .music-player span { font-size: 0.8rem; font-weight: bold; }
+
+        /* PORTADA INTERNA */
+        header {
+            margin-top: 90px;
+            margin-bottom: 30px;
+        }
+
+        .crown-icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: var(--accent-color);
+            margin: 5px 0 15px 0;
+        }
+
+        .subtitle {
+            letter-spacing: 4px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .invitation-img {
+            width: 100%;
+            max-height: 350px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 2px solid var(--accent-color);
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        /* CUENTA REGRESIVA */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #555;
+        }
+
+        .countdown-item { display: flex; flex-direction: column; font-size: 0.8rem; color: var(--text-muted); }
+        .countdown-item span { font-size: 1.6rem; font-weight: bold; color: var(--accent-color); }
+
+        /* TARJETAS */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #555;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        .card h2 { font-size: 1.4rem; margin-top: 0; }
+        .card i.section-icon { color: var(--accent-color); font-size: 1.8rem; margin-bottom: 10px; }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: #000;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-top: 15px;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .footer { margin: 40px 0; font-size: 0.8rem; color: var(--text-muted); }
+    </style>
+</head>
+<body class="locked">
+
+    <!-- EL SOBRE DE BIENVENIDA -->
+    <div class="envelope-overlay" id="envelopeOverlay">
+        <div class="envelope-box">
+            <i class="fas fa-envelope-open"></i>
+            <p class="subtitle" style="margin-bottom: 5px;">MIS QUINCE AÑOS</p>
+            <h2 style="color: var(--accent-color); font-size: 2.2rem; margin: 0 0 20px 0;">Alexa</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px;">Esta invitación es especial para ti.<br>Haz clic abajo para abrirla.</p>
+            <button class="btn" id="openBtn">Abrir Invitación</button>
+        </div>
+    </div>
+
+    <!-- REPRODUCTOR CONTROL MULTIMEDIA -->
+    <div class="music-player" id="musicControl">
+        <i class="fas fa-play" id="musicIcon"></i>
+        <span id="musicStatus">Escuchar música</span>
+    </div>
+
+    <!-- PLAYER DE YOUTUBE OCULTO -->
+    <div id="youtube-player" style="display:none;"></div>
+
+    <!-- CONTENIDO GENERAL -->
+    <div class="container">
+        <header>
+            <div class="crown-icon"><i class="fas fa-crown"></i></div>
+            <p class="subtitle">MIS QUINCE AÑOS</p>
+            <h1>Alexa</h1>
+        </header>
+
+        <!-- PRIMERA FOTO -->
+        <img src="foto1.jpg" alt="Alexa" class="invitation-img">
+
+        <p>Hay momentos inolvidables que se quedan guardados en el corazón, y compartir mi felicidad contigo hará este día aún más especial.</p>
+
+        <!-- CUENTA REGRESIVA -->
+        <div class="countdown">
+            <div class="countdown-item"><span id="days">00</span>Días</div>
+            <div class="countdown-item"><span id="hours">00</span>Horas</div>
+            <div class="countdown-item"><span id="minutes">00</span>Min</div>
+            <div class="countdown-item"><span id="seconds">00</span>Seg</div>
+        </div>
+
+        <!-- MISA -->
+        <div class="card">
+            <i class="fas fa-church section-icon"></i>
+            <h2 style="color: var(--accent-color);">Ceremonia Religiosa</h2>
+            <p><strong>Fecha:</strong> 19 de Septiembre de 2026</p>
+            <p><strong>Hora:</strong> 4:00 PM</p>
+            <p>Acompáñame a dar gracias en este día tan importante.</p>
+            <a href="https://maps.app.goo.gl/mNXgSDCiLDPPqkJd7?g_st=awb" target="_blank" class="btn">Ver mapa de la iglesia</a>
+        </div>
+
+        <!-- SEGUNDA FOTO -->
+        <img src="foto2.jpg" alt="Mis XV Años" class="invitation-img">
+
+        <!-- RECEPCIÓN -->
+        <div class="card">
+            <i class="fas fa-glass-cheers section-icon"></i>
+            <h2 style="color: var(--accent-color);">Recepción</h2>
+            <p><strong>Fecha:</strong> 19 de Septiembre de 2026</p>
+            <p><strong>Hora:</strong> 5:30 PM</p>
+            <p>¡Te espero para celebrar, bailar y disfrutar juntos!</p>
+            <a href="https://maps.app.goo.gl/4xNC45i5C1FJbChM7?g_st=awb" target="_blank" class="btn">Ver mapa del salón</a>
+        </div>
+
+        <!-- CONFIRMACIÓN -->
+        <div class="card">
+            <i class="fas fa-envelope-open-text section-icon"></i>
+            <h2 style="color: var(--accent-color);">Confirmación</h2>
+            <p>¡Es muy importante para mí contar con tu presencia!</p>
+            <a href="https://wa.me/521234567890?text=Hola,%20confirmo%20mi%20asistencia%20a%20los%20XV%20de%20Alexa." target="_blank" class="btn" style="background-color: #25D366; color: white;"><i class="fab fa-whatsapp"></i> Confirmar Asistencia</a>
+        </div>
+
+        <div class="footer">¡Te espero para celebrar juntos! ✨</div>
+    </div>
+
+    <!-- CONTROLADORES JAVASCRIPT -->
+    <script>
+        // --- 1. CARGA API REPRODUCTOR YOUTUBE ---
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0', width: '0', videoId: 'kPa7bsKwL-c', 
+                playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'kPa7bsKwL-c' }
+            });
+        }
+
+        const musicControl = document.getElementById('musicControl');
+        const musicIcon = document.getElementById('musicIcon');
+        const musicStatus = document.getElementById('musicStatus');
+        let isPlaying = false;
+
+        function toggleMusic() {
+            if (!isPlaying) {
+                player.playVideo();
+                musicIcon.className = 'fas fa-pause';
+                musicStatus.innerText = 'Música Activada';
+                isPlaying = true;
+            } else {
+                player.pauseVideo();
+                musicIcon.className = 'fas fa-play';
+                musicStatus.innerText = 'Música Pausada';
+                isPlaying = false;
+            }
+        }
+
+        musicControl.addEventListener('click', toggleMusic);
+
+        // --- 2. LOGICA PARA ABRIR EL SOBRE ---
+        const openBtn = document.getElementById('openBtn');
+        const envelopeOverlay = document.getElementById('envelopeOverlay');
+
+        openBtn.addEventListener('click', () => {
+            // Desliza el sobre hacia arriba
+            envelopeOverlay.classList.add('open');
+            // Habilita el scroll de la pagina
+            document.body.classList.remove('locked');
+            // Reproduce la musica inmediatamente con la interaccion
+            setTimeout(() => {
+                if(!isPlaying) toggleMusic();
+            }, 300);
+        });
+
+        // --- 3. TIEMPO EN REVERSA (19 Septiembre 2026) ---
+        const eventDate = new Date(2026, 8, 19, 16, 0, 0).getTime();
+
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days < 10 ? "0" + days : days;
+            document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
+            document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+
+            if (distance < 0) {
+                clearInterval(timer);
+                document.querySelector(".countdown").innerHTML = "¡Hoy es mi gran día!";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
