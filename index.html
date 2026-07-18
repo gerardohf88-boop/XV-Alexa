@@ -2,20 +2,22 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Mis XV Años - Alexa</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #2b2b2b; /* Fondo Gris Obscuro */
-            --card-bg: #3a3a3a;  /* Tarjetas Gris */
-            --accent-color: #d4af37; /* Dorado */
+            --bg-color: #2b2b2b;
+            --card-bg: #3a3a3a;
+            --accent-color: #d4af37;
             --text-color: #ffffff;
             --text-muted: #cccccc;
         }
 
         body.locked {
             overflow: hidden;
+            position: fixed;
+            width: 100%;
         }
 
         body {
@@ -27,72 +29,92 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            touch-action: none; /* Controlado por JS en el sobre */
         }
 
-        /* --- PANTALLA DEL SOBRE CON DESTELLOS --- */
+        /* --- INTERFAZ DEL SOBRE INTERACTIVO 3D --- */
         .envelope-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #1e1e1e;
+            background: radial-gradient(circle at center, #2c2c2c 0%, #111111 100%);
             z-index: 2000;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            perspective: 1000px;
             overflow: hidden;
+            transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        .envelope-overlay.open {
-            transform: translateY(-100%);
-        }
-
-        /* Destellos flotantes (Fondo del sobre) */
-        .sparkle {
+        /* Fondo de partículas de diamante */
+        .diamond-sparkle {
             position: absolute;
-            background: radial-gradient(circle, rgba(212,175,55,0.8) 0%, rgba(212,175,55,0) 70%);
+            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(212,175,55,0.3) 40%, rgba(212,175,55,0) 70%);
             border-radius: 50%;
-            animation: floatUp 6s infinite ease-in-out;
+            pointer-events: none;
+            animation: diamondLight 4s infinite ease-in-out;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes diamondLight {
+            0%, 100% { transform: translateY(100vh) scale(0) rotate(0deg); opacity: 0; }
+            50% { opacity: 1; filter: drop-shadow(0 0 8px #fff); }
+            100% { transform: translateY(-10vh) scale(1.5) rotate(360deg); opacity: 0; }
+        }
+
+        /* Contenedor del sobre realista */
+        .envelope-container {
+            width: 90%;
+            max-width: 380px;
+            height: 480px;
+            position: relative;
+            transform-style: preserve-3d;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.6);
+            border-radius: 12px;
+            background: #1e1e1e;
+            border: 1px solid rgba(212,175,55,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 30px 20px;
+            box-sizing: border-box;
+            cursor: grab;
+        }
+
+        /* Incrustación de marco floral dorado superior e inferior */
+        .envelope-flowers-top, .envelope-flowers-bottom {
+            width: 100%;
+            max-width: 320px;
+            height: auto;
+            pointer-events: none;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+        }
+
+        .envelope-content {
+            text-align: center;
+            z-index: 5;
             pointer-events: none;
         }
 
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
-        }
-
-        .envelope-box {
-            position: relative;
-            text-align: center;
-            padding: 30px;
-            max-width: 400px;
-            width: 80%;
-            border: 2px solid var(--accent-color);
-            border-radius: 15px;
-            background: rgba(43, 43, 43, 0.95);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-            z-index: 2001;
-            backdrop-filter: blur(5px);
-        }
-
-        .envelope-box i.fa-envelope-open {
-            font-size: 3.5rem;
+        /* Indicador animado de deslizar hacia arriba */
+        .swipe-indicator {
             color: var(--accent-color);
-            margin-bottom: 20px;
-            animation: pulse 2s infinite;
+            font-size: 1.8rem;
+            animation: bounceUp 1.5s infinite;
+            margin-bottom: 5px;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.08); }
+        @keyframes bounceUp {
+            0%, 100% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(-12px); opacity: 1; filter: drop-shadow(0 0 8px var(--accent-color)); }
         }
 
-        /* --- EFECTOS DINÁMICOS AL INTERIOR --- */
+        /* --- CONTENEDOR PRINCIPAL INTERIOR --- */
         .container {
             max-width: 450px;
             width: 100%;
@@ -101,14 +123,41 @@
             text-align: center;
             opacity: 0;
             transition: opacity 1s ease-in-out;
-            transition-delay: 0.6s;
+            transition-delay: 0.4s;
         }
 
         body:not(.locked) .container {
             opacity: 1;
         }
 
-        /* Efecto destello de luz en texto dorado */
+        .luxury-crown {
+            width: 140px;
+            height: auto;
+            margin-bottom: 10px;
+            filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.5));
+            animation: crownGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes crownGlow {
+            0% { transform: scale(1); filter: drop-shadow(0 4px 8px rgba(212,175,55,0.3)); }
+            100% { transform: scale(1.04); filter: drop-shadow(0 6px 15px rgba(255,255,255,0.6)); }
+        }
+
+        .tulip-divider {
+            width: 100%;
+            max-width: 280px;
+            height: auto;
+            margin: -10px auto 10px auto;
+            display: block;
+            opacity: 0.85;
+            animation: tulipSway 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes tulipSway {
+            0% { transform: rotate(-1deg) scale(0.98); opacity: 0.8; }
+            100% { transform: rotate(1deg) scale(1.02); opacity: 1; }
+        }
+
         .shine-text {
             color: var(--accent-color);
             position: relative;
@@ -125,44 +174,20 @@
             to { background-position: 200% center; }
         }
 
-        /* Flores con movimiento suave de balanceo */
-        .flower-decor {
-            font-size: 1.2rem;
-            color: rgba(212, 175, 55, 0.4);
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: -10px;
-            padding: 0 15px;
-        }
-
-        .flower-decor i {
-            animation: sway 4s ease-in-out infinite alternate;
-            transform-origin: bottom center;
-        }
-
-        .flower-decor i:nth-child(2) {
-            animation-delay: -2s;
-        }
-
-        @keyframes sway {
-            0% { transform: rotate(-8deg); }
-            100% { transform: rotate(8deg); }
-        }
-
-        /* Animación de Copas Brindando */
         .cheers-animation {
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: var(--accent-color);
             display: inline-block;
             animation: clink 1.5s ease-in-out infinite;
+            margin-bottom: 5px;
         }
 
         @keyframes clink {
             0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(-15deg) scale(1.1); }
+            50% { transform: rotate(-12deg) scale(1.1); }
         }
 
-        /* REPRODUCTOR */
+        /* REPRODUCTOR FLOTANTE */
         .music-player {
             position: fixed;
             top: 20px;
@@ -243,15 +268,24 @@
 </head>
 <body class="locked">
 
-    <!-- EL SOBRE DE BIENVENIDA CON DESTELLOS ANIMADOS -->
+    <!-- PANTALLA DE SOBRE 3D CON RECONOCIMIENTO DE DESLIZAMIENTO -->
     <div class="envelope-overlay" id="envelopeOverlay">
-        <!-- Partículas de destellos generadas dinámicamente por JS -->
-        <div class="envelope-box">
-            <i class="fas fa-envelope-open"></i>
-            <p class="subtitle" style="margin-bottom: 5px;">MIS QUINCE AÑOS</p>
-            <h2 class="shine-text" style="font-size: 2.5rem; margin: 0 0 20px 0;">Alexa</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px;">Esta invitación es especial para ti.<br>Haz clic abajo para abrirla.</p>
-            <button class="btn" id="openBtn">Abrir Invitación</button>
+        <div class="envelope-container" id="envelopeContainer">
+            <!-- Flores Doradas Superiores -->
+            <img src="https://i.ibb.co/Lvbq9gN/gold-tulips.png" alt="Flores Superiores" class="envelope-flowers-top">
+            
+            <div class="envelope-content">
+                <p class="subtitle" style="margin-bottom: 5px; color: var(--accent-color);">MIS QUINCE AÑOS</p>
+                <h2 class="shine-text" style="font-size: 2.8rem; margin: 0 0 10px 0;">Alexa</h2>
+                <div style="width: 50px; height: 1px; background-color: var(--accent-color); margin: 15px auto;"></div>
+                <p style="color: #ffffff; font-size: 0.85rem; font-style: italic; letter-spacing: 1px;">Desliza hacia arriba para abrir</p>
+            </div>
+
+            <div class="envelope-content" style="margin-bottom: 10px;">
+                <div class="swipe-indicator"><i class="fas fa-chevron-up"></i></div>
+                <!-- Sello de Cera / Emblema -->
+                <img src="https://i.ibb.co/3TLbbyx/luxury-crown.png" alt="Sello Corona" style="width: 60px; height: auto; opacity: 0.9;">
+            </div>
         </div>
     </div>
 
@@ -263,20 +297,18 @@
 
     <div id="youtube-player" style="display:none;"></div>
 
-    <!-- CONTENIDO GENERAL -->
+    <!-- CONTENIDO GENERAL DE LA INVITACIÓN -->
     <div class="container">
         <header>
-            <div style="font-size: 2.5rem; color: var(--accent-color); margin-bottom: 10px;"><i class="fas fa-crown"></i></div>
-            <p class="subtitle">MIS QUINCE AÑOS</p>
+            <img src="https://i.ibb.co/3TLbbyx/luxury-crown.png" alt="Corona Princesa" class="luxury-crown">
+            <p class="subtitle" style="margin-top: 10px;">MIS QUINCE AÑOS</p>
             <h1 class="shine-text">Alexa</h1>
         </header>
 
-        <!-- PRIMERA FOTO -->
         <img src="foto1.jpeg" alt="Alexa" class="invitation-img">
 
         <p>Hay momentos inolvidables que se quedan guardados en el corazón, y compartir mi felicidad contigo hará este día aún más especial.</p>
 
-        <!-- CUENTA REGRESIVA -->
         <div class="countdown">
             <div class="countdown-item"><span id="days">00</span>Días</div>
             <div class="countdown-item"><span id="hours">00</span>Horas</div>
@@ -286,7 +318,7 @@
 
         <!-- MISA -->
         <div class="card">
-            <div class="flower-decor"><i class="fas fa-seedling"></i><i class="fas fa-seedling"></i></div>
+            <img src="https://i.ibb.co/Lvbq9gN/gold-tulips.png" alt="Tulipanes Dorados" class="tulip-divider">
             <div style="font-size: 1.8rem; color: var(--accent-color); margin-bottom: 10px;"><i class="fas fa-church"></i></div>
             <h2 class="shine-text">Ceremonia Religiosa</h2>
             <p><strong>Fecha:</strong> 19 de Septiembre de 2026</p>
@@ -295,12 +327,11 @@
             <a href="https://maps.app.goo.gl/mNXgSDCiLDPPqkJd7?g_st=awb" target="_blank" class="btn">Ver mapa de la iglesia</a>
         </div>
 
-        <!-- SEGUNDA FOTO -->
         <img src="foto2.jpeg" alt="Mis XV Años" class="invitation-img">
 
         <!-- RECEPCIÓN -->
         <div class="card">
-            <div class="flower-decor"><i class="fas fa-seedling"></i><i class="fas fa-seedling"></i></div>
+            <img src="https://i.ibb.co/Lvbq9gN/gold-tulips.png" alt="Tulipanes Dorados" class="tulip-divider">
             <div class="cheers-animation"><i class="fas fa-glass-cheers"></i></div>
             <h2 class="shine-text">Recepción</h2>
             <p><strong>Fecha:</strong> 19 de Septiembre de 2026</p>
@@ -314,27 +345,107 @@
             <div style="font-size: 1.8rem; color: var(--accent-color); margin-bottom: 10px;"><i class="fas fa-envelope-open-text"></i></div>
             <h2 class="shine-text">Confirmación</h2>
             <p>¡Es muy importante para mí contar con tu presencia!</p>
-            <a href="https://wa.me/521234567890?text=Hola,%20confirmo%20mi%20asistencia%20a%20los%20XV%20de%20Alexa." target="_blank" class="btn" style="background-color: #25D366; color: white;"><i class="fab fa-whatsapp"></i> Confirmar Asistencia</a>
+            <a href="https://wa.me/525564855060?text=Hola,%20confirmo%20mi%20asistencia%20a%20los%20XV%20de%20Alexa." target="_blank" class="btn" style="background-color: #25D366; color: white;"><i class="fab fa-whatsapp"></i> Confirmar Asistencia</a>
         </div>
 
         <div class="footer">¡Te espero para celebrar juntos! ✨</div>
     </div>
 
     <script>
-        // --- CREACIÓN DE DESTELLOS DE FONDO EN EL SOBRE ---
+        // --- 1. GENERACIÓN DE DESTELLOS DE DIAMANTE ANIMADOS ---
         const overlay = document.getElementById('envelopeOverlay');
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 25; i++) {
             const sparkle = document.createElement('div');
-            sparkle.classList.add('sparkle');
-            sparkle.style.width = Math.random() * 8 + 4 + 'px';
+            sparkle.classList.add('diamond-sparkle');
+            sparkle.style.width = Math.random() * 6 + 3 + 'px';
             sparkle.style.height = sparkle.style.width;
             sparkle.style.left = Math.random() * 100 + 'vw';
             sparkle.style.animationDelay = Math.random() * 5 + 's';
-            sparkle.style.animationDuration = Math.random() * 4 + 4 + 's';
+            sparkle.style.animationDuration = Math.random() * 3 + 4 + 's';
             overlay.appendChild(sparkle);
         }
 
-        // --- API REPRODUCTOR YOUTUBE ---
+        // --- 2. LOGICA JAVASCRIPT GESTO SWIPE UP (DESLIZAR ARRIBA) ---
+        const container = document.getElementById('envelopeContainer');
+        let startY = 0;
+        let currentY = 0;
+        let isDragging = false;
+
+        // Soporte táctil (Celulares)
+        container.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+            isDragging = true;
+            container.style.transition = 'none';
+        }, {passive: true});
+
+        container.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            currentY = e.touches[0].clientY;
+            let deltaY = currentY - startY;
+            
+            // Permitir mover solo hacia arriba de forma fluida
+            if (deltaY < 0) {
+                let dragPercent = Math.abs(deltaY) / window.innerHeight;
+                container.style.transform = `translateY(${deltaY}px) rotateX(${dragPercent * 15}deg) scale(${1 - dragPercent * 0.1})`;
+                overlay.style.backgroundColor = `rgba(30, 30, 30, ${1 - dragPercent * 1.2})`;
+            }
+        }, {passive: true});
+
+        container.addEventListener('touchend', (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+            let totalDeltaY = currentY - startY;
+
+            // Si se deslizó más de 120px hacia arriba, se ejecuta la apertura completa
+            if (totalDeltaY < -120) {
+                triggerOpenEnvelope();
+            } else {
+                // Si no fue suficiente, regresa el sobre a su posición original con rebote
+                container.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                container.style.transform = 'translateY(0) rotateX(0deg) scale(1)';
+                overlay.style.backgroundColor = '#1e1e1e';
+            }
+        });
+
+        // Soporte para Mouse (PC/Pruebas)
+        container.addEventListener('mousedown', (e) => {
+            startY = e.clientY;
+            isDragging = true;
+            container.style.transition = 'none';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            let deltaY = e.clientY - startY;
+            if (deltaY < 0) {
+                container.style.transform = `translateY(${deltaY}px)`;
+            }
+        });
+
+        window.addEventListener('mouseup', (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+            let totalDeltaY = e.clientY - startY;
+            if (totalDeltaY < -100) {
+                triggerOpenEnvelope();
+            } else {
+                container.style.transition = 'transform 0.4s ease';
+                container.style.transform = 'translateY(0)';
+            }
+        });
+
+        function triggerOpenEnvelope() {
+            overlay.style.transition = 'transform 0.9s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease';
+            overlay.style.transform = 'translateY(-100%)';
+            document.body.classList.remove('locked');
+            document.body.style.touchAction = 'auto'; // Habilitar scroll de la página
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                if(!isPlaying) toggleMusic();
+            }, 900);
+        }
+
+        // --- 3. API REPRODUCTOR YOUTUBE ---
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -369,19 +480,7 @@
 
         musicControl.addEventListener('click', toggleMusic);
 
-        // --- LÓGICA SOBRE ---
-        const openBtn = document.getElementById('openBtn');
-        const envelopeOverlay = document.getElementById('envelopeOverlay');
-
-        openBtn.addEventListener('click', () => {
-            envelopeOverlay.classList.add('open');
-            document.body.classList.remove('locked');
-            setTimeout(() => {
-                if(!isPlaying) toggleMusic();
-            }, 300);
-        });
-
-        // --- CUENTA REGRESIVA ---
+        // --- 4. CUENTA REGRESIVA ---
         const eventDate = new Date(2026, 8, 19, 16, 0, 0).getTime();
 
         const timer = setInterval(function() {
