@@ -2,710 +2,392 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis XV Años - Alexa</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-color: #2b2b2b;
-            --card-bg: #3a3a3a;
-            --accent-color: #d4af37;
-            --text-color: #ffffff;
-            --text-muted: #cccccc;
-            --envelope-bg: #1e1e1e;
-            --envelope-inside: #252525;
-            --neon-gold: #fff3a8;
+            --gold-primary: #d4af37;
+            --gold-light: #f3e5ab;
+            --gold-dark: #aa7c11;
+            --grey-dark: #1c1d1f;
+            --grey-light: #2c2d30;
+            --text-light: #f5f5f5;
         }
 
-        body.locked {
-            overflow: hidden;
-            position: fixed;
-            width: 100%;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Playfair Display', 'Didot', 'Georgia', serif;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
+            background-color: var(--grey-dark);
+            color: var(--text-light);
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            perspective: 1000px;
         }
 
-        /* --- CONTENEDOR EFECTO MARIPOSAS --- */
-        #butterfly-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 99; 
-            overflow: hidden;
-        }
-
-        .golden-butterfly {
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            pointer-events: none;
-            opacity: 0;
-            filter: drop-shadow(0 2px 8px rgba(214,175,55,0.8));
-        }
-
-        .butterfly-trail {
-            position: absolute;
-            background: radial-gradient(circle, #fff 0%, var(--accent-color) 60%, transparent 100%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 98;
-            opacity: 0.9;
-            animation: trailFade 0.8s forwards ease-out;
-        }
-
-        @keyframes trailFade {
-            0 { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 2px #fff); }
-            100% { transform: scale(0); opacity: 0; }
-        }
-
-        /* --- CONTENEDOR DE LA PANTALLA INICIAL --- */
-        .envelope-overlay {
+        /* Sistema de Brillos de Fondo */
+        .gold-particles {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, #2c2c2c 0%, #111111 100%);
-            z-index: 2000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            transition: opacity 0.8s ease, visibility 0.8s;
-        }
-
-        .envelope-overlay.fade-out {
-            opacity: 0;
-            visibility: hidden;
             pointer-events: none;
-        }
-
-        .diamond-sparkle {
-            position: absolute;
-            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(212,175,55,0.2) 40%, rgba(212,175,55,0) 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: diamondLight 4s infinite ease-in-out;
-            mix-blend-mode: screen;
+            background: radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.05) 0%, transparent 40%);
             z-index: 1;
         }
 
-        @keyframes diamondLight {
-            0%, 100% { transform: translateY(100vh) scale(0); opacity: 0; }
-            50% { opacity: 1; filter: drop-shadow(0 0 8px #fff); }
-            100% { transform: translateY(-10vh) scale(1.3); opacity: 0; }
-        }
-
-        /* --- ESTRUCTURA DEL SOBRE INTERACTIVO --- */
+        /* CONTENEDOR INTERACTIVO DEL SOBRE */
         .envelope-wrapper {
             position: relative;
+            width: 380px;
+            height: 280px;
+            background-color: #252629;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 0 20px rgba(0,0,0,0.4);
             cursor: pointer;
-            z-index: 5;
-            perspective: 1000px;
-            margin-top: 20px;
-        }
-
-        .envelope {
-            position: relative;
-            width: 300px;
-            height: 200px;
-            background-color: var(--envelope-bg);
-            border: 1px solid rgba(212,175,55,0.3);
-            border-radius: 0 0 8px 8px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            z-index: 10;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform-style: preserve-3d;
+            border-radius: 4px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
         }
 
-        /* ANIMACIONES DE APERTURA NATIVAS CSS */
-        .envelope-wrapper.open .flap {
+        .envelope-wrapper:hover {
+            transform: scale(1.02) rotateX(5deg);
+        }
+
+        /* Solapa Superior */
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 190px solid transparent;
+            border-right: 190px solid transparent;
+            border-top: 140px solid #2e3033;
+            filter: drop-shadow(0 4px 5px rgba(0,0,0,0.4));
+            transform-origin: top center;
+            transition: transform 0.6s ease-in-out;
+            z-index: 5;
+        }
+
+        /* Cuerpo del Sobre Inferior/Laterales */
+        .envelope-body {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 190px solid #2a2b2e;
+            border-right: 190px solid #2a2b2e;
+            border-bottom: 140px solid #2c2e30;
+            z-index: 4;
+            border-radius: 0 0 4px 4px;
+        }
+
+        /* Sello de Oro que parpadea/pulsa */
+        .gold-seal {
+            position: absolute;
+            top: 140px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 55px;
+            height: 55px;
+            background: radial-gradient(circle, var(--gold-light) 0%, var(--gold-primary) 70%, var(--gold-dark) 100%);
+            border-radius: 50%;
+            z-index: 6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5), 0 0 15px rgba(212, 175, 55, 0.4);
+            transition: all 0.5s ease;
+            animation: pulse-seal 2s infinite ease-in-out;
+        }
+
+        .gold-seal img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        @keyframes pulse-seal {
+            0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 4px 10px rgba(0,0,0,0.5), 0 0 10px rgba(212, 175, 55, 0.4); }
+            50% { transform: translate(-50%, -50%) scale(1.06); box-shadow: 0 4px 15px rgba(0,0,0,0.4), 0 0 25px rgba(212, 175, 55, 0.8); }
+            100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 4px 10px rgba(0,0,0,0.5), 0 0 10px rgba(212, 175, 55, 0.4); }
+        }
+
+        /* Tarjeta Interior Asomándose */
+        .inner-card-preview {
+            position: absolute;
+            bottom: 10px;
+            left: 20px;
+            width: 340px;
+            height: 240px;
+            background-color: var(--grey-light);
+            border: 2px solid var(--gold-primary);
+            border-radius: 4px;
+            z-index: 2;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        /* Efecto de Corona de Alta Fidelidad */
+        .real-crown {
+            width: 75px;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
+            margin-bottom: 5px;
+            animation: float-crown 3s infinite ease-in-out;
+        }
+
+        @keyframes float-crown {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-4px); filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.9)); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Textos de Neón Dorado */
+        .neon-gold-text {
+            font-size: 2.2rem;
+            color: #fff;
+            text-shadow: 0 0 5px #fff, 0 0 10px var(--gold-primary), 0 0 20px var(--gold-primary), 0 0 30px var(--gold-dark);
+            margin: 5px 0;
+            font-family: 'Great Vibes', 'Bickham Script Pro', cursive, serif;
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            color: var(--gold-primary);
+            text-transform: uppercase;
+        }
+
+        /* ESTADO ABIERTO (ANIMACIÓN DEL SOBRE) */
+        .envelope-wrapper.open .envelope-flap {
             transform: rotateX(180deg);
             z-index: 1;
         }
 
-        .envelope-wrapper.open .letter {
-            transform: translateY(-90px) translateZ(10px);
-            z-index: 4;
-        }
-
-        .envelope-wrapper.open .seal-css {
-            transform: translate(-50%, -50%) scale(0);
+        .envelope-wrapper.open .gold-seal {
             opacity: 0;
+            transform: translate(-50%, -50%) scale(0);
+            pointer-events: none;
         }
 
-        .envelope-deco-bg {
+        .envelope-wrapper.open .inner-card-preview {
+            transform: translateY(-160px) scale(1.05);
+            z-index: 8;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+        }
+
+        /* CONTENIDO PRINCIPAL DE LA INVITACIÓN (OCULTO AL INICIO) */
+        .main-invitation-content {
             position: absolute;
+            top: 40px;
             width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            opacity: 0.08;
-            background: repeating-linear-gradient(45deg, var(--accent-color), var(--accent-color) 10px, transparent 10px, transparent 20px);
+            max-width: 500px;
+            background: linear-gradient(135deg, #222326 0%, #17181a 100%);
+            border: 3px double var(--gold-primary);
+            border-radius: 8px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+            opacity: 0;
+            transform: scale(0.8) translateY(50px);
+            transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             pointer-events: none;
-        }
-
-        .flap {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-top: 100px solid var(--envelope-bg);
-            transform-origin: top;
-            pointer-events: none;
-            z-index: 3;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .flap::after {
-            content: '';
-            position: absolute;
-            top: -103px;
-            left: -150px;
-            width: 0;
-            height: 0;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-top: 102px solid rgba(212, 175, 55, 0.4);
             z-index: -1;
         }
 
-        .pocket {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-left: 150px solid rgba(37,37,37,0.9);
-            border-right: 150px solid rgba(37,37,37,0.9);
-            border-bottom: 100px solid rgba(30,30,30,0.95);
-            border-top: 100px solid transparent;
-            border-radius: 0 0 8px 8px;
-            z-index: 4;
-            pointer-events: none;
-        }
-
-        .seal-css {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50px;
-            height: 50px;
-            background: radial-gradient(circle, #f3e5ab 0%, var(--accent-color) 100%);
-            border-radius: 50%;
-            z-index: 5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-        }
-
-        .seal-css::before {
-            content: '👑';
-            font-size: 1.5rem;
-        }
-
-        /* TARJETA INTERNA */
-        .letter {
-            position: absolute;
-            bottom: 10px;
-            left: 15px;
-            width: 270px;
-            height: 170px;
-            background-color: #2b2b2b;
-            border: 2px solid var(--accent-color);
-            border-radius: 6px;
-            z-index: 2;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-            box-sizing: border-box;
-            text-align: center;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
-        }
-
-        /* AJUSTES PARA LA NUEVA CORONA REAL */
-        .real-crown {
-            width: 100px;
-            height: auto;
-            object-fit: contain;
-            margin-bottom: 6px;
-            /* Resalta los diamantes y añade un aura dorada */
-            filter: drop-shadow(0 0 10px rgba(212,175,55,0.6)) contrast(1.1);
-            animation: crownPulse 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes crownPulse {
-            0% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(212,175,55,0.5)) contrast(1.1); }
-            100% { transform: scale(1.04); filter: drop-shadow(0 0 16px rgba(255,243,168,0.85)) contrast(1.15); }
-        }
-
-        /* TEXTO INTERIOR NEÓN */
-        .neon-gold-text {
-            font-size: 2.2rem;
-            margin: 2px 0;
-            font-weight: bold;
-            color: var(--neon-gold);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 
-                0 0 6px rgba(255,255,255,0.6),
-                0 0 12px var(--accent-color),
-                0 0 25px var(--accent-color),
-                0 0 40px #ffae00;
-            animation: neonFlicker 3s infinite alternate;
-        }
-
-        @keyframes neonFlicker {
-            0%, 100% { opacity: 1; text-shadow: 0 0 6px rgba(255,255,255,0.6), 0 0 12px var(--accent-color), 0 0 25px var(--accent-color), 0 0 40px #ffae00; }
-            50% { opacity: 0.95; text-shadow: 0 0 4px rgba(255,255,255,0.4), 0 0 9px var(--accent-color), 0 0 20px var(--accent-color), 0 0 30px #e69d00; }
-        }
-
-        /* --- CONTENEDOR PRINCIPAL INTERIOR --- */
-        .container {
-            max-width: 450px;
-            width: 100%;
-            padding: 20px;
-            box-sizing: border-box;
-            text-align: center;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
+        .main-invitation-content.visible {
             position: relative;
-            z-index: 100; 
-        }
-
-        body:not(.locked) .container {
             opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+            z-index: 20;
         }
 
-        .gold-divider-css {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 15px auto;
-            width: 80%;
-        }
-
-        .gold-divider-css::before, .gold-divider-css::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(to var(--direction, right), transparent, var(--accent-color));
-        }
-
-        .gold-divider-css::after { --direction: left; }
-
-        .gold-divider-css span {
-            width: 10px;
-            height: 10px;
-            background: var(--accent-color);
-            transform: rotate(45deg);
-            margin: 0 10px;
-        }
-
+        /* Cabecera Principal */
         .shine-text {
-            color: var(--accent-color);
-            position: relative;
-            display: inline-block;
-            overflow: hidden;
-            background: linear-gradient(to right, #d4af37 20%, #fff 40%, #fff 60%, #d4af37 80%);
-            background-size: 200% auto;
+            font-size: 3.5rem;
+            background: linear-gradient(to right, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa7c11 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: textShine 4s linear infinite;
+            margin: 10px 0;
+            font-family: 'Great Vibes', 'Bickham Script Pro', cursive, serif;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
         }
 
-        @keyframes textShine {
-            to { background-position: 200% center; }
+        /* Galería de Fotos del Cliente */
+        .photo-gallery {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 25px 0;
         }
 
-        .cheers-animation {
-            font-size: 2.2rem;
-            color: var(--accent-color);
-            display: inline-block;
-            animation: clink 1.5s ease-in-out infinite;
+        .client-photo {
+            width: 130px;
+            height: 180px;
+            object-fit: cover;
+            border: 2px solid var(--gold-primary);
+            border-radius: 4px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.5);
+            transition: transform 0.4s ease;
+        }
+
+        .client-photo:hover {
+            transform: scale(1.05) rotate(2deg);
+            border-color: var(--gold-light);
+        }
+
+        /* Detalles del Evento */
+        .details-box {
+            border-top: 1px dashed rgba(212, 175, 55, 0.4);
+            border-bottom: 1px dashed rgba(212, 175, 55, 0.4);
+            padding: 20px 0;
+            margin: 20px 0;
+        }
+
+        .date-highlight {
+            font-size: 1.3rem;
+            color: var(--gold-light);
+            letter-spacing: 2px;
             margin-bottom: 5px;
         }
 
-        @keyframes clink {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(-12deg) scale(1.1); }
+        /* Sistema de Mariposas Voladoras */
+        .butterfly {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle, var(--gold-light) 0%, var(--gold-primary) 100%);
+            clip-path: polygon(50% 45%, 0% 0%, 15% 70%, 50% 60%, 85% 70%, 100% 0%);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 15;
         }
 
-        .music-player {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(58, 58, 58, 0.9);
-            border: 1px solid var(--accent-color);
-            padding: 10px 15px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1001;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            cursor: pointer;
-            backdrop-filter: blur(5px);
+        @keyframes fly-away {
+            0% { transform: translate(0, 0) scale(0.5) rotate(0deg); opacity: 1; }
+            50% { transform: translate(var(--x1), var(--y1)) scale(1) rotate(45deg); opacity: 0.8; }
+            100% { transform: translate(var(--x2), var(--y2)) scale(0.2) rotate(90deg); opacity: 0; }
         }
-
-        .music-player i { color: var(--accent-color); font-size: 1.2rem; }
-        .music-player span { font-size: 0.8rem; font-weight: bold; }
-
-        header { margin-top: 90px; margin-bottom: 30px; }
-        h1 { font-size: 3.2rem; margin: 5px 0 15px 0; font-weight: bold; }
-        .subtitle { letter-spacing: 4px; color: var(--text-muted); font-size: 0.9rem; }
-
-        .invitation-img {
-            width: 100%;
-            max-height: 350px;
-            object-fit: cover;
-            border-radius: 15px;
-            border: 2px solid var(--accent-color);
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        }
-
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 30px 0;
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid #555;
-        }
-
-        .countdown-item { display: flex; flex-direction: column; font-size: 0.8rem; color: var(--text-muted); }
-        .countdown-item span { font-size: 1.6rem; font-weight: bold; color: var(--accent-color); }
-
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-            border: 1px solid #555;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card h2 { font-size: 1.4rem; margin-top: 5px; }
-
-        .btn {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: #000;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 25px;
-            font-weight: bold;
-            margin-top: 15px;
-            cursor: pointer;
-            border: none;
-            font-size: 1rem;
-        }
-
-        .footer { margin: 40px 0; font-size: 0.8rem; color: var(--text-muted); }
     </style>
+    <!-- Importación de fuente elegante de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 </head>
-<body class="locked">
+<body>
 
-    <!-- CONTENEDOR DE MARIPOSAS -->
-    <div id="butterfly-container"></div>
+    <div class="gold-particles"></div>
 
-    <!-- PANTALLA INICIAL: EL SOBRE INTERACTIVO 3D -->
-    <div class="envelope-overlay" id="envelopeOverlay">
-        <div style="text-align: center; z-index: 10; margin-bottom: 10px; padding: 0 20px;">
-            <p class="subtitle" style="margin-bottom: 5px; color: var(--text-muted);">ESTA INVITACIÓN ES ESPECIAL PARA TI</p>
-            <p style="color: var(--accent-color); font-size: 0.9rem; font-style: italic;">Haz clic en el sobre para abrirlo</p>
+    <!-- VISTA 1: EL SOBRE VIRTUAL -->
+    <div class="envelope-wrapper" id="envelope">
+        <div class="envelope-flap"></div>
+        <div class="gold-seal">
+            <!-- La corona de alta resolución local en el sello -->
+            <img src="corona.png" alt="Sello Corona Real">
         </div>
-
-        <div class="envelope-wrapper" id="envelopeWrapper">
-            <div class="envelope">
-                <div class="flap"></div>
-                <div class="envelope-deco-bg"></div>
-                <div class="pocket"></div>
-                <div class="seal-css"></div>
-                
-                <!-- NUEVA CORONA ASIGNADA LOCALMENTE -->
-                <div class="letter">
-                    <img src="corona.png" alt="Corona Real Dorada" class="real-crown">
-                    <p class="subtitle" style="font-size: 0.75rem; margin: 0;">MIS XV AÑOS</p>
-                    <h3 class="neon-gold-text">Alexa</h3>
-                    <p style="font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 3px;">¡Abriendo invitación!</p>
-                </div>
-            </div>
+        <div class="inner-card-preview">
+            <!-- La corona de alta resolución local adentro de la tarjeta -->
+            <img src="corona.png" alt="Corona Real Dorada" class="real-crown">
+            <p class="subtitle" style="font-size: 0.7rem; margin: 0;">MIS XV AÑOS</p>
+            <h3 class="neon-gold-text">Alexa</h3>
+            <p style="font-size: 0.7rem; color: rgba(255,255,255,0.6); margin-top: 3px;">¡Toca para abrir!</p>
         </div>
+        <div class="envelope-body"></div>
     </div>
 
-    <!-- REPRODUCTOR CONTROL MULTIMEDIA -->
-    <div class="music-player" id="musicControl">
-        <i class="fas fa-play" id="musicIcon"></i>
-        <span id="musicStatus">Escuchar música</span>
-    </div>
-
-    <div id="youtube-player" style="display:none;"></div>
-
-    <!-- CONTENIDO GENERAL DE LA INVITACIÓN -->
-    <div class="container">
+    <!-- VISTA 2: INVITACIÓN PRINCIPAL COMPLETA -->
+    <div class="main-invitation-content" id="mainContent">
         <header>
-            <!-- NUEVA CORONA ASIGNADA EN LA SECCIÓN PRINCIPAL -->
-            <img src="corona.png" alt="Corona Real Principal" class="real-crown" style="width: 120px; margin-bottom: 8px;">
-            <p class="subtitle" style="margin-top: 5px;">MIS QUINCE AÑOS</p>
+            <!-- La corona de alta resolución en la cabecera principal -->
+            <img src="corona.png" alt="Corona Real Principal" class="real-crown" style="width: 110px; margin-bottom: 5px;">
+            <p class="subtitle">MIS QUINCE AÑOS</p>
             <h1 class="shine-text">Alexa</h1>
         </header>
 
-        <!-- PRIMERA FOTO -->
-        <img src="foto1.jpeg" alt="Alexa" class="invitation-img">
-
-        <p>Hay momentos inolvidables que se quedan guardados en el corazón, y compartir mi felicidad contigo hará este día aún más especial.</p>
-
-        <!-- CUENTA REGRESIVA -->
-        <div class="countdown">
-            <div class="countdown-item"><span id="days">00</span>Días</div>
-            <div class="countdown-item"><span id="hours">00</span>Horas</div>
-            <div class="countdown-item"><span id="minutes">00</span>Min</div>
-            <div class="countdown-item"><span id="seconds">00</span>Seg</div>
+        <!-- Sección de Fotografías Locales -->
+        <div class="photo-gallery">
+            <img src="foto1.jpeg" alt="Alexa Foto 1" class="client-photo">
+            <img src="foto2.jpeg" alt="Alexa Foto 2" class="client-photo">
         </div>
 
-        <!-- MISA -->
-        <div class="card">
-            <div class="gold-divider-css"><span></span></div>
-            <div style="font-size: 1.8rem; color: var(--accent-color); margin-bottom: 10px;"><i class="fas fa-church"></i></div>
-            <h2 class="shine-text">Ceremonia Religiosa</h2>
-            <p><strong>Fecha:</strong> 19 de Septiembre de 2026</p>
-            <p><strong>Hora:</strong> 4:00 PM</p>
-            <p>Acompáñame a dar gracias en este día tan importante.</p>
-            <a href="https://maps.app.goo.gl/mNXgSDCiLDPPqkJd7?g_st=awb" target="_blank" class="btn">Ver mapa de la iglesia</a>
-        </div>
+        <section class="details-box">
+            <p style="font-style: italic; margin-bottom: 15px; color: #ccc;">
+                "Hay momentos en la vida que son inolvidables, pero compartirlos con quienes más amas los hace eternos."
+            </p>
+            <p class="date-highlight">SÁBADO, 19 DE SEPTIEMBRE DE 2026</p>
+            <p style="color: var(--gold-primary); letter-spacing: 1px;">RECEPCIÓN EXCLUSIVA</p>
+        </section>
 
-        <!-- SEGUNDA FOTO -->
-        <img src="foto2.jpeg" alt="Mis XV Años" class="invitation-img">
-
-        <!-- RECEPCIÓN -->
-        <div class="card">
-            <div class="gold-divider-css"><span></span></div>
-            <div class="cheers-animation"><i class="fas fa-glass-cheers"></i></div>
-            <h2 class="shine-text">Recepción</h2>
-            <p><strong>Fecha:</strong> 19 de Septiembre de 2026</p>
-            <p><strong>Hora:</strong> 5:30 PM</p>
-            <p>¡Te espero para celebrar, bailar y disfrutar juntos!</p>
-            <a href="https://maps.app.goo.gl/4xNC45i5C1FJbChM7?g_st=awb" target="_blank" class="btn">Ver mapa del salón</a>
-        </div>
-
-        <!-- CONFIRMACIÓN -->
-        <div class="card">
-            <div style="font-size: 1.8rem; color: var(--accent-color); margin-bottom: 10px;"><i class="fas fa-envelope-open-text"></i></div>
-            <h2 class="shine-text">Confirmación</h2>
-            <p>¡Es muy importante para mí contar con tu presencia!</p>
-            <a href="https://wa.me/525564855060?text=Hola,%20confirmo%20mi%20asistencia%20a%20los%20XV%20de%20Alexa." target="_blank" class="btn" style="background-color: #25D366; color: white;"><i class="fab fa-whatsapp"></i> Confirmar Asistencia</a>
-        </div>
-
-        <div class="footer">¡Te espero para celebrar juntos! ✨</div>
+        <footer>
+            <p style="font-size: 0.8rem; color: rgba(255,255,255,0.5);">Te esperamos con elegancia y alegría.</p>
+        </footer>
     </div>
 
     <script>
-        // --- 1. DESTELLOS DE DIAMANTE DE FONDO ---
-        const overlayBg = document.getElementById('envelopeOverlay');
-        for (let i = 0; i < 20; i++) {
-            const sparkle = document.createElement('div');
-            sparkle.classList.add('diamond-sparkle');
-            sparkle.style.width = Math.random() * 5 + 3 + 'px';
-            sparkle.style.height = sparkle.style.width;
-            sparkle.style.left = Math.random() * 100 + 'vw';
-            sparkle.style.animationDelay = Math.random() * 5 + 's';
-            sparkle.style.animationDuration = Math.random() * 3 + 4 + 's';
-            overlayBg.appendChild(sparkle);
-        }
+        const envelope = document.getElementById('envelope');
+        const mainContent = document.getElementById('mainContent');
 
-        // --- 2. SISTEMA DE MARIPOSAS DORADAS ---
-        const butterflyContainer = document.getElementById('butterfly-container');
-        let butterflyInterval;
-
-        const butterflySVG = `
-            <svg viewBox="0 0 50 50" fill="url(#goldGrad)">
-                <defs>
-                    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#ffe891" />
-                        <stop offset="100%" stop-color="#d4af37" />
-                    </linearGradient>
-                </defs>
-                <path d="M25,22 C22,12 10,10 7,18 C5,24 14,32 25,38 C36,32 45,24 43,18 C40,10 28,12 25,22 Z M25,25 C23,28 15,35 12,38 C10,41 15,44 20,41 C23,39 25,32 25,25 Z M25,25 C25,32 27,39 30,41 C35,44 40,41 38,38 C35,35 27,28 25,25 Z" />
-            </svg>
-        `;
-
-        function startButterflies() {
-            butterflyInterval = setInterval(createButterfly, 500);
-        }
-
-        function createButterfly() {
-            const documentHeight = Math.max(
-                document.body.scrollHeight, 
-                document.documentElement.scrollHeight,
-                document.body.offsetHeight,
-                document.documentElement.offsetHeight
-            );
+        envelope.addEventListener('click', () => {
+            // 1. Activar animación tridimensional del sobre
+            envelope.classList.add('open');
             
-            const butterfly = document.createElement('div');
-            butterfly.classList.add('golden-butterfly');
-            butterfly.innerHTML = butterflySVG;
+            // 2. Disparar ráfaga mágica de mariposas de oro desde el centro
+            createButterflyBurst();
 
-            const startX = Math.random() * 100; 
-            const startY = Math.random() * documentHeight;
-            const endX = startX + (Math.random() * 40 - 20); 
-            const endY = startY - (Math.random() * 300 + 200);
-
-            const size = Math.random() * 22 + 18; 
-            butterfly.style.width = `${size}px`;
-            butterfly.style.height = `${size}px`;
-            
-            butterfly.style.left = `${startX}vw`;
-            butterfly.style.top = `${startY}px`;
-
-            butterflyContainer.appendChild(butterfly);
-
-            let progress = 0;
-            const speed = Math.random() * 0.0025 + 0.002; 
-            const amplitude = Math.random() * 40 + 15; 
-            const waveFrequency = Math.random() * 0.08 + 0.04;
-
-            function animate() {
-                progress += speed;
-                if (progress >= 1) {
-                    butterfly.remove();
-                } else {
-                    const currentY = startY + (endY - startY) * progress;
-                    const currentX = startX + (endX - startX) * progress + Math.sin(progress * Math.PI * 10 * waveFrequency) * (amplitude / 10);
-                    
-                    butterfly.style.top = `${currentY}px`;
-                    butterfly.style.left = `${currentX}vw`;
-                    butterfly.style.opacity = progress < 0.1 ? progress * 10 : (progress > 0.85 ? (1 - progress) * 6.6 : 0.9);
-
-                    const flap = Math.sin(Date.now() * 0.025) * 0.7 + 0.8;
-                    butterfly.style.transform = `scaleX(${flap}) rotate(${Math.sin(progress * 4) * 20}deg)`;
-
-                    if (Math.random() < 0.25) { 
-                        createSparkleTrail(currentX, currentY, size);
-                    }
-
-                    requestAnimationFrame(animate);
-                }
-            }
-            requestAnimationFrame(animate);
-        }
-
-        function createSparkleTrail(xPercent, yPx, offset) {
-            const trail = document.createElement('div');
-            trail.classList.add('butterfly-trail');
-            
-            const tSize = Math.random() * 5 + 3; 
-            trail.style.width = `${tSize}px`;
-            trail.style.height = `${tSize}px`;
-            
-            trail.style.left = `calc(${xPercent}vw + ${Math.random() * (offset / 2)}px)`;
-            trail.style.top = `${yPx + (Math.random() * (offset / 2))}`;
-            
-            butterflyContainer.appendChild(trail);
-            
-            setTimeout(() => { trail.remove(); }, 800);
-        }
-
-        // --- 3. MANEJO INTERACTIVO DEL SOBRE ---
-        const wrapper = document.getElementById('envelopeWrapper');
-        const overlay = document.getElementById('envelopeOverlay');
-
-        wrapper.addEventListener('click', () => {
-            wrapper.classList.add('open');
-            startButterflies();
-
+            // 3. Desvanecer el sobre y presentar la invitación majestuosa de Alexa
             setTimeout(() => {
-                overlay.classList.add('fade-out');
-                document.body.classList.remove('locked');
-                setTimeout(() => {
-                    if(!isPlaying) toggleMusic();
-                }, 200);
-            }, 1400);
+                envelope.style.display = 'none';
+                mainContent.classList.add('visible');
+            }, 1200);
         });
 
-        // --- 4. API REPRODUCTOR YOUTUBE ---
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        var player;
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('youtube-player', {
-                height: '0', width: '0', videoId: 'kPa7bsKwL-c', 
-                playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'kPa7bsKwL-c' }
-            });
-        }
-
-        const musicControl = document.getElementById('musicControl');
-        const musicIcon = document.getElementById('musicIcon');
-        const musicStatus = document.getElementById('musicStatus');
-        let isPlaying = false;
-
-        function toggleMusic() {
-            if (!isPlaying) {
-                player.playVideo();
-                musicIcon.className = 'fas fa-pause';
-                musicStatus.innerText = 'Música Activada';
-                isPlaying = true;
-            } else {
-                player.pauseVideo();
-                musicIcon.className = 'fas fa-play';
-                musicStatus.innerText = 'Música Pausada';
-                isPlaying = false;
+        function createButterflyBurst() {
+            const container = document.body;
+            for (let i = 0; i < 15; i++) {
+                const b = document.createElement('div');
+                b.classList.add('butterfly');
+                
+                // Posicionar en el núcleo del sobre
+                b.style.left = '50%';
+                b.style.top = '50%';
+                
+                // Generar rumbos aleatorios dinámicos para las mariposas
+                const x1 = (Math.random() - 0.5) * 300;
+                const y1 = (Math.random() - 0.5) * 300 - 100;
+                const x2 = (Math.random() - 0.5) * 600;
+                const y2 = (Math.random() - 0.5) * 600 - 200;
+                
+                b.style.setProperty('--x1', `${x1}px`);
+                b.style.setProperty('--y1', `${y1}px`);
+                b.style.setProperty('--x2', `${x2}px`);
+                b.style.setProperty('--y2', `${y2}px`);
+                
+                // Velocidades asíncronas para realismo
+                b.style.animation = `fly-away ${1.5 + Math.random()}s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
+                
+                container.appendChild(b);
+                setTimeout(() => b.remove(), 2500);
             }
         }
-
-        musicControl.addEventListener('click', toggleMusic);
-
-        // --- 5. CUENTA REGRESIVA ---
-        const eventDate = new Date(2026, 8, 19, 16, 0, 0).getTime();
-
-        const timer = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = eventDate - now;
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById("days").innerText = days < 10 ? "0" + days : days;
-            document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
-            document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
-            document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
-
-            if (distance < 0) {
-                clearInterval(timer);
-                document.querySelector(".countdown").innerHTML = "¡Hoy es mi gran día!";
-            }
-        }, 1000);
     </script>
 </body>
 </html>
