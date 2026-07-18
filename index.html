@@ -7,7 +7,7 @@
     <!-- Iconos FontAwesome para los botones, copa y WhatsApp -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Fuentes Elegantes -->
-    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --gold-primary: #d4af37;
@@ -114,6 +114,13 @@
             animation: pulse-seal 2s infinite ease-in-out;
         }
 
+        .gold-seal svg {
+            width: 35px;
+            height: 35px;
+            color: #111;
+            filter: drop-shadow(0 1px 2px rgba(255,255,255,0.4));
+        }
+
         @keyframes pulse-seal {
             0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 4px 10px rgba(0,0,0,0.5), 0 0 10px rgba(212, 175, 55, 0.4); }
             50% { transform: translate(-50%, -50%) scale(1.08); box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 25px rgba(212, 175, 55, 0.8); }
@@ -141,28 +148,28 @@
             box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
         }
 
-        /* Corona Flotante Local PNG */
-        .user-png-crown {
-            width: 85px;
+        /* Corona Flotante Local */
+        .real-crown {
+            width: 80px;
             height: auto;
+            color: var(--gold-primary);
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.7));
             margin-bottom: 5px;
             animation: float-crown 3s infinite ease-in-out;
         }
 
         @keyframes float-crown {
             0% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+            50% { transform: translateY(-5px); filter: drop-shadow(0 0 14px rgba(212, 175, 55, 0.95)); }
             100% { transform: translateY(0); }
         }
 
-        /* Fuente Script de Alta Legibilidad */
         .neon-gold-text {
-            font-family: 'Alex Brush', cursive;
-            font-size: 3.2rem;
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
             color: #fff;
             text-shadow: 0 0 5px #fff, 0 0 10px var(--gold-primary), 0 0 20px var(--gold-primary);
-            margin: 0;
-            font-weight: 400;
+            margin: 5px 0;
         }
 
         .subtitle {
@@ -191,7 +198,6 @@
 
         /* --- VISTA 2: INVITACIÓN COMPLETA (PRINCIPAL) --- */
         .main-invitation-content {
-            position: relative;
             width: 100%;
             max-width: 450px;
             background: linear-gradient(135deg, #222326 0%, #17181a 100%);
@@ -214,63 +220,13 @@
             transform: scale(1);
         }
 
-        /* Mariposas laterales integradas que flotan y sueltan destellos */
-        .card-butterfly {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            background: var(--gold-light);
-            clip-path: polygon(50% 45%, 0% 0%, 15% 70%, 50% 60%, 85% 70%, 100% 0%);
-            z-index: 25;
-            animation: float-card-bf 3.5s infinite ease-in-out;
-        }
-        .cb-left { top: 25px; left: 15px; }
-        .cb-right { top: 55px; right: 20px; animation-delay: 1.5s; }
-
-        @keyframes float-card-bf {
-            0%, 100% { transform: translateY(0) rotate(-5deg); opacity: 0.7; }
-            50% { transform: translateY(-6px) rotate(5deg); opacity: 0.9; }
-        }
-
-        /* Partículas/Destellos cayendo */
-        .sparkle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 5px var(--gold-light);
-            pointer-events: none;
-            z-index: 24;
-            animation: fall-fade 1.6s linear forwards;
-        }
-
-        @keyframes fall-fade {
-            0% { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(55px); opacity: 0; }
-        }
-
-        /* Animación de las copas balanceándose */
-        .fa-wine-glass-alt {
-            display: inline-block;
-            animation: tilt-shake 2.5s infinite ease-in-out;
-            transform-origin: bottom center;
-        }
-
-        @keyframes tilt-shake {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-14deg); }
-            75% { transform: rotate(14deg); }
-        }
-
         .shine-text {
-            font-family: 'Alex Brush', cursive;
-            font-size: 4.8rem;
-            font-weight: 400;
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.8rem;
             background: linear-gradient(to right, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa7c11 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin: 0px 0 10px 0;
+            margin: 5px 0 15px 0;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
         }
 
@@ -395,7 +351,7 @@
             box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
         }
 
-        /* Ráfaga burst de mariposas iniciales */
+        /* Mariposas Mágicas */
         .butterfly {
             position: absolute;
             width: 22px;
@@ -413,7 +369,7 @@
             100% { transform: translate(var(--x2), var(--y2)) scale(0.2) rotate(90deg); opacity: 0; }
         }
 
-        /* Botón de Control Música Fijo */
+        /* Botón de Música Flotante */
         .music-control {
             position: fixed;
             bottom: 20px;
@@ -431,23 +387,16 @@
             z-index: 100;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
-
-        /* Contenedor invisible para la API de YouTube */
-        #yt-player {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            pointer-events: none;
-        }
     </style>
 </head>
 <body>
 
     <div class="gold-particles"></div>
 
-    <!-- REPRODUCTOR EN SEGUNDO PLANO DE YOUTUBE (Carga el video de "Die with a smile") -->
-    <div id="yt-player"></div>
+    <!-- REPRODUCTOR CONFIGURADO CON SU CANCIÓN -->
+    <audio id="bgMusic" loop>
+        <source src="die-with-a-smile.mp3" type="audio/mpeg">
+    </audio>
 
     <div class="music-control" id="musicBtn" style="display: none;">
         <i class="fas fa-music"></i>
@@ -457,12 +406,16 @@
     <div class="envelope-wrapper" id="envelope">
         <div class="envelope-flap"></div>
         <div class="gold-seal">
-            <!-- TU CORONA PNG EN EL SELLO -->
-            <img src="corona.png" alt="Corona Sello" style="width: 38px; height: auto;">
+            <!-- Corona Sello Real SVG -->
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M2 16.5l3-9.5 4.5 5 2.5-7 2.5 7 4.5-5 3 9.5z"/>
+            </svg>
         </div>
         <div class="inner-card-preview">
-            <!-- TU CORONA PNG EN LA VISTA PREVIA -->
-            <img src="corona.png" alt="Corona Vista Previa" class="user-png-crown">
+            <!-- Corona Interior SVG -->
+            <svg class="real-crown" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M2 16.5l3-9.5 4.5 5 2.5-7 2.5 7 4.5-5 3 9.5z"/>
+            </svg>
             <p class="subtitle" style="font-size: 0.7rem; margin: 0;">MIS XV AÑOS</p>
             <h3 class="neon-gold-text">Alexa</h3>
             <p style="font-size: 0.7rem; color: rgba(255,255,255,0.6); margin-top: 3px;">¡Toca para abrir!</p>
@@ -472,12 +425,11 @@
 
     <!-- VISTA 2: INVITACIÓN PRINCIPAL COMPLETA -->
     <div class="main-invitation-content" id="mainContent">
-        <div class="card-butterfly cb-left" id="bfLeft"></div>
-        <div class="card-butterfly cb-right" id="bfRight"></div>
-
         <header>
-            <!-- TU CORONA PNG EN LA CABECERA PRINCIPAL -->
-            <img src="corona.png" alt="Corona Principal" class="user-png-crown" style="width: 100px; margin-bottom: 0;">
+            <!-- Corona Principal SVG -->
+            <svg class="real-crown" style="width: 100px; margin-bottom: 5px;" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M2 16.5l3-9.5 4.5 5 2.5-7 2.5 7 4.5-5 3 9.5z"/>
+            </svg>
             <p class="subtitle">MIS QUINCE AÑOS</p>
             <h1 class="shine-text">Alexa</h1>
         </header>
@@ -492,7 +444,7 @@
             "Hay momentos en la vida que son inolvidables, pero compartirlos con quienes más amas los hace eternos."
         </p>
 
-        <!-- Contador Regresivo -->
+        <!-- Contador Regresivo Enlazado a la Fecha Real -->
         <div class="countdown-container">
             <div class="countdown-item"><span class="countdown-number" id="days">00</span><span class="countdown-label">Días</span></div>
             <div class="countdown-item"><span class="countdown-number" id="hours">00</span><span class="countdown-label">Hrs</span></div>
@@ -500,7 +452,7 @@
             <div class="countdown-item"><span class="countdown-number" id="seconds">00</span><span class="countdown-label">Seg</span></div>
         </div>
 
-        <!-- Módulo: Ceremonia Religiosa -->
+        <!-- Módulo: Ceremonia Religiosa con su Horario -->
         <div class="info-card">
             <i class="fas fa-church"></i>
             <h4>Sagrada Ceremonia</h4>
@@ -508,7 +460,7 @@
             <a href="https://maps.google.com" target="_blank" class="btn-gold"><i class="fas fa-map-marker-alt"></i> Ver Ubicación de Iglesia</a>
         </div>
 
-        <!-- Módulo: Recepción -->
+        <!-- Módulo: Recepción con su Horario -->
         <div class="info-card">
             <i class="fas fa-glass-cheers"></i>
             <h4>Gran Recepción</h4>
@@ -516,13 +468,14 @@
             <a href="https://maps.google.com" target="_blank" class="btn-gold"><i class="fas fa-map-marker-alt"></i> Ver Ubicación del Salón</a>
         </div>
 
-        <!-- Módulo de la Copa (CORREGIDO Y LIMPIO) -->
+        <!-- Módulo de la Copa -->
         <div class="info-card">
             <i class="fas fa-wine-glass-alt"></i>
-            <p style="margin: 5px 0 0 0; font-size: 1.1rem; color: var(--gold-light); font-weight: 600;">Pases: 4 Personas</p>
+            <h4>Pase Familiar Exclusivo</h4>
+            <p>Hemos reservado con mucho cariño:<br><strong style="font-size: 1.1rem; color: var(--gold-light);">Pases: 4 Personas</strong></p>
         </div>
 
-        <!-- Confirmación Vía WhatsApp -->
+        <!-- Confirmación Vía WhatsApp con tu número real -->
         <div class="info-card" style="border-color: rgba(37, 211, 102, 0.3);">
             <i class="fab fa-whatsapp" style="color: #25d366;"></i>
             <h4>Confirmar Asistencia</h4>
@@ -537,67 +490,40 @@
         </footer>
     </div>
 
-    <!-- SCRIPT DE CARGA PARA LA API DE YOUTUBE -->
-    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
         const envelope = document.getElementById('envelope');
         const mainContent = document.getElementById('mainContent');
+        const bgMusic = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
-        let player;
-
-        // Inicializar el reproductor de YouTube con la canción ("Die with a smile")
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('yt-player', {
-                height: '1',
-                width: '1',
-                videoId: 'Kz8T_w8KeeY', // ID oficial del tema en YouTube
-                playerVars: {
-                    'autoplay': 0,
-                    'controls': 0,
-                    'loop': 1,
-                    'playlist': 'Kz8T_w8KeeY'
-                },
-                events: {
-                    'onReady': onPlayerReady
-                }
-            });
-        }
-
-        function onPlayerReady(event) {
-            // El reproductor ya está listo para accionarse cuando se abra el sobre
-        }
 
         // Manejo interactivo de apertura del sobre
         envelope.addEventListener('click', () => {
             envelope.classList.add('open');
             createButterflyBurst();
 
-            // Activar la reproducción desde YouTube al hacer clic
-            if (player && typeof player.playVideo === 'function') {
-                player.playVideo();
+            // Arrancar el tema Die with a Smile
+            bgMusic.play().then(() => {
                 musicBtn.style.display = 'flex';
-            }
+            }).catch(err => console.log("Audio esperando interacción"));
 
             setTimeout(() => {
                 envelope.style.display = 'none';
                 mainContent.classList.add('visible');
-                startSparkles(); // Activa caída continua de destellos de las mariposas
             }, 1200);
         });
 
-        // Botón Flotante para pausar/reproducir la música de YouTube
+        // Botón de Play/Pausa de Música
         musicBtn.addEventListener('click', () => {
-            const playerState = player.getPlayerState();
-            if (playerState === YT.PlayerState.PLAYING) {
-                player.pauseVideo();
-                musicBtn.style.color = '#777';
-            } else {
-                player.playVideo();
+            if (bgMusic.paused) {
+                bgMusic.play();
                 musicBtn.style.color = 'var(--gold-primary)';
+            } else {
+                bgMusic.pause();
+                musicBtn.style.color = '#777';
             }
         });
 
-        // Animación de ráfaga burst de mariposas iniciales
+        // Animación de ráfaga de mariposas
         function createButterflyBurst() {
             const container = document.body;
             for (let i = 0; i < 18; i++) {
@@ -621,26 +547,6 @@
                 container.appendChild(b);
                 setTimeout(() => b.remove(), 2500);
             }
-        }
-
-        // Motor de destellos continuos para las mariposas fijas laterales
-        function startSparkles() {
-            setInterval(() => {
-                createSparkleFromElement(document.getElementById('bfLeft'));
-                createSparkleFromElement(document.getElementById('bfRight'));
-            }, 400);
-        }
-
-        function createSparkleFromElement(element) {
-            if (!element) return;
-            const sparkle = document.createElement('div');
-            sparkle.classList.add('sparkle');
-            
-            sparkle.style.left = (element.offsetLeft + 10) + 'px';
-            sparkle.style.top = (element.offsetTop + 24) + 'px';
-            
-            mainContent.appendChild(sparkle);
-            setTimeout(() => sparkle.remove(), 1600);
         }
 
         // Cuenta regresiva real para el 19 de Septiembre de 2026
