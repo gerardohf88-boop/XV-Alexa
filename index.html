@@ -211,7 +211,7 @@
             opacity: 0;
             transform: scale(0.9);
             transition: all 1s ease-in-out;
-            z-index: 20;
+            z-index: 10; /* Capa por debajo de las mariposas voladoras */
             margin: 20px 10px;
         }
 
@@ -356,20 +356,20 @@
         .butterfly-svg {
             position: fixed;
             pointer-events: none;
-            z-index: 15;
+            z-index: 50; /* Aumentado para pasar POR ENCIMA del contenedor principal */
             transform-origin: center;
         }
 
-        /* Animación de Aleteo 3D genérica */
+        /* Animación de Aleteo 3D */
         .butterfly-svg svg {
             width: 100%;
             height: 100%;
-            animation: butterfly-flap 0.2s infinite ease-in-out alternate;
+            animation: butterfly-flap 0.18s infinite ease-in-out alternate;
         }
 
         @keyframes butterfly-flap {
             0% { transform: scaleX(1); }
-            100% { transform: scaleX(0.25); }
+            100% { transform: scaleX(0.2); }
         }
 
         /* 1. Animación exclusiva para la ráfaga inicial del sobre */
@@ -379,20 +379,20 @@
             100% { transform: translate(var(--x2), var(--y2)) scale(0.1) rotate(var(--rot2)); opacity: 0; }
         }
 
-        /* 2. Animación exclusiva para las mariposas interiores de fondo */
+        /* 2. Animación para que vuelen POR DELANTE de la invitación */
         @keyframes float-up-ambient {
             0% {
                 transform: translateY(110vh) translateX(0) scale(0.5) rotate(0deg);
                 opacity: 0;
             }
             10% {
-                opacity: 0.7;
+                opacity: 0.85; /* Un poco más visibles al cruzar al frente */
             }
             90% {
-                opacity: 0.7;
+                opacity: 0.85;
             }
             100% {
-                transform: translateY(-10vh) translateX(var(--drift-x)) scale(0.8) rotate(var(--drift-rot));
+                transform: translateY(-10vh) translateX(var(--drift-x)) scale(0.85) rotate(var(--drift-rot));
                 opacity: 0;
             }
         }
@@ -540,7 +540,7 @@
         </footer>
     </div>
 
-    <script>
+    <script {rule1}>
         const envelope = document.getElementById('envelope');
         const mainContent = document.getElementById('mainContent');
         const bgMusic = document.getElementById('bgMusic');
@@ -581,7 +581,7 @@
             setTimeout(() => {
                 envelope.style.display = 'none';
                 mainContent.classList.add('visible');
-                startAmbientButterflies(); // Iniciar flujo continuo al interior
+                startAmbientButterflies(); // Iniciar flujo continuo al interior sobre la invitación
             }, 1200);
         });
 
@@ -630,42 +630,40 @@
             }
         }
 
-        // 2. AMBIENTACIÓN INTERIOR (MARIPOSAS CONSTANTES DE FONDO)
+        // 2. AMBIENTACIÓN INTERIOR (MARIPOSAS CONSTANTES VOLANDO POR DELANTE)
         let ambientInterval;
         function startAmbientButterflies() {
-            // Crea una mariposa cada 1.5 segundos para no saturar el rendimiento visual
+            // Crea una mariposa cada 1.3 segundos
             ambientInterval = setInterval(() => {
                 const container = document.body;
                 const b = document.createElement('div');
                 b.classList.add('butterfly-svg');
                 
-                // Tamaños aleatorios sutiles para dar profundidad (entre 20px y 30px)
-                const size = 20 + Math.random() * 10;
+                // Tamaños aleatorios sutiles (entre 22px y 34px)
+                const size = 22 + Math.random() * 12;
                 b.style.width = `${size}px`;
                 b.style.height = `${size}px`;
                 
-                // Posición horizontal inicial aleatoria a lo ancho de la pantalla
+                // Se posicionan de forma horizontal aleatoria cubriendo la pantalla
                 b.style.left = `${Math.random() * 100}vw`;
-                b.style.top = '0'; // Se controla la altura por CSS Translate Y
+                b.style.top = '0';
                 
                 const randomColor = butterflyColors[Math.floor(Math.random() * butterflyColors.length)];
                 b.innerHTML = getButterflySVG(randomColor);
                 
-                // Desplazamiento horizontal (bamboleo) y rotación final al azar durante el viaje
-                const driftX = (Math.random() - 0.5) * 250;
-                const driftRot = (Math.random() - 0.5) * 90;
+                // Desplazamiento horizontal de balanceo y rotación final
+                const driftX = (Math.random() - 0.5) * 280;
+                const driftRot = (Math.random() - 0.5) * 110;
                 b.style.setProperty('--drift-x', `${driftX}px`);
                 b.style.setProperty('--drift-rot', `${driftRot}deg`);
                 
-                // Duración de subida lenta (entre 6 y 10 segundos)
-                const duration = 6 + Math.random() * 4;
+                // Duración de la trayectoria de subida
+                const duration = 5.5 + Math.random() * 3.5;
                 b.style.animation = `float-up-ambient ${duration}s linear forwards`;
                 
                 container.appendChild(b);
-                
-                // Limpieza del elemento al terminar el recorrido
                 setTimeout(() => b.remove(), duration * 1000);
-            }, 1500);
+            }, 1300);
         }
 
         // Cuenta regresiva real
