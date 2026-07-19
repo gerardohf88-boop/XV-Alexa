@@ -1,86 +1,220 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Invitación XV Años Alexa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis XV Años - Alexa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; padding: 0; background: #2f2f2f; color: #d4af37; font-family: 'Arial', sans-serif; text-align: center; overflow-x: hidden; }
-        
-        /* Sobre */
-        #envelope-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #4a4a4a; z-index: 1000; transition: transform 1s ease-in-out; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .envelope-flap { width: 300px; height: 150px; background: #333; border: 2px solid #d4af37; position: relative; }
-        .seal { width: 80px; height: 80px; background: #d4af37; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 3px solid #b8860b; }
-        .seal img { width: 50px; }
+        :root {
+            --gold-primary: #d4af37;
+            --gold-light: #f3e5ab;
+            --gold-dark: #aa7c11;
+            --grey-dark: #1c1d1f;
+            --grey-light: #2c2d30;
+            --text-light: #f5f5f5;
+        }
 
-        /* Invitación */
-        #invitation { display: none; padding: 40px; background: linear-gradient(135deg, #4a4a4a, #2b2b2b); min-height: 100vh; animation: fadeIn 2s; }
-        .card { border: 2px solid #d4af37; padding: 30px; border-radius: 20px; box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); background: rgba(0,0,0,0.2); }
-        
-        .photo-1 { filter: url('#paint-filter'); width: 250px; border: 5px solid #d4af37; border-radius: 10px; }
-        .photo-2 { filter: drop-shadow(0 0 10px #fff); width: 250px; border: 5px solid #d4af37; border-radius: 10px; }
-        
-        .glow { animation: shimmer 2s infinite alternate; }
-        @keyframes shimmer { from { box-shadow: 0 0 5px #d4af37; } to { box-shadow: 0 0 20px #d4af37; } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--grey-dark);
+            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            perspective: 1000px;
+        }
+
+        .gold-particles {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
+            background: radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.06) 0%, transparent 45%),
+                        radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.06) 0%, transparent 45%);
+            z-index: 1;
+        }
+
+        .envelope-wrapper {
+            position: relative; width: 380px; height: 280px; background-color: #252629;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7), inset 0 0 20px rgba(0,0,0,0.5);
+            cursor: pointer; z-index: 10;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d; border-radius: 4px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .envelope-wrapper:hover { transform: scale(1.03) rotateX(5deg); }
+
+        .envelope-flap {
+            position: absolute; top: 0; left: 0; width: 0; height: 0;
+            border-left: 190px solid transparent; border-right: 190px solid transparent;
+            border-top: 140px solid #2e3033;
+            transform-origin: top center; transition: transform 0.6s ease-in-out; z-index: 5;
+        }
+
+        .envelope-body {
+            position: absolute; bottom: 0; left: 0; width: 0; height: 0;
+            border-left: 190px solid #2a2b2e; border-right: 190px solid #2a2b2e;
+            border-bottom: 140px solid #2c2e30; z-index: 4; border-radius: 0 0 4px 4px;
+        }
+
+        .gold-seal {
+            position: absolute; top: 140px; left: 50%; transform: translate(-50%, -50%);
+            width: 60px; height: 60px; background: radial-gradient(circle, var(--gold-light) 0%, var(--gold-primary) 70%, var(--gold-dark) 100%);
+            border-radius: 50%; z-index: 6; display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5), 0 0 15px rgba(212, 175, 55, 0.5);
+            animation: pulse-seal 2s infinite ease-in-out;
+        }
+
+        .gold-seal img { width: 35px; height: 35px; object-fit: contain; }
+
+        @keyframes pulse-seal {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.08); }
+        }
+
+        .inner-card-preview {
+            position: absolute; bottom: 10px; left: 20px; width: 340px; height: 240px;
+            background-color: var(--grey-light); border: 2px solid var(--gold-primary);
+            border-radius: 4px; z-index: 2; padding: 20px; text-align: center;
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+
+        .custom-crown { width: 80px; height: auto; animation: float-crown 3s infinite ease-in-out; }
+
+        @keyframes float-crown { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+        .neon-gold-text { font-family: 'Great Vibes', cursive; font-size: 2.5rem; text-shadow: 0 0 10px var(--gold-primary); }
+
+        .envelope-wrapper.open .envelope-flap { transform: rotateX(180deg); z-index: 1; }
+        .envelope-wrapper.open .gold-seal { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+        .envelope-wrapper.open .inner-card-preview { transform: translateY(-160px) scale(1.05); z-index: 8; }
+
+        .main-invitation-content {
+            width: 90%; max-width: 450px; background: linear-gradient(135deg, #222326 0%, #17181a 100%);
+            border: 3px double var(--gold-primary); border-radius: 8px; padding: 35px 20px;
+            text-align: center; display: none; opacity: 0; transition: all 1s ease-in-out;
+        }
+        .main-invitation-content.visible { display: block; opacity: 1; }
+
+        .shine-text { font-family: 'Great Vibes', cursive; font-size: 3.5rem; color: var(--gold-primary); }
+
+        .photo-gallery { display: flex; gap: 12px; justify-content: center; margin: 20px 0; }
+        .client-photo { width: 45%; height: 200px; object-fit: cover; border: 2px solid var(--gold-primary); border-radius: 4px; }
+
+        .countdown-container { display: flex; justify-content: space-between; background: rgba(0,0,0,0.4); padding: 15px; margin: 20px 0; }
+        .countdown-number { font-size: 1.5rem; font-weight: 600; color: var(--gold-light); display: block; }
+        .countdown-label { font-size: 0.6rem; color: #aaa; text-transform: uppercase; }
+
+        .info-card { background: rgba(44, 45, 48, 0.6); border: 1px solid rgba(212, 175, 55, 0.2); padding: 20px; margin: 15px 0; }
+        .btn-gold { display: block; background: var(--gold-primary); color: #111; padding: 10px; text-decoration: none; font-weight: 600; margin-top: 10px; }
+        .btn-whatsapp { background: #25d366; color: #fff; }
+
+        .butterfly { position: absolute; width: 22px; height: 22px; background: var(--gold-light); clip-path: polygon(50% 45%, 0% 0%, 15% 70%, 50% 60%, 85% 70%, 100% 0%); opacity: 0; pointer-events: none; z-index: 15; }
+        .music-control { position: fixed; bottom: 20px; right: 20px; width: 45px; height: 45px; background: rgba(0,0,0,0.7); border: 1px solid var(--gold-primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 100; }
     </style>
 </head>
 <body>
 
-<div id="envelope-container">
-    <div class="seal" onclick="openEnvelope()">
-        <img src="corona.png" alt="Sello">
-    </div>
-    <p>Click para abrir</p>
-</div>
+    <div class="gold-particles"></div>
+    <!-- Reproductor vinculado a tu archivo local -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="die-with-a-smile.mp3" type="audio/mpeg">
+    </audio>
 
-<div id="invitation">
-    <div class="card">
-        <img src="corona.png" style="width:100px;">
-        <h1>Mis XV Años Alexa</h1>
-        <p>Despues de tantos sueños, y aprendizajes y momentos inolvidables hoy comienza una nueva etapa de mi vida, Con mucha Algeria te invito a celebrar conmigo este dia tan especial para mi.</p>
-        
-        <img src="foto1.jpeg" class="photo-1" alt="Alexa">
-        
-        <h2>Aparta la Fecha: 19/09/2026</h2>
-        <div id="countdown" style="font-size: 24px; color: gold; font-weight: bold;">Faltan: ...</div>
-        
-        <div style="margin: 20px 0;">
-            <p>Mis Padres Son: Patricia Valtierra Y Jesús Neyra</p>
-            <p>Mi Madrina es: Adriana Valtierra</p>
+    <div class="music-control" id="musicBtn" style="display: none;">
+        <i class="fas fa-music"></i>
+    </div>
+
+    <div class="envelope-wrapper" id="envelope">
+        <div class="envelope-flap"></div>
+        <div class="gold-seal"><img src="corona.png" alt="Corona"></div>
+        <div class="inner-card-preview">
+            <img class="custom-crown" src="corona.png" alt="Corona">
+            <h3 class="neon-gold-text">Alexa</h3>
+            <p>¡Toca para abrir!</p>
+        </div>
+        <div class="envelope-body"></div>
+    </div>
+
+    <div class="main-invitation-content" id="mainContent">
+        <img class="custom-crown" src="corona.png" alt="Corona" style="width: 80px;">
+        <h1 class="shine-text">Alexa</h1>
+        <div class="photo-gallery">
+            <img src="foto1.jpeg" class="client-photo">
+            <img src="foto2.jpeg" class="client-photo">
         </div>
         
-        <a href="https://maps.app.goo.gl/ghkMmsZR3kf96D1g7" style="color: gold;">Ceremonia Religiosa (4:00pm)</a><br>
-        <a href="https://maps.app.goo.gl/UWWrzNTeyeGzYMX76?g_st=aw" style="color: gold;">Recepción (5:30 PM)</a>
-        
-        <p>Código de Vestimenta: Formal (Dorado y Gris)</p>
-        
-        <img src="foto2.jpeg" class="photo-2" alt="Alexa">
-        
-        <p>Mesa de regalos: Lluvia de Sobres.</p>
-        <a href="tel:5564855060" style="color: gold;">Confirma tu Asistencia: 55 6485 5060</a>
+        <!-- Reloj Contador -->
+        <div class="countdown-container">
+            <div class="countdown-item"><span class="countdown-number" id="days">00</span><span class="countdown-label">Días</span></div>
+            <div class="countdown-item"><span class="countdown-number" id="hours">00</span><span class="countdown-label">Hrs</span></div>
+            <div class="countdown-item"><span class="countdown-number" id="minutes">00</span><span class="countdown-label">Min</span></div>
+            <div class="countdown-item"><span class="countdown-number" id="seconds">00</span><span class="countdown-label">Seg</span></div>
+        </div>
+
+        <div class="info-card">
+            <i class="fas fa-church"></i>
+            <h4>Sagrada Ceremonia</h4>
+            <p>4:00 PM</p>
+            <a href="#" class="btn-gold">Ver Ubicación</a>
+        </div>
+        <div class="info-card">
+            <i class="fab fa-whatsapp"></i>
+            <h4>Confirmar Asistencia</h4>
+            <a href="https://wa.me/525564855060" class="btn-gold btn-whatsapp">Confirmar por WhatsApp</a>
+        </div>
     </div>
-</div>
 
-<audio id="audio" loop>
-    <source src="die-with-a-smile.mp3" type="audio/mpeg">
-</audio>
+    <script>
+        const envelope = document.getElementById('envelope');
+        const mainContent = document.getElementById('mainContent');
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
 
-<script>
-    function openEnvelope() {
-        document.getElementById('envelope-container').style.transform = 'translateY(-100%)';
-        document.getElementById('invitation').style.display = 'block';
-        document.getElementById('audio').play();
-    }
+        envelope.addEventListener('click', () => {
+            bgMusic.play().catch(e => console.log("Audio esperando interacción"));
+            envelope.classList.add('open');
+            createButterflyBurst();
+            musicBtn.style.display = 'flex';
+            setTimeout(() => { envelope.style.display = 'none'; mainContent.classList.add('visible'); }, 1200);
+        });
 
-    // Contador
-    setInterval(() => {
-        const dest = new Date("Sep 19, 2026 00:00:00").getTime();
-        const now = new Date().getTime();
-        const d = Math.floor((dest - now) / (1000 * 60 * 60 * 24));
-        document.getElementById('countdown').innerHTML = "Faltan: " + d + " días";
-    }, 1000);
-</script>
+        musicBtn.addEventListener('click', () => {
+            if (bgMusic.paused) bgMusic.play(); else bgMusic.pause();
+        });
 
+        function createButterflyBurst() {
+            for (let i = 0; i < 15; i++) {
+                const b = document.createElement('div');
+                b.classList.add('butterfly');
+                b.style.left = '50%'; b.style.top = '50%';
+                const x = (Math.random() - 0.5) * 600;
+                const y = (Math.random() - 0.5) * 600;
+                b.style.setProperty('--x2', x + 'px');
+                b.style.setProperty('--y2', y + 'px');
+                b.style.animation = 'fly-away ' + (1.5 + Math.random()) + 's ease-out forwards';
+                document.body.appendChild(b);
+                setTimeout(() => b.remove(), 2000);
+            }
+        }
+
+        // Configuración de la fecha: 19 de septiembre de 2026
+        const eventDate = new Date('September 19, 2026 16:00:00').getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = eventDate - now;
+            if (diff > 0) {
+                document.getElementById('days').textContent = Math.floor(diff / (1000 * 60 * 60 * 24));
+                document.getElementById('hours').textContent = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById('minutes').textContent = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById('seconds').textContent = Math.floor((diff % (1000 * 60)) / 1000);
+            }
+        }, 1000);
+    </script>
 </body>
 </html>
