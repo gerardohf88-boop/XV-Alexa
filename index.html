@@ -2,81 +2,56 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis XV Años Alexa</title>
     <style>
-        body { 
-            margin: 0; padding: 0; font-family: 'Arial', sans-serif;
-            background-color: #4a4a4a; /* Gris metálico */
-            color: #d4af37; /* Oro */
-            text-align: center;
+        body { background-color: #4a4a4a; color: #d4af37; text-align: center; font-family: 'Arial', sans-serif; overflow-x: hidden; }
+        .container { width: 90%; max-width: 600px; margin: auto; padding: 20px; }
+        
+        /* Efecto de brillo y movimiento suave */
+        .glow-box { 
+            background: rgba(0,0,0,0.3); 
+            border: 2px solid #d4af37; 
+            padding: 20px; 
+            border-radius: 15px; 
+            margin: 20px 0;
+            animation: float 3s ease-in-out infinite, shimmer 2s infinite alternate;
         }
-        .container { width: 90%; max-width: 600px; margin: auto; padding: 40px; }
-        h1 { color: #d4af37; font-size: 2.5em; margin-bottom: 10px; }
-        .crown { width: 120px; height: auto; margin-bottom: 10px; }
-        .photo-style { 
-            border: 5px solid #d4af37; 
-            box-shadow: 0 0 20px #d4af37; 
-            margin: 20px auto; 
-            width: 250px; height: 250px;
-            background: #ccc;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .text-box { background: rgba(0,0,0,0.2); padding: 20px; border-radius: 15px; margin: 20px 0; border: 1px solid #d4af37; }
-        .btn { 
-            display: inline-block; padding: 15px 30px; background: #d4af37; color: #fff;
-            text-decoration: none; border-radius: 10px; margin: 10px 0; font-weight: bold;
-        }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes shimmer { from { box-shadow: 0 0 5px #d4af37; } to { box-shadow: 0 0 20px #d4af37; } }
+
+        #countdown { font-size: 2em; font-weight: bold; color: #fff; text-shadow: 0 0 10px #d4af37; }
+        .crown { width: 100px; animation: rotate 10s linear infinite; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Encabezado -->
         <img src="corona.png" alt="Corona" class="crown">
         <h1>Mis XV Años Alexa</h1>
-        
-        <!-- Reproducción de música -->
-        <audio id="music" autoplay loop>
-            <source src="die-with-a-smile.mp3" type="audio/mpeg">
-            Tu navegador no soporta el formato de audio.
-        </audio>
-        
-        <div class="text-box">
-            <p>Después de tantos sueños, aprendizajes y momentos inolvidables, hoy comienza una nueva etapa de mi vida. Con mucha alegría te invito a celebrar conmigo este día tan especial para mí.</p>
+
+        <div class="glow-box">
+            <p>Faltan:</p>
+            <div id="countdown"></div>
         </div>
-
-        <!-- Foto 1 -->
-        <div class="photo-style">
-            <p>[Foto 1 - Estilo Pintura]</p>
-        </div>
-
-        <h2>Aparta la Fecha: 19/09/2026</h2>
-        <div id="countdown" style="font-size: 1.5em; font-weight: bold;">Faltan: ...</div>
-
-        <div class="text-box">
-            <p><strong>Mis Padres Son:</strong><br>Patricia Valtierra y Jesús Neyra</p>
-            <p><strong>Mi Madrina es:</strong><br>Adriana Valtierra<br>Quien ha aceptado ser parte de esta nueva etapa.</p>
-        </div>
-
-        <a class="btn" href="https://maps.app.goo.gl/ghkMmsZR3kf96D1g7">Ceremonia Religiosa (4:00 PM)</a>
-        <br>
-        <a class="btn" href="https://maps.app.goo.gl/UWWrzNTeyeGzYMX76?g_st=aw">Recepción (5:30 PM)</a>
-
-        <div class="text-box">
-            <p><strong>Código de Vestimenta:</strong> Formal<br>Reservado el color Dorado y el Gris en todos sus tonos.</p>
-        </div>
-
-        <!-- Foto 2 -->
-        <div class="photo-style">
-            <p>[Foto 2 - Estilo Polvo de Hadas]</p>
-        </div>
-
-        <div class="text-box">
-            <p><strong>Mesa de regalos:</strong><br>El mejor regalo es tu presencia, pero si deseas hacerme un regalo que sea mediante: Lluvia de Sobres y Regalos.</p>
-        </div>
-
-        <a class="btn" href="https://wa.me/5564855060">Confirma tu Asistencia: 55 6485 5060</a>
-        <p>¡Espero que seas parte de esta gran celebración!</p>
     </div>
+
+    <script>
+        // Configuración del contador
+        const targetDate = new Date("September 19, 2026 00:00:00").getTime();
+        
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById("countdown").innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+            
+            if (diff < 0) clearInterval(timer);
+        }, 1000);
+    </script>
 </body>
 </html>
