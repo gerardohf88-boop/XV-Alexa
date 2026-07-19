@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invitación - Mis XV Años</title>
+    <title>Mis XV Años - Alexa</title>
     <style>
         :root { --gold: #d4af37; --envelope-color: #d1d1d1; --dark: #1c1d1f; }
         body { 
@@ -12,17 +12,25 @@
             min-height: 100vh; margin: 0; overflow: hidden; 
         }
 
-        /* --- Sobre 3D --- */
-        .envelope-container { perspective: 1000px; cursor: pointer; z-index: 100; }
+        /* --- Sobre --- */
+        .envelope-container { perspective: 1000px; cursor: pointer; z-index: 100; position: relative; }
         .envelope { width: 300px; height: 200px; background: var(--envelope-color); position: relative; border-radius: 0 0 10px 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
         .envelope::before { /* Solapa */
-            content: "INVITACIÓN"; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #555;
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: #b8b8b8; clip-path: polygon(0 0, 100% 0, 50% 70%);
             transform-origin: top; transition: transform 0.8s ease-in-out; z-index: 2;
         }
         .open .envelope::before { transform: rotateX(-180deg); }
         
+        .crown-icon { 
+            position: absolute; top: 10px; left: 50%; transform: translateX(-50%); 
+            width: 80px; z-index: 3; pointer-events: none; 
+        }
+        .inv-text { 
+            position: absolute; top: 110px; width: 100%; text-align: center; 
+            color: #555; font-weight: bold; letter-spacing: 2px; z-index: 3;
+        }
+
         /* --- Tarjeta --- */
         .card { 
             width: 90%; max-width: 400px; background: rgba(34, 34, 34, 0.95); 
@@ -30,10 +38,8 @@
             display: none; opacity: 0; text-align: center; position: absolute; z-index: 50;
         }
 
-        /* --- Efecto Glitter --- */
         .glitter { position: absolute; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; pointer-events: none; }
-
-        .btn { display: block; background: var(--gold); color: black; padding: 12px; text-decoration: none; font-weight: bold; margin: 15px 0; border-radius: 8px; }
+        .btn { display: block; background: #25d366; color: white; padding: 12px; text-decoration: none; font-weight: bold; margin: 15px auto; border-radius: 8px; width: 200px; }
         .photo-frame { width: 100%; border-radius: 10px; border: 2px solid var(--gold); margin: 10px 0; }
     </style>
 </head>
@@ -42,13 +48,16 @@
 <div id="particle-container" style="position: fixed; width: 100%; height: 100%; pointer-events: none; z-index: 200;"></div>
 
 <div class="envelope-container" id="env-box" onclick="abrir()">
+    <img src="corona.png" class="crown-icon" alt="Corona">
     <div class="envelope"></div>
+    <div class="inv-text">INVITACIÓN</div>
 </div>
 
 <div class="card" id="card">
     <div style="font-size: 2rem; color: var(--gold); font-weight: 800; text-transform: uppercase;">Mis XV Años<br>Alexa</div>
     <img src="foto1.jpeg" class="photo-frame" alt="Alexa">
     <p>¡Te espero para celebrar este día tan especial!</p>
+    
     <a href="https://wa.me/525564855060" class="btn">Confirmar Asistencia</a>
 </div>
 
@@ -61,7 +70,7 @@
         box.classList.add('open');
         document.getElementById('musica').play();
 
-        // Explosión de Glitter
+        // Efecto de explosión de glitter
         for (let i = 0; i < 150; i++) {
             let g = document.createElement('div');
             g.className = 'glitter';
