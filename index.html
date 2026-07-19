@@ -8,14 +8,15 @@
         :root { --gold: #d4af37; --grey-metal: #a8a9ad; --dark: #1c1d1f; }
         body { background: var(--dark); color: white; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow-x: hidden; }
         
-        #fx-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000; }
-        .float-obj { position: absolute; animation: drift linear infinite; font-size: 20px; }
-        @keyframes drift { 0% { transform: translateY(100vh) rotate(0deg); } 100% { transform: translateY(-10vh) rotate(360deg); } }
+        /* Contenedor de partículas siempre arriba */
+        #fx-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+        .float-obj { position: absolute; animation: drift linear infinite; font-size: 20px; will-change: transform; }
+        @keyframes drift { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; } }
 
         @keyframes flash-gold { 0% { background: var(--dark); } 50% { background: #3b331a; } 100% { background: var(--dark); } }
         .flash { animation: flash-gold 1s ease-out; }
 
-        .envelope-container { perspective: 1000px; cursor: pointer; position: relative; width: 300px; height: 200px; transition: transform 0.3s; }
+        .envelope-container { perspective: 1000px; cursor: pointer; position: relative; width: 300px; height: 200px; transition: transform 0.3s; z-index: 5; }
         .envelope { width: 100%; height: 100%; background: #d1d1d1; position: relative; border-radius: 0 0 10px 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
         .envelope::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #b8b8b8; clip-path: polygon(0 0, 100% 0, 50% 70%); transform-origin: top; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); z-index: 2; }
         .open .envelope::before { transform: rotateX(-180deg); }
@@ -81,11 +82,26 @@
 <audio id="musica" src="die-with-a-smile.mp3"></audio>
 
 <script>
+    function crearMariposas() {
+        setInterval(() => {
+            const container = document.getElementById('fx-container');
+            let m = document.createElement('div');
+            m.className = 'float-obj';
+            m.innerHTML = '🦋';
+            m.style.left = Math.random() * 100 + 'vw';
+            m.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            m.style.color = '#d4af37';
+            container.appendChild(m);
+            setTimeout(() => m.remove(), 10000);
+        }, 1200);
+    }
+
     function abrir() {
         const box = document.getElementById('env-box');
         document.body.classList.add('flash');
         box.classList.add('open');
         document.getElementById('musica').play();
+        crearMariposas(); // Iniciar lluvia de mariposas
 
         setTimeout(() => {
             box.style.display = 'none';
