@@ -8,26 +8,31 @@
         :root { --gold: #d4af37; --grey-metal: #a8a9ad; --dark: #1c1d1f; }
         body { background: var(--dark); color: white; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow-x: hidden; }
         
-        /* Efectos visuales */
-        #fx-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-        .float-obj { position: absolute; animation: drift linear infinite; font-size: 20px; z-index: 1; }
-        @keyframes drift { 0% { transform: translateY(100vh); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(-10vh); opacity: 0; } }
+        /* Contenedor de partículas */
+        #fx-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000; }
+        .float-obj { position: absolute; animation: drift linear infinite; font-size: 20px; }
+        @keyframes drift { 0% { transform: translateY(100vh) rotate(0deg); } 100% { transform: translateY(-10vh) rotate(360deg); } }
+
+        /* Efecto de destello profesional */
+        @keyframes flash-gold { 0% { background: var(--dark); } 50% { background: #3b331a; } 100% { background: var(--dark); } }
+        .flash { animation: flash-gold 1s ease-out; }
 
         /* Sobre */
-        .envelope-container { perspective: 1000px; cursor: pointer; z-index: 100; position: relative; width: 300px; height: 200px; }
+        .envelope-container { perspective: 1000px; cursor: pointer; position: relative; width: 300px; height: 200px; transition: transform 0.3s; }
+        .envelope-container:hover { transform: scale(1.05); }
         .envelope { width: 100%; height: 100%; background: #d1d1d1; position: relative; border-radius: 0 0 10px 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        .envelope::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #b8b8b8; clip-path: polygon(0 0, 100% 0, 50% 70%); transform-origin: top; transition: transform 0.8s ease-in-out; z-index: 2; }
+        .envelope::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #b8b8b8; clip-path: polygon(0 0, 100% 0, 50% 70%); transform-origin: top; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); z-index: 2; }
         .open .envelope::before { transform: rotateX(-180deg); }
         .crown-icon { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 80px; z-index: 3; pointer-events: none; }
         .inv-text { position: absolute; top: 120px; width: 100%; text-align: center; color: #555; font-weight: bold; letter-spacing: 2px; z-index: 3; text-transform: uppercase; }
 
         /* Tarjeta */
-        .card { width: 90%; max-width: 400px; background: rgba(34, 34, 34, 0.95); border: 2px solid var(--gold); padding: 30px; border-radius: 20px; display: none; opacity: 0; text-align: center; z-index: 10; margin: 20px auto; transition: opacity 1s ease; }
-        .title-gold { font-size: 2.2rem; font-weight: 800; text-transform: uppercase; background: linear-gradient(to bottom, #d4af37, #f7ef8a, #d4af37); -webkit-background-clip: text; -webkit-text-fill-color: transparent; -webkit-text-stroke: 1.2px var(--grey-metal); line-height: 1.1; }
+        .card { width: 90%; max-width: 400px; background: rgba(34, 34, 34, 0.95); border: 2px solid var(--gold); padding: 30px; border-radius: 20px; display: none; opacity: 0; text-align: center; margin: 20px auto; position: relative; z-index: 10; transition: opacity 1.5s ease; }
+        .title-gold { font-size: 2.2rem; font-weight: 800; text-transform: uppercase; background: linear-gradient(to bottom, #d4af37, #f7ef8a, #d4af37); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1; }
         .btn { display: block; background: var(--gold); color: black; padding: 12px; text-decoration: none; font-weight: bold; margin: 15px 0; border-radius: 8px; }
         .btn-wa { background: #25d366; color: white; }
-        .photo-frame { width: 100%; border-radius: 10px; border: 2px solid var(--gold); margin: 10px 0; }
-        .icon-img { width: 80px; height: 80px; margin: 10px auto; display: block; }
+        .photo-frame { width: 100%; max-width: 300px; border-radius: 10px; border: 2px solid var(--gold); margin: 10px 0; }
+        .icon-img { width: 70px; height: 70px; margin: 10px auto; display: block; object-fit: contain; }
     </style>
 </head>
 <body>
@@ -45,24 +50,22 @@
     <img src="corona.png" alt="Corona" style="width: 80px; margin: 10px 0;">
     <img src="foto1.jpeg" class="photo-frame" alt="Alexa">
     
-    <p style="font-style: italic;">¡Te invito a celebrar conmigo este día tan especial!</p>
+    <p>¡Te invito a celebrar este día especial!</p>
     
-    <p style="font-weight: bold; color: var(--gold);">Faltan:</p>
     <div id="timer" style="display: flex; justify-content: space-between; margin: 15px 0;"></div>
 
-    <p><b>Mis Padres:</b><br>Patricia Valtierra y Jesús Neyra</p>
-    <p><b>Mi Madrina:</b><br>Adriana Valtierra</p>
+    <p><b>Padres:</b> Patricia Valtierra y Jesús Neyra<br><b>Madrina:</b> Adriana Valtierra</p>
     <hr style="border-top: 1px solid var(--gold);">
     
     <img src="foto2.jpeg" class="photo-frame" alt="Alexa">
 
     <h3>Ceremonia Religiosa</h3>
     <img src="iglesia.png" class="icon-img" alt="Iglesia">
-    <a href="https://maps.app.goo.gl/ii3c1FefPviK5Yat6" class="btn">Ver ubicación (4:00 PM)</a>
+    <a href="https://maps.app.goo.gl/ii3c1FefPviK5Yat6" class="btn">Ver ubicación</a>
 
     <h3>Recepción</h3>
     <img src="recepcion.png" class="icon-img" alt="Recepción">
-    <a href="https://maps.app.goo.gl/UWWrzNTeyeGzYMX76" class="btn">Ver ubicación (5:30 PM)</a>
+    <a href="https://maps.app.goo.gl/UWWrzNTeyeGzYMX76" class="btn">Ver ubicación</a>
 
     <a href="https://wa.me/525564855060" class="btn btn-wa">Confirmar Asistencia</a>
 </div>
@@ -70,38 +73,32 @@
 <audio id="musica" src="die-with-a-smile.mp3"></audio>
 
 <script>
-    function crearEfecto() {
-        setInterval(() => {
-            const container = document.getElementById('fx-container');
-            let obj = document.createElement('div');
-            obj.className = 'float-obj';
-            obj.innerHTML = Math.random() > 0.5 ? '🦋' : '✨';
-            obj.style.left = Math.random() * 100 + 'vw';
-            obj.style.animationDuration = (Math.random() * 5 + 5) + 's';
-            container.appendChild(obj);
-            setTimeout(() => obj.remove(), 10000);
-        }, 800);
-    }
-
     function abrir() {
         const box = document.getElementById('env-box');
+        const body = document.body;
         box.classList.add('open');
+        body.classList.add('flash');
         document.getElementById('musica').play();
-        crearEfecto(); 
+
+        // Generar partículas de golpe
+        for(let i=0; i<30; i++) {
+            let p = document.createElement('div');
+            p.className = 'float-obj';
+            p.innerHTML = '✨';
+            p.style.left = Math.random()*100 + 'vw';
+            p.style.animationDuration = '2s';
+            document.getElementById('fx-container').appendChild(p);
+        }
 
         setTimeout(() => {
             box.style.display = 'none';
             const card = document.getElementById('card');
             card.style.display = 'block';
-            setTimeout(() => { card.style.opacity = "1"; }, 50);
-        }, 800);
+            setTimeout(() => { card.style.opacity = "1"; }, 100);
+        }, 1000);
     }
-
-    setInterval(() => {
-        let diff = new Date('2026-09-19T16:00:00') - new Date();
-        let d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
-        document.getElementById('timer').innerHTML = `<div style="background:#333; padding:5px; width:22%; border-radius:5px;">${d}<br><small>Días</small></div><div style="background:#333; padding:5px; width:22%; border-radius:5px;">${h}<br><small>Hrs</small></div><div style="background:#333; padding:5px; width:22%; border-radius:5px;">${m}<br><small>Min</small></div><div style="background:#333; padding:5px; width:22%; border-radius:5px;">${s}<br><small>Seg</small></div>`;
-    }, 1000);
+    
+    // ... (Mantén tu lógica del timer aquí igual)
 </script>
 </body>
 </html>
