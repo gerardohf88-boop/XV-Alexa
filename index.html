@@ -5,74 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis XV Años - Alexa</title>
     <style>
-        :root { --gold: #d4af37; --grey-metal: #a8a9ad; --dark: #1c1d1f; }
+        :root { --gold: #d4af37; --dark: #1c1d1f; }
         body { 
             background: var(--dark); color: white; font-family: 'Montserrat', sans-serif; 
             display: flex; justify-content: center; align-items: center; 
             min-height: 100vh; margin: 0; overflow-x: hidden; 
-            flex-direction: column; /* Esto ayuda a centrar todo */
         }
         
-        /* SOBRE METÁLICO */
-        .envelope { 
-            width: 320px; height: 220px; 
-            background: linear-gradient(160deg, #d1d1d1, #7a7a7a); 
-            border-radius: 12px; cursor: pointer; 
-            display: flex; justify-content: center; align-items: center; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6); 
-            transition: all 0.5s ease;
-            border: 1px solid rgba(255,255,255,0.2);
-            z-index: 100;
+        /* Contenedor de partículas flotantes */
+        #particle-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .floating { position: absolute; animation: float linear infinite; opacity: 0.6; }
+        @keyframes float { 
+            0% { transform: translateY(100vh) rotate(0deg); } 
+            100% { transform: translateY(-10vh) rotate(360deg); } 
         }
 
-        /* TARJETA */
+        .envelope { 
+            width: 320px; height: 220px; background: linear-gradient(160deg, #d1d1d1, #7a7a7a); 
+            border-radius: 12px; cursor: pointer; display: flex; justify-content: center; 
+            align-items: center; box-shadow: 0 15px 35px rgba(0,0,0,0.6); 
+            transition: all 0.5s ease; z-index: 100;
+        }
+
         .card { 
-            width: 90%; max-width: 400px; background: #222; border: 2px solid var(--gold); 
+            width: 90%; max-width: 400px; background: rgba(34, 34, 34, 0.9); border: 2px solid var(--gold); 
             padding: 30px; border-radius: 20px; display: none; text-align: center; 
-            opacity: 0; transition: opacity 1s ease; 
-            max-height: 90vh; overflow-y: auto; margin: 20px;
+            opacity: 0; transition: opacity 1s ease; max-height: 90vh; overflow-y: auto; 
+            z-index: 10; position: relative;
         }
         
-        .particle { position: absolute; font-size: 24px; pointer-events: none; z-index: 50; }
         .btn { display: block; background: var(--gold); color: black; padding: 12px; text-decoration: none; font-weight: bold; margin: 15px 0; border-radius: 8px; }
-        .img-box { width: 100%; height: 130px; background: #2a2a2a; display: flex; justify-content: center; align-items: center; border: 1px solid var(--gold); margin: 10px 0; font-size: 50px; color: var(--gold); border-radius: 10px; }
         .photo-frame { width: 100%; border-radius: 10px; border: 2px solid var(--gold); margin: 10px 0; }
     </style>
 </head>
 <body>
 
-<!-- SOBRE -->
+<div id="particle-container"></div>
+
 <div class="envelope" id="env" onclick="abrir()">
     <img src="corona.png" alt="Corona" style="width: 120px; height: auto;">
 </div>
 
-<!-- TARJETA -->
 <div class="card" id="card">
     <img src="foto1.jpeg" class="photo-frame" alt="Alexa">
     <h1>Alexa</h1>
     <p>Mis XV Años</p>
     <p style="font-style: italic; margin: 20px 0;">Después de tantos sueños, aprendizajes y momentos inolvidables hoy comienza una nueva etapa de mi vida, Con mucha alegría te invito a celebrar conmigo este día tan especial para mi.</p>
 
-    <p>Faltan</p>
     <div id="timer" style="display: flex; justify-content: space-between; margin: 15px 0;"></div>
 
     <p><b>Mis Padres:</b><br>Patricia Valtierra y Jesús Neyra</p>
     <p><b>Mi Madrina:</b><br>Adriana Valtierra</p>
     
-    <hr style="border-top: 1px solid var(--gold); margin: 20px 0;">
-
     <img src="foto2.jpeg" class="photo-frame" alt="Alexa">
 
     <h3>Ceremonia Religiosa</h3>
-    <div class="img-box">⛪</div>
     <a href="https://maps.app.goo.gl/ii3c1FefPviK5Yat6" class="btn">Ver ubicación (4:00 PM)</a>
 
     <h3>Recepción</h3>
-    <div class="img-box">🥂</div>
     <a href="https://maps.app.goo.gl/UWWrzNTeyeGzYMX76" class="btn">Ver ubicación (5:30 PM)</a>
 
-    <p><b>Código de vestimenta:</b> Formal. Reservado el color dorado y gris.</p>
-    <p><b>Mesa de regalos:</b> Agradezco lluvia de sobres.</p>
     <a href="https://wa.me/525564855060" class="btn" style="background: #25d366; color: white;">Confirmar Asistencia</a>
 </div>
 
@@ -80,51 +72,30 @@
 
 <script>
     function abrir() {
-        let env = document.getElementById('env');
+        document.getElementById('env').style.display = 'none';
         let card = document.getElementById('card');
-        
-        // Efecto visual del sobre
-        env.style.opacity = "0";
-        env.style.transform = "scale(0.5)";
-        
-        setTimeout(() => {
-            env.style.display = 'none'; // Oculta el sobre
-            card.style.display = 'block'; // Muestra la tarjeta
-            
-            // Forzar renderizado para la animación
-            setTimeout(() => { 
-                card.style.opacity = "1"; 
-            }, 50);
-            
-            document.getElementById('musica').play();
-            crearExplosion();
-        }, 500);
+        card.style.display = 'block';
+        setTimeout(() => { card.style.opacity = "1"; }, 100);
+        document.getElementById('musica').play();
+        iniciarParticulas();
     }
 
-    function crearExplosion() {
-        for(let i=0; i<40; i++) {
+    function iniciarParticulas() {
+        const container = document.getElementById('particle-container');
+        for (let i = 0; i < 20; i++) {
             let p = document.createElement('div');
-            p.className = 'particle';
+            p.className = 'floating';
             p.innerHTML = i % 2 === 0 ? '🦋' : '✨';
-            p.style.left = '50%'; p.style.top = '50%';
-            document.body.appendChild(p);
-            
-            let angle = Math.random() * Math.PI * 2;
-            let vel = Math.random() * 300 + 100;
-            
-            p.animate([
-                { transform: 'translate(0,0) scale(1)', opacity: 1 },
-                { transform: `translate(${Math.cos(angle)*vel}px, ${Math.sin(angle)*vel}px) scale(0)`, opacity: 0 }
-            ], { duration: 3000, fill: 'forwards' });
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            p.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            container.appendChild(p);
         }
     }
 
     setInterval(() => {
         let diff = new Date('2026-09-19T16:00:00') - new Date();
-        let d = Math.floor(diff/86400000);
-        let h = Math.floor((diff%86400000)/3600000);
-        let m = Math.floor((diff%3600000)/60000);
-        let s = Math.floor((diff%60000)/1000);
+        let d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
         document.getElementById('timer').innerHTML = `
             <div style="background:#333; padding:10px 5px; width:22%; border-radius:5px;">${d}<br><small>Días</small></div>
             <div style="background:#333; padding:10px 5px; width:22%; border-radius:5px;">${h}<br><small>Hrs</small></div>
