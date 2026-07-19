@@ -8,10 +8,10 @@
         :root { --gold: #d4af37; --grey-metal: #a8a9ad; --dark: #1c1d1f; }
         body { background: var(--dark); color: white; font-family: 'Montserrat', sans-serif; margin: 0; min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow-x: hidden; }
         
-        /* Contenedor de partículas siempre arriba */
-        #fx-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
-        .float-obj { position: absolute; animation: drift linear infinite; font-size: 20px; will-change: transform; }
-        @keyframes drift { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; } }
+        /* Contenedor forzado al frente */
+        #fx-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 99999; }
+        .float-obj { position: absolute; font-size: 24px; color: var(--gold); text-shadow: 0 0 5px rgba(212, 175, 55, 0.8); animation: drift linear forwards; will-change: transform; }
+        @keyframes drift { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; } }
 
         @keyframes flash-gold { 0% { background: var(--dark); } 50% { background: #3b331a; } 100% { background: var(--dark); } }
         .flash { animation: flash-gold 1s ease-out; }
@@ -82,18 +82,15 @@
 <audio id="musica" src="die-with-a-smile.mp3"></audio>
 
 <script>
-    function crearMariposas() {
-        setInterval(() => {
-            const container = document.getElementById('fx-container');
-            let m = document.createElement('div');
-            m.className = 'float-obj';
-            m.innerHTML = '🦋';
-            m.style.left = Math.random() * 100 + 'vw';
-            m.style.animationDuration = (Math.random() * 4 + 6) + 's';
-            m.style.color = '#d4af37';
-            container.appendChild(m);
-            setTimeout(() => m.remove(), 10000);
-        }, 1200);
+    function crearMariposa() {
+        const container = document.getElementById('fx-container');
+        let m = document.createElement('div');
+        m.className = 'float-obj';
+        m.innerHTML = '🦋';
+        m.style.left = Math.random() * 100 + 'vw';
+        m.style.animationDuration = (Math.random() * 3 + 4) + 's';
+        container.appendChild(m);
+        setTimeout(() => m.remove(), 7000);
     }
 
     function abrir() {
@@ -101,7 +98,9 @@
         document.body.classList.add('flash');
         box.classList.add('open');
         document.getElementById('musica').play();
-        crearMariposas(); // Iniciar lluvia de mariposas
+        
+        // Empezar a generar mariposas
+        setInterval(crearMariposa, 800);
 
         setTimeout(() => {
             box.style.display = 'none';
