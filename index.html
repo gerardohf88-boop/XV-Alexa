@@ -3,85 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>Mis XV Años - Alexa</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --gold: #d4af37; --grey-metal: #a8a9ad; --dark: #1c1d1f; }
-        body { background: var(--dark); color: white; font-family: 'Montserrat', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; text-align: center; }
-
-        .envelope { width: 300px; height: 200px; background: linear-gradient(135deg, #a8a9ad, #666); border-radius: 10px; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .crown { width: 80px; filter: drop-shadow(0 0 5px white); }
-
-        .card { width: 90%; max-width: 400px; background: #222; border: 2px solid var(--gold); padding: 25px; display: none; border-radius: 15px; margin: 20px 0; }
+        :root { --gold: #d4af37; --dark: #1c1d1f; }
+        body { background: var(--dark); color: white; font-family: 'Arial', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        
+        /* Contenedor principal */
+        .card { 
+            width: 90%; max-width: 400px; background: #222; border: 2px solid var(--gold); 
+            padding: 25px; border-radius: 15px; text-align: center; color: white !important;
+        }
+        .envelope { width: 300px; height: 200px; background: linear-gradient(135deg, #a8a9ad, #666); cursor: pointer; display: flex; justify-content: center; align-items: center; border-radius: 10px; }
+        
+        /* Estilos de texto */
+        h1, h3, p { color: white !important; margin: 10px 0; }
+        .timer-grid { display: flex; justify-content: space-between; margin: 15px 0; }
+        .timer-box { background: #333; padding: 10px; border-radius: 5px; width: 22%; font-weight: bold; color: var(--gold); }
+        .btn { display: block; background: var(--gold); color: black; padding: 10px; text-decoration: none; font-weight: bold; margin: 10px 0; border-radius: 5px; }
         .photo-gallery { display: flex; gap: 10px; justify-content: center; margin-bottom: 15px; }
         .client-photo { width: 48%; height: 150px; object-fit: cover; border: 1px solid var(--gold); }
-        .location-img { width: 100%; height: 120px; object-fit: cover; border: 1px solid var(--gold); margin: 10px 0; }
-        
-        .timer-grid { display: flex; justify-content: space-between; margin: 10px 0 20px 0; }
-        .timer-box { background: rgba(212,175,55,0.1); padding: 10px; border-radius: 5px; width: 22%; font-weight: bold; color: var(--gold); }
-        .btn { display: block; background: var(--gold); color: black; padding: 10px; text-decoration: none; font-weight: bold; margin: 5px 0; border-radius: 5px; }
-        .particle { position: absolute; background: gold; border-radius: 50%; pointer-events: none; }
     </style>
 </head>
 <body>
 
-<div class="envelope" id="env"><img src="corona.png" class="crown"></div>
+<!-- Sobre (Visible al inicio) -->
+<div class="envelope" id="env" onclick="abrirInvitacion()">
+    <img src="corona.png" width="80">
+</div>
 
-<div class="card" id="card">
-    <img src="corona.png" width="50">
+<!-- Tarjeta (Oculta al inicio) -->
+<div class="card" id="card" style="display: none;">
     <h1>Alexa</h1>
-    
-    <!-- Galería -->
     <div class="photo-gallery">
-        <img src="foto1.jpeg" class="client-photo" alt="Foto 1">
-        <img src="foto2.jpeg" class="client-photo" alt="Foto 2">
+        <img src="foto1.jpeg" class="client-photo">
+        <img src="foto2.jpeg" class="client-photo">
     </div>
 
-    <!-- Mensaje debajo de fotos -->
-    <p style="font-size: 0.9rem; margin-bottom: 20px; font-style: italic;">
-        Después de tantos sueños, aprendizajes y momentos inolvidables hoy comienza una nueva etapa de mi vida, Con mucha alegría te invito a celebrar conmigo este día tan especial para mi.
-    </p>
+    <p style="font-style: italic;">Después de tantos sueños, aprendizajes y momentos inolvidables hoy comienza una nueva etapa de mi vida, Con mucha alegría te invito a celebrar conmigo este día tan especial para mi.</p>
 
-    <!-- Contador -->
-    <p style="margin-bottom: 5px;">Faltan</p>
+    <p>Faltan</p>
     <div class="timer-grid" id="timer"></div>
 
-    <p><b>Mis Padres:</b> Patricia Valtierra y Jesús Neyra</p>
-    <p><b>Madrina:</b> Adriana Valtierra</p>
-
-    <hr style="border: 0; border-top: 1px solid var(--gold); margin: 15px 0;">
+    <p><b>Mis Padres:</b><br>Patricia Valtierra y Jesús Neyra</p>
+    <p><b>Mi Madrina:</b><br>Adriana Valtierra</p>
+    
+    <hr style="border-top: 1px solid var(--gold);">
 
     <h3>Ceremonia Religiosa</h3>
-    <img src="iglesia.png" class="location-img">
-    <a href="https://maps.app.goo.gl/ii3c1FefPviK5Yat6?g_st=aw" class="btn">Ver Ubicación Iglesia (4:00 PM)</a>
+    <a href="https://maps.app.goo.gl/ii3c1FefPviK5Yat6" class="btn">Ubicación Iglesia (4:00 PM)</a>
 
     <h3>Recepción</h3>
-    <img src="salon.png" class="location-img">
-    <a href="https://maps.app.goo.gl/UWWrzNTeyeGzYMX76?g_st=aw" class="btn">Ver Ubicación Salón (5:30 PM)</a>
+    <a href="https://maps.app.goo.gl/UWWrzNTeyeGzYMX76" class="btn">Ubicación Salón (5:30 PM)</a>
 
-    <p><b>Código de vestimenta:</b> Formal. Reservado el color dorado y gris en todos sus tonos.</p>
-    <p><b>Mesa de regalos:</b> El mejor regalo es tu presencia. Si deseas hacerme un detalle, agradezco lluvia de sobres.</p>
+    <p><b>Código de vestimenta:</b> Formal. Reservado el color dorado y gris.</p>
+    <p><b>Mesa de regalos:</b> El mejor regalo es tu presencia. Agradezco lluvia de sobres.</p>
+    
     <a href="https://wa.me/525564855060" class="btn" style="background: #25d366; color: white;">Confirmar Asistencia</a>
 </div>
 
 <audio id="musica" src="die-with-a-smile.mp3"></audio>
 
 <script>
-    document.getElementById('env').onclick = function() {
-        this.style.display = 'none';
+    function abrirInvitacion() {
+        document.getElementById('env').style.display = 'none';
         document.getElementById('card').style.display = 'block';
         document.getElementById('musica').play();
-        createMagic();
-    };
-
-    function createMagic() {
-        for(let i=0; i<40; i++) {
-            let p = document.createElement('div');
-            p.className = 'particle';
-            p.style.width = p.style.height = Math.random()*6 + 'px';
-            p.style.left = '50%'; p.style.top = '50%';
-            document.body.appendChild(p);
-            p.animate([{transform: 'translate(0,0)', opacity:1}, {transform: `translate(${(Math.random()-0.5)*800}px, ${(Math.random()-0.5)*800}px)`, opacity:0}], {duration: 3000, fill: 'forwards'});
-        }
     }
 
     setInterval(() => {
@@ -90,11 +75,11 @@
         let h = Math.floor((diff%86400000)/3600000);
         let m = Math.floor((diff%3600000)/60000);
         let s = Math.floor((diff%60000)/1000);
-        document.getElementById('timer').innerHTML = `
-            <div class="timer-box">${d}<br><small>Días</small></div>
-            <div class="timer-box">${h}<br><small>Hrs</small></div>
-            <div class="timer-box">${m}<br><small>Min</small></div>
-            <div class="timer-box">${s}<br><small>Seg</small></div>`;
+        document.getElementById('timer').innerHTML = 
+            `<div class="timer-box">${d}<br><small>Días</small></div>` +
+            `<div class="timer-box">${h}<br><small>Hrs</small></div>` +
+            `<div class="timer-box">${m}<br><small>Min</small></div>` +
+            `<div class="timer-box">${s}<br><small>Seg</small></div>`;
     }, 1000);
 </script>
 </body>
