@@ -12,7 +12,7 @@
             min-height: 100vh; margin: 0; overflow-x: hidden; 
         }
         
-        /* Contenedor de partículas flotantes */
+        /* Partículas flotantes de fondo */
         #particle-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
         .floating { position: absolute; animation: float linear infinite; opacity: 0.6; }
         @keyframes float { 
@@ -20,6 +20,7 @@
             100% { transform: translateY(-10vh) rotate(360deg); } 
         }
 
+        /* Sobre */
         .envelope { 
             width: 320px; height: 220px; background: linear-gradient(160deg, #d1d1d1, #7a7a7a); 
             border-radius: 12px; cursor: pointer; display: flex; justify-content: center; 
@@ -27,8 +28,9 @@
             transition: all 0.5s ease; z-index: 100;
         }
 
+        /* Tarjeta */
         .card { 
-            width: 90%; max-width: 400px; background: rgba(34, 34, 34, 0.9); border: 2px solid var(--gold); 
+            width: 90%; max-width: 400px; background: rgba(34, 34, 34, 0.95); border: 2px solid var(--gold); 
             padding: 30px; border-radius: 20px; display: none; text-align: center; 
             opacity: 0; transition: opacity 1s ease; max-height: 90vh; overflow-y: auto; 
             z-index: 10; position: relative;
@@ -36,6 +38,7 @@
         
         .btn { display: block; background: var(--gold); color: black; padding: 12px; text-decoration: none; font-weight: bold; margin: 15px 0; border-radius: 8px; }
         .photo-frame { width: 100%; border-radius: 10px; border: 2px solid var(--gold); margin: 10px 0; }
+        hr { border: 0; border-top: 1px solid var(--gold); margin: 20px 0; }
     </style>
 </head>
 <body>
@@ -55,8 +58,12 @@
     <div id="timer" style="display: flex; justify-content: space-between; margin: 15px 0;"></div>
 
     <p><b>Mis Padres:</b><br>Patricia Valtierra y Jesús Neyra</p>
-    <p><b>Mi Madrina:</b><br>Adriana Valtierra</p>
+    <p><b>Mi Madrina:</b><br>Adriana Valtierra<br>
+       <span style="font-size: 0.9rem; font-style: italic; color: var(--gold);">Quien ha aceptado ser parte de esta nueva etapa.</span>
+    </p>
     
+    <hr>
+
     <img src="foto2.jpeg" class="photo-frame" alt="Alexa">
 
     <h3>Ceremonia Religiosa</h3>
@@ -65,7 +72,15 @@
     <h3>Recepción</h3>
     <a href="https://maps.app.goo.gl/UWWrzNTeyeGzYMX76" class="btn">Ver ubicación (5:30 PM)</a>
 
-    <a href="https://wa.me/525564855060" class="btn" style="background: #25d366; color: white;">Confirmar Asistencia</a>
+    <div style="margin: 25px 0;">
+        <h3>Mesa de regalos</h3>
+        <p style="font-style: italic;">El mejor regalo es tu presencia, pero si deseas hacerme un regalo que sea mediante: <b>lluvia de Sobres y Regalos</b>.</p>
+    </div>
+
+    <p><b>Confirma tu Asistencia:</b></p>
+    <a href="https://wa.me/525564855060" class="btn" style="background: #25d366; color: white;">WhatsApp: 55 6485 5060</a>
+    
+    <p style="margin-top: 20px;">¡Espero seas parte de esta gran celebración!</p>
 </div>
 
 <audio id="musica" src="die-with-a-smile.mp3"></audio>
@@ -82,7 +97,7 @@
 
     function iniciarParticulas() {
         const container = document.getElementById('particle-container');
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 25; i++) {
             let p = document.createElement('div');
             p.className = 'floating';
             p.innerHTML = i % 2 === 0 ? '🦋' : '✨';
