@@ -8,7 +8,7 @@
         :root { --gold: #d4af37; --grey-metal: #a8a9ad; --dark: #1c1d1f; }
         body { background: var(--dark); color: white; font-family: 'Montserrat', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; }
         
-        /* Estilos del Sobre */
+        /* --- ESTILOS DEL SOBRE --- */
         .envelope-container { perspective: 1000px; cursor: pointer; z-index: 100; position: relative; width: 300px; height: 200px; }
         .envelope { width: 100%; height: 100%; background: #d1d1d1; position: relative; border-radius: 0 0 10px 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
         .envelope::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #b8b8b8; clip-path: polygon(0 0, 100% 0, 50% 70%); transform-origin: top; transition: transform 0.8s ease-in-out; z-index: 2; }
@@ -16,9 +16,9 @@
         .crown-icon { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 80px; z-index: 3; pointer-events: none; }
         .inv-text { position: absolute; top: 120px; width: 100%; text-align: center; color: #555; font-weight: bold; letter-spacing: 2px; z-index: 3; text-transform: uppercase; }
 
-        /* Estilos de la Tarjeta */
-        .card { width: 90%; max-width: 400px; background: rgba(34, 34, 34, 0.95); border: 2px solid var(--gold); padding: 30px; border-radius: 20px; display: none; opacity: 0; text-align: center; z-index: 10; position: relative; margin: 20px 0; }
-        .title-gold { font-size: 2.2rem; font-weight: 800; text-transform: uppercase; background: linear-gradient(to bottom, #d4af37, #f7ef8a, #d4af37); -webkit-background-clip: text; -webkit-text-fill-color: transparent; -webkit-text-stroke: 1.2px var(--grey-metal); line-height: 1.1; }
+        /* --- ESTILOS DE LA TARJETA --- */
+        .card { width: 90%; max-width: 400px; background: rgba(34, 34, 34, 0.95); border: 2px solid var(--gold); padding: 30px; border-radius: 20px; display: none; opacity: 0; text-align: center; z-index: 10; margin: 20px auto; overflow-y: auto; max-height: 90vh; transition: opacity 1s ease; }
+        .title-gold { font-size: 2.2rem; font-weight: 800; text-transform: uppercase; background: linear-gradient(to bottom, #d4af37, #f7ef8a, #d4af37); -webkit-background-clip: text; -webkit-text-fill-color: transparent; -webkit-text-stroke: 1.2px var(--grey-metal); line-height: 1.1; margin-top: 10px; }
         .btn { display: block; background: var(--gold); color: black; padding: 12px; text-decoration: none; font-weight: bold; margin: 15px 0; border-radius: 8px; }
         .btn-wa { background: #25d366; color: white; }
         .photo-frame { width: 100%; border-radius: 10px; border: 2px solid var(--gold); margin: 10px 0; }
@@ -37,7 +37,7 @@
     <div class="inv-text">Invitación</div>
 </div>
 
-<!-- Tarjeta (Contenido original) -->
+<!-- Tarjeta con todo el contenido -->
 <div class="card" id="card">
     <div class="title-gold">Mis XV Años<br>Alexa</div>
     <img src="corona.png" alt="Corona" style="width: 80px; margin: 10px 0;">
@@ -82,10 +82,12 @@
     function abrir() {
         const box = document.getElementById('env-box');
         const container = document.getElementById('particle-container');
+        const card = document.getElementById('card');
+        
         box.classList.add('open');
         document.getElementById('musica').play();
 
-        // Efecto Glitter
+        // Explosión de glitter
         for (let i = 0; i < 150; i++) {
             let g = document.createElement('div');
             g.className = 'glitter';
@@ -98,9 +100,8 @@
 
         setTimeout(() => {
             box.style.display = 'none';
-            const card = document.getElementById('card');
             card.style.display = 'block';
-            card.animate([{ opacity: 0, transform: 'scale(0.9)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 1000, fill: 'forwards' });
+            setTimeout(() => { card.style.opacity = "1"; }, 50);
         }, 800);
     }
 
