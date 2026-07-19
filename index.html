@@ -1,57 +1,86 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <title>Invitación XV Años Alexa</title>
     <style>
-        body { background-color: #4a4a4a; color: #d4af37; text-align: center; font-family: 'Arial', sans-serif; overflow-x: hidden; }
-        .container { width: 90%; max-width: 600px; margin: auto; padding: 20px; }
+        body { margin: 0; padding: 0; background: #2f2f2f; color: #d4af37; font-family: 'Arial', sans-serif; text-align: center; overflow-x: hidden; }
         
-        /* Efecto de brillo y movimiento suave */
-        .glow-box { 
-            background: rgba(0,0,0,0.3); 
-            border: 2px solid #d4af37; 
-            padding: 20px; 
-            border-radius: 15px; 
-            margin: 20px 0;
-            animation: float 3s ease-in-out infinite, shimmer 2s infinite alternate;
-        }
+        /* Sobre */
+        #envelope-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #4a4a4a; z-index: 1000; transition: transform 1s ease-in-out; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .envelope-flap { width: 300px; height: 150px; background: #333; border: 2px solid #d4af37; position: relative; }
+        .seal { width: 80px; height: 80px; background: #d4af37; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 3px solid #b8860b; }
+        .seal img { width: 50px; }
 
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        /* Invitación */
+        #invitation { display: none; padding: 40px; background: linear-gradient(135deg, #4a4a4a, #2b2b2b); min-height: 100vh; animation: fadeIn 2s; }
+        .card { border: 2px solid #d4af37; padding: 30px; border-radius: 20px; box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); background: rgba(0,0,0,0.2); }
+        
+        .photo-1 { filter: url('#paint-filter'); width: 250px; border: 5px solid #d4af37; border-radius: 10px; }
+        .photo-2 { filter: drop-shadow(0 0 10px #fff); width: 250px; border: 5px solid #d4af37; border-radius: 10px; }
+        
+        .glow { animation: shimmer 2s infinite alternate; }
         @keyframes shimmer { from { box-shadow: 0 0 5px #d4af37; } to { box-shadow: 0 0 20px #d4af37; } }
-
-        #countdown { font-size: 2em; font-weight: bold; color: #fff; text-shadow: 0 0 10px #d4af37; }
-        .crown { width: 100px; animation: rotate 10s linear infinite; }
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img src="corona.png" alt="Corona" class="crown">
-        <h1>Mis XV Años Alexa</h1>
 
-        <div class="glow-box">
-            <p>Faltan:</p>
-            <div id="countdown"></div>
-        </div>
+<div id="envelope-container">
+    <div class="seal" onclick="openEnvelope()">
+        <img src="corona.png" alt="Sello">
     </div>
+    <p>Click para abrir</p>
+</div>
 
-    <script>
-        // Configuración del contador
-        const targetDate = new Date("September 19, 2026 00:00:00").getTime();
+<div id="invitation">
+    <div class="card">
+        <img src="corona.png" style="width:100px;">
+        <h1>Mis XV Años Alexa</h1>
+        <p>Despues de tantos sueños, y aprendizajes y momentos inolvidables hoy comienza una nueva etapa de mi vida, Con mucha Algeria te invito a celebrar conmigo este dia tan especial para mi.</p>
         
-        const timer = setInterval(function() {
-            const now = new Date().getTime();
-            const diff = targetDate - now;
+        <img src="foto1.jpeg" class="photo-1" alt="Alexa">
+        
+        <h2>Aparta la Fecha: 19/09/2026</h2>
+        <div id="countdown" style="font-size: 24px; color: gold; font-weight: bold;">Faltan: ...</div>
+        
+        <div style="margin: 20px 0;">
+            <p>Mis Padres Son: Patricia Valtierra Y Jesús Neyra</p>
+            <p>Mi Madrina es: Adriana Valtierra</p>
+        </div>
+        
+        <a href="https://maps.app.goo.gl/ghkMmsZR3kf96D1g7" style="color: gold;">Ceremonia Religiosa (4:00pm)</a><br>
+        <a href="https://maps.app.goo.gl/UWWrzNTeyeGzYMX76?g_st=aw" style="color: gold;">Recepción (5:30 PM)</a>
+        
+        <p>Código de Vestimenta: Formal (Dorado y Gris)</p>
+        
+        <img src="foto2.jpeg" class="photo-2" alt="Alexa">
+        
+        <p>Mesa de regalos: Lluvia de Sobres.</p>
+        <a href="tel:5564855060" style="color: gold;">Confirma tu Asistencia: 55 6485 5060</a>
+    </div>
+</div>
 
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+<audio id="audio" loop>
+    <source src="die-with-a-smile.mp3" type="audio/mpeg">
+</audio>
 
-            document.getElementById("countdown").innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-            
-            if (diff < 0) clearInterval(timer);
-        }, 1000);
-    </script>
+<script>
+    function openEnvelope() {
+        document.getElementById('envelope-container').style.transform = 'translateY(-100%)';
+        document.getElementById('invitation').style.display = 'block';
+        document.getElementById('audio').play();
+    }
+
+    // Contador
+    setInterval(() => {
+        const dest = new Date("Sep 19, 2026 00:00:00").getTime();
+        const now = new Date().getTime();
+        const d = Math.floor((dest - now) / (1000 * 60 * 60 * 24));
+        document.getElementById('countdown').innerHTML = "Faltan: " + d + " días";
+    }, 1000);
+</script>
+
 </body>
 </html>
