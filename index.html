@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Mis XV Años - Alexa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --gold: #d4af37; --dark: #1c1d1f; }
-        body { background: var(--dark); color: white; font-family: 'Arial', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        body { background: var(--dark); color: white; font-family: 'Montserrat', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         
-        /* Contenedor principal */
         .card { 
             width: 90%; max-width: 400px; background: #222; border: 2px solid var(--gold); 
             padding: 25px; border-radius: 15px; text-align: center; color: white !important;
@@ -15,27 +15,27 @@
         .envelope { width: 300px; height: 200px; background: linear-gradient(135deg, #a8a9ad, #666); cursor: pointer; display: flex; justify-content: center; align-items: center; border-radius: 10px; }
         
         /* Estilos de texto */
-        h1, h3, p { color: white !important; margin: 10px 0; }
+        h1, h3, p { color: white !important; margin: 8px 0; }
         .timer-grid { display: flex; justify-content: space-between; margin: 15px 0; }
-        .timer-box { background: #333; padding: 10px; border-radius: 5px; width: 22%; font-weight: bold; color: var(--gold); }
+        .timer-box { background: #333; padding: 10px; border-radius: 5px; width: 22%; font-weight: bold; color: var(--gold); font-size: 0.8rem; }
         .btn { display: block; background: var(--gold); color: black; padding: 10px; text-decoration: none; font-weight: bold; margin: 10px 0; border-radius: 5px; }
         .photo-gallery { display: flex; gap: 10px; justify-content: center; margin-bottom: 15px; }
-        .client-photo { width: 48%; height: 150px; object-fit: cover; border: 1px solid var(--gold); }
+        .client-photo { width: 48%; height: 150px; object-fit: cover; border: 1px solid var(--gold); border-radius: 5px; }
+        .img-placeholder { width: 100%; height: 120px; font-size: 3rem; display: flex; justify-content: center; align-items: center; border: 1px solid var(--gold); border-radius: 5px; margin: 10px 0; background: #333; }
     </style>
 </head>
 <body>
 
-<!-- Sobre (Visible al inicio) -->
 <div class="envelope" id="env" onclick="abrirInvitacion()">
-    <img src="corona.png" width="80">
+    <img src="corona.png" width="80" onerror="this.style.display='none'">
+    <i class="fas fa-crown" style="font-size: 50px; color: white;"></i>
 </div>
 
-<!-- Tarjeta (Oculta al inicio) -->
 <div class="card" id="card" style="display: none;">
     <h1>Alexa</h1>
     <div class="photo-gallery">
-        <img src="foto1.jpeg" class="client-photo">
-        <img src="foto2.jpeg" class="client-photo">
+        <img src="foto1.jpeg" class="client-photo" onerror="this.style.display='none'">
+        <img src="foto2.jpeg" class="client-photo" onerror="this.style.display='none'">
     </div>
 
     <p style="font-style: italic;">Después de tantos sueños, aprendizajes y momentos inolvidables hoy comienza una nueva etapa de mi vida, Con mucha alegría te invito a celebrar conmigo este día tan especial para mi.</p>
@@ -46,13 +46,15 @@
     <p><b>Mis Padres:</b><br>Patricia Valtierra y Jesús Neyra</p>
     <p><b>Mi Madrina:</b><br>Adriana Valtierra</p>
     
-    <hr style="border-top: 1px solid var(--gold);">
+    <hr style="border-top: 1px solid var(--gold); margin: 20px 0;">
 
     <h3>Ceremonia Religiosa</h3>
-    <a href="https://maps.app.goo.gl/ii3c1FefPviK5Yat6" class="btn">Ubicación Iglesia (4:00 PM)</a>
+    <div class="img-placeholder"><i class="fas fa-church"></i></div>
+    <a href="https://maps.app.goo.gl/ii3c1FefPviK5Yat6" class="btn">Ver ubicación (4:00 PM)</a>
 
     <h3>Recepción</h3>
-    <a href="https://maps.app.goo.gl/UWWrzNTeyeGzYMX76" class="btn">Ubicación Salón (5:30 PM)</a>
+    <div class="img-placeholder"><i class="fas fa-glass-cheers"></i></div>
+    <a href="https://maps.app.goo.gl/UWWrzNTeyeGzYMX76" class="btn">Ver ubicación (5:30 PM)</a>
 
     <p><b>Código de vestimenta:</b> Formal. Reservado el color dorado y gris.</p>
     <p><b>Mesa de regalos:</b> El mejor regalo es tu presencia. Agradezco lluvia de sobres.</p>
