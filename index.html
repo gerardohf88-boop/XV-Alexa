@@ -3,166 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis XV Años - Alexa</title>
+    <title>Invitación - Mis XV Años</title>
     <style>
-        :root { --gold: #d4af37; --grey-metal: #a8a9ad; --dark: #1c1d1f; }
+        :root { --gold: #d4af37; --envelope-color: #d1d1d1; --dark: #1c1d1f; }
         body { 
             background: var(--dark); color: white; font-family: 'Montserrat', sans-serif; 
             display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh; margin: 0; overflow-x: hidden; 
+            min-height: 100vh; margin: 0; overflow: hidden; 
         }
 
-        /* Estilos del Sobre */
-        .envelope-wrapper { position: relative; width: 300px; height: 200px; cursor: pointer; perspective: 1000px; z-index: 100; }
-        .flap { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #c0c0c0; border-top: 100px solid var(--grey-metal); 
-            border-left: 150px solid transparent; border-right: 150px solid transparent;
-            transition: transform 0.8s; transform-origin: top; z-index: 2;
+        /* --- Sobre 3D --- */
+        .envelope-container { perspective: 1000px; cursor: pointer; z-index: 100; }
+        .envelope { width: 300px; height: 200px; background: var(--envelope-color); position: relative; border-radius: 0 0 10px 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .envelope::before { /* Solapa */
+            content: "INVITACIÓN"; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #555;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #b8b8b8; clip-path: polygon(0 0, 100% 0, 50% 70%);
+            transform-origin: top; transition: transform 0.8s ease-in-out; z-index: 2;
         }
-        .envelope-body { 
-            position: absolute; bottom: 0; width: 100%; height: 100%; 
-            background: #d1d1d1; border-radius: 0 0 10px 10px; z-index: 1;
-            display: flex; justify-content: center; align-items: center;
-        }
-        .open-flap { transform: rotateX(180deg); }
-        .inv-text { color: var(--dark); font-weight: bold; letter-spacing: 2px; text-transform: uppercase; }
-
-        .title-gold {
-            font-size: 2.2rem; font-weight: 800; text-transform: uppercase;
-            background: linear-gradient(to bottom, #d4af37, #f7ef8a, #d4af37);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            -webkit-text-stroke: 1.2px var(--grey-metal); line-height: 1.1;
-            margin-top: 10px; margin-bottom: 5px;
-        }
-
-        #particle-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-        .floating { position: absolute; animation: float linear infinite; opacity: 0.6; }
-        .glitter { position: absolute; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; pointer-events: none; }
+        .open .envelope::before { transform: rotateX(-180deg); }
         
-        @keyframes float { 
-            0% { transform: translateY(100vh) rotate(0deg); } 
-            100% { transform: translateY(-10vh) rotate(360deg); } 
-        }
-
+        /* --- Tarjeta --- */
         .card { 
-            width: 90%; max-width: 400px; background: rgba(34, 34, 34, 0.95); border: 2px solid var(--gold); 
-            padding: 30px; border-radius: 20px; display: none; text-align: center; 
-            opacity: 0; transition: opacity 1s ease; max-height: 90vh; overflow-y: auto; 
-            z-index: 10; position: relative;
+            width: 90%; max-width: 400px; background: rgba(34, 34, 34, 0.95); 
+            border: 2px solid var(--gold); padding: 30px; border-radius: 20px; 
+            display: none; opacity: 0; text-align: center; position: absolute; z-index: 50;
         }
-        
+
+        /* --- Efecto Glitter --- */
+        .glitter { position: absolute; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; pointer-events: none; }
+
         .btn { display: block; background: var(--gold); color: black; padding: 12px; text-decoration: none; font-weight: bold; margin: 15px 0; border-radius: 8px; }
         .photo-frame { width: 100%; border-radius: 10px; border: 2px solid var(--gold); margin: 10px 0; }
-        .icon-img { width: 80px; height: 80px; margin: 10px auto; object-fit: contain; }
-        hr { border: 0; border-top: 1px solid var(--gold); margin: 20px 0; }
     </style>
 </head>
 <body>
 
-<div id="particle-container"></div>
+<div id="particle-container" style="position: fixed; width: 100%; height: 100%; pointer-events: none; z-index: 200;"></div>
 
-<!-- Sobre -->
-<div class="envelope-wrapper" id="env" onclick="abrir()">
-    <div class="flap" id="flap"></div>
-    <div class="envelope-body">
-        <span class="inv-text">INVITACIÓN</span>
-    </div>
+<div class="envelope-container" id="env-box" onclick="abrir()">
+    <div class="envelope"></div>
 </div>
 
-<!-- Tarjeta -->
 <div class="card" id="card">
-    <div class="title-gold">Mis XV Años<br>Alexa</div>
-    <img src="corona.png" alt="Corona" style="width: 80px; margin: 10px 0;">
+    <div style="font-size: 2rem; color: var(--gold); font-weight: 800; text-transform: uppercase;">Mis XV Años<br>Alexa</div>
     <img src="foto1.jpeg" class="photo-frame" alt="Alexa">
-    
-    <p style="font-style: italic; margin: 20px 0;">Después de tantos sueños, aprendizajes y momentos inolvidables hoy comienza una nueva etapa de mi vida, Con mucha alegría te invito a celebrar conmigo este día tan especial para mi.</p>
-
-    <p style="font-weight: bold; font-size: 1.3rem; color: var(--gold); margin: 5px 0;">Faltan:</p>
-    <div id="timer" style="display: flex; justify-content: space-between; margin: 15px 0;"></div>
-
-    <p><b>Mis Padres:</b><br>Patricia Valtierra y Jesús Neyra</p>
-    <p><b>Mi Madrina:</b><br>Adriana Valtierra<br>
-       <span style="font-size: 0.9rem; font-style: italic; color: var(--gold);">Quien ha aceptado ser parte de esta nueva etapa.</span>
-    </p>
-    
-    <hr>
-
-    <img src="foto2.jpeg" class="photo-frame" alt="Alexa">
-
-    <h3>Ceremonia Religiosa</h3>
-    <img src="iglesia.png" class="icon-img" alt="Iglesia">
-    <a href="https://maps.app.goo.gl/ii3c1FefPviK5Yat6" class="btn">Ver ubicación (4:00 PM)</a>
-
-    <h3>Recepción</h3>
-    <img src="recepcion.png" class="icon-img" alt="Recepción">
-    <a href="https://maps.app.goo.gl/UWWrzNTeyeGzYMX76" class="btn">Ver ubicación (5:30 PM)</a>
-
-    <div style="margin: 25px 0;">
-        <h3>Mesa de regalos</h3>
-        <p style="font-style: italic;">El mejor regalo es tu presencia, pero si deseas hacerme un regalo que sea mediante: <b>lluvia de Sobres y Regalos</b>.</p>
-    </div>
-
-    <p><b>Confirma tu Asistencia:</b></p>
-    <a href="https://wa.me/525564855060" class="btn" style="background: #25d366; color: white;">WhatsApp: 55 6485 5060</a>
-    
-    <p style="margin-top: 20px;">¡Espero y seas parte de esta gran celebración!</p>
+    <p>¡Te espero para celebrar este día tan especial!</p>
+    <a href="https://wa.me/525564855060" class="btn">Confirmar Asistencia</a>
 </div>
 
 <audio id="musica" src="die-with-a-smile.mp3"></audio>
 
 <script>
     function abrir() {
-        document.getElementById('flap').classList.add('open-flap');
+        const box = document.getElementById('env-box');
+        const container = document.getElementById('particle-container');
+        box.classList.add('open');
         document.getElementById('musica').play();
 
-        const container = document.getElementById('particle-container');
-        for (let i = 0; i < 120; i++) {
+        // Explosión de Glitter
+        for (let i = 0; i < 150; i++) {
             let g = document.createElement('div');
             g.className = 'glitter';
-            g.style.left = '50%';
-            g.style.top = '50%';
+            g.style.left = '50%'; g.style.top = '50%';
             container.appendChild(g);
             
             let angle = Math.random() * Math.PI * 2;
-            let velocity = Math.random() * 300 + 50;
+            let dist = Math.random() * 400 + 100;
             g.animate([
-                { transform: 'translate(0, 0) scale(1)', opacity: 1 },
-                { transform: `translate(${Math.cos(angle)*velocity}px, ${Math.sin(angle)*velocity}px) scale(0)`, opacity: 0 }
-            ], { duration: 2000, easing: 'ease-out' });
+                { transform: 'translate(0,0) scale(1)', opacity: 1 },
+                { transform: `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px) scale(0)`, opacity: 0 }
+            ], { duration: 1500, easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)' });
         }
 
+        // Mostrar tarjeta
         setTimeout(() => {
-            document.getElementById('env').style.display = 'none';
-            let card = document.getElementById('card');
+            box.style.display = 'none';
+            const card = document.getElementById('card');
             card.style.display = 'block';
-            setTimeout(() => { card.style.opacity = "1"; }, 100);
-            iniciarParticulas();
-        }, 800);
+            card.animate([{ opacity: 0, transform: 'scale(0.5)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 1000, fill: 'forwards' });
+        }, 600);
     }
-
-    function iniciarParticulas() {
-        const container = document.getElementById('particle-container');
-        for (let i = 0; i < 20; i++) {
-            let p = document.createElement('div');
-            p.className = 'floating';
-            p.innerHTML = i % 2 === 0 ? '🦋' : '✨';
-            p.style.left = Math.random() * 100 + 'vw';
-            p.style.fontSize = (Math.random() * 20 + 10) + 'px';
-            p.style.animationDuration = (Math.random() * 5 + 5) + 's';
-            container.appendChild(p);
-        }
-    }
-
-    setInterval(() => {
-        let diff = new Date('2026-09-19T16:00:00') - new Date();
-        let d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
-        document.getElementById('timer').innerHTML = `
-            <div style="background:#333; padding:10px 5px; width:22%; border-radius:5px;">${d}<br><small>Días</small></div>
-            <div style="background:#333; padding:10px 5px; width:22%; border-radius:5px;">${h}<br><small>Hrs</small></div>
-            <div style="background:#333; padding:10px 5px; width:22%; border-radius:5px;">${m}<br><small>Min</small></div>
-            <div style="background:#333; padding:10px 5px; width:22%; border-radius:5px;">${s}<br><small>Seg</small></div>`;
-    }, 1000);
 </script>
 </body>
 </html>
