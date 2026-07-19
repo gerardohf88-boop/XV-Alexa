@@ -11,32 +11,38 @@
             display: flex; justify-content: center; align-items: center; 
             min-height: 100vh; margin: 0; overflow-x: hidden; 
         }
-        
+
+        /* Estilos del Sobre */
+        .envelope-wrapper { position: relative; width: 300px; height: 200px; cursor: pointer; perspective: 1000px; z-index: 100; }
+        .flap { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: #c0c0c0; border-top: 100px solid var(--grey-metal); 
+            border-left: 150px solid transparent; border-right: 150px solid transparent;
+            transition: transform 0.8s; transform-origin: top; z-index: 2;
+        }
+        .envelope-body { 
+            position: absolute; bottom: 0; width: 100%; height: 100%; 
+            background: #d1d1d1; border-radius: 0 0 10px 10px; z-index: 1;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .open-flap { transform: rotateX(180deg); }
+        .inv-text { color: var(--dark); font-weight: bold; letter-spacing: 2px; text-transform: uppercase; }
+
         .title-gold {
-            font-size: 2.2rem;
-            font-weight: 800;
-            text-transform: uppercase;
+            font-size: 2.2rem; font-weight: 800; text-transform: uppercase;
             background: linear-gradient(to bottom, #d4af37, #f7ef8a, #d4af37);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            -webkit-text-stroke: 1.2px var(--grey-metal);
-            line-height: 1.1;
-            margin-top: 10px;
-            margin-bottom: 5px;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            -webkit-text-stroke: 1.2px var(--grey-metal); line-height: 1.1;
+            margin-top: 10px; margin-bottom: 5px;
         }
 
         #particle-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
         .floating { position: absolute; animation: float linear infinite; opacity: 0.6; }
+        .glitter { position: absolute; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; pointer-events: none; }
+        
         @keyframes float { 
             0% { transform: translateY(100vh) rotate(0deg); } 
             100% { transform: translateY(-10vh) rotate(360deg); } 
-        }
-
-        .envelope { 
-            width: 320px; height: 220px; background: linear-gradient(160deg, #d1d1d1, #7a7a7a); 
-            border-radius: 12px; cursor: pointer; display: flex; justify-content: center; 
-            align-items: center; box-shadow: 0 15px 35px rgba(0,0,0,0.6); 
-            transition: all 0.5s ease; z-index: 100;
         }
 
         .card { 
@@ -56,10 +62,15 @@
 
 <div id="particle-container"></div>
 
-<div class="envelope" id="env" onclick="abrir()">
-    <img src="corona.png" alt="Corona" style="width: 120px; height: auto;">
+<!-- Sobre -->
+<div class="envelope-wrapper" id="env" onclick="abrir()">
+    <div class="flap" id="flap"></div>
+    <div class="envelope-body">
+        <span class="inv-text">INVITACIÓN</span>
+    </div>
 </div>
 
+<!-- Tarjeta -->
 <div class="card" id="card">
     <div class="title-gold">Mis XV Años<br>Alexa</div>
     <img src="corona.png" alt="Corona" style="width: 80px; margin: 10px 0;">
@@ -102,17 +113,37 @@
 
 <script>
     function abrir() {
-        document.getElementById('env').style.display = 'none';
-        let card = document.getElementById('card');
-        card.style.display = 'block';
-        setTimeout(() => { card.style.opacity = "1"; }, 100);
+        document.getElementById('flap').classList.add('open-flap');
         document.getElementById('musica').play();
-        iniciarParticulas();
+
+        const container = document.getElementById('particle-container');
+        for (let i = 0; i < 120; i++) {
+            let g = document.createElement('div');
+            g.className = 'glitter';
+            g.style.left = '50%';
+            g.style.top = '50%';
+            container.appendChild(g);
+            
+            let angle = Math.random() * Math.PI * 2;
+            let velocity = Math.random() * 300 + 50;
+            g.animate([
+                { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+                { transform: `translate(${Math.cos(angle)*velocity}px, ${Math.sin(angle)*velocity}px) scale(0)`, opacity: 0 }
+            ], { duration: 2000, easing: 'ease-out' });
+        }
+
+        setTimeout(() => {
+            document.getElementById('env').style.display = 'none';
+            let card = document.getElementById('card');
+            card.style.display = 'block';
+            setTimeout(() => { card.style.opacity = "1"; }, 100);
+            iniciarParticulas();
+        }, 800);
     }
 
     function iniciarParticulas() {
         const container = document.getElementById('particle-container');
-        for (let i = 0; i < 25; i++) {
+        for (let i = 0; i < 20; i++) {
             let p = document.createElement('div');
             p.className = 'floating';
             p.innerHTML = i % 2 === 0 ? '🦋' : '✨';
