@@ -5,13 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis XV Años - Alexa</title>
     <style>
-        :root { --gold: #d4af37; --dark: #1c1d1f; }
+        :root { --gold: #d4af37; --grey-metal: #a8a9ad; --dark: #1c1d1f; }
         body { 
             background: var(--dark); color: white; font-family: 'Montserrat', sans-serif; 
             display: flex; justify-content: center; align-items: center; 
             min-height: 100vh; margin: 0; overflow-x: hidden; 
         }
         
+        /* Estilo del encabezado elegante */
+        .title-gold {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(to bottom, #d4af37, #f7ef8a, #d4af37);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke: 1px var(--grey-metal);
+            margin: 20px 0;
+            line-height: 1.2;
+        }
+
         #particle-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
         .floating { position: absolute; animation: float linear infinite; opacity: 0.6; }
         @keyframes float { 
@@ -49,8 +61,10 @@
 
 <div class="card" id="card">
     <img src="foto1.jpeg" class="photo-frame" alt="Alexa">
-    <h1>Alexa</h1>
-    <p>Mis XV Años</p>
+    
+    <!-- Encabezado personalizado -->
+    <div class="title-gold">Mis XV Años<br>Alexa</div>
+    
     <p style="font-style: italic; margin: 20px 0;">Después de tantos sueños, aprendizajes y momentos inolvidables hoy comienza una nueva etapa de mi vida, Con mucha alegría te invito a celebrar conmigo este día tan especial para mi.</p>
 
     <div id="timer" style="display: flex; justify-content: space-between; margin: 15px 0;"></div>
