@@ -1,5 +1,360 @@
-<div style="text-align: center; padding: 30px; border: 2px solid #ffd700; border-radius: 20px; background-color: #fffdf0; font-family: Arial, sans-serif; max-width: 400px; margin: 20px auto;">
-    <div style="font-size: 80px; margin-bottom: 10px;">😜</div>
-    <h2 style="color: #333; margin: 0;">Fuera de servicio</h2>
-    <p style="color: #666;">Volveremos pronto.</p>
-</div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación Especial - 19 de Septiembre 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d4af37;
+            --primary-dark: #aa820a;
+            --bg-dark: #0d0f12;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-light: #f5f5f7;
+            --text-gold: #e5c158;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            text-align: center;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 20%, #1e232d 0%, #0d0f12 80%);
+            min-height: 100vh;
+        }
+
+        /* Pantalla de Apertura / Sobre */
+        #envelope-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0b0c0e;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        #envelope-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .envelope-card {
+            background: linear-gradient(145deg, #181b20, #121418);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 16px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            max-width: 90%;
+            width: 380px;
+            animation: pulseGlow 3s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
+            100% { box-shadow: 0 0 30px rgba(212, 175, 55, 0.5); }
+        }
+
+        .envelope-title {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 3rem;
+            color: var(--text-gold);
+            margin-bottom: 10px;
+        }
+
+        .envelope-sub {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 25px;
+        }
+
+        .btn-open {
+            background: linear-gradient(135deg, #d4af37, #aa820a);
+            color: #000;
+            font-weight: 600;
+            font-family: 'Cinzel', serif;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            letter-spacing: 1.5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-open:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.7);
+        }
+
+        /* Contenedor Principal */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            margin-bottom: 30px;
+        }
+
+        .subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            color: var(--text-gold);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .main-title {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 4rem;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            margin-bottom: 15px;
+        }
+
+        .event-date-header {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--text-gold);
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            padding: 10px 0;
+            margin: 20px 0;
+            letter-spacing: 2px;
+        }
+
+        /* Sección Solo Faltan / Temporizador */
+        .countdown-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 20px;
+            padding: 30px 20px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .countdown-label {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            color: var(--text-gold);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .timer-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
+            padding: 15px 5px;
+        }
+
+        .timer-number {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .timer-unit {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-gold);
+            margin-top: 5px;
+        }
+
+        /* Botones y Enlaces del Evento */
+        .actions-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.05));
+            border: 1px solid var(--primary);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-link:hover {
+            background: var(--primary);
+            color: #000;
+            font-weight: 600;
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-link svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        footer {
+            margin-top: 50px;
+            font-size: 0.8rem;
+            color: #777;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Overlay de Apertura Inicial -->
+    <div id="envelope-overlay">
+        <div class="envelope-card">
+            <div class="envelope-title">Nuestra Invitación</div>
+            <div class="envelope-sub">Te invitamos a celebrar con nosotros</div>
+            <button class="btn-open" onclick="openInvitation()">Abrir Invitación</button>
+        </div>
+    </div>
+
+    <!-- Audio de Fondo (Opcional, coloca un archivo musica.mp3 en la misma carpeta) -->
+    <audio id="bg-music" loop preload="auto">
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        <header>
+            <div class="subtitle">Te invitamos a celebrar</div>
+            <h1 class="main-title">Nuestro Evento Especial</h1>
+            <div class="event-date-header">
+                19 DE SEPTIEMBRE DE 2026 • 05:00 PM
+            </div>
+        </header>
+
+        <!-- Sección del Temporizador "Solo Faltan" -->
+        <section class="countdown-section">
+            <div class="countdown-label">Solo Faltan</div>
+            <div class="timer-grid">
+                <div class="timer-box">
+                    <div class="timer-number" id="days">00</div>
+                    <div class="timer-unit">Días</div>
+                </div>
+                <div class="timer-box">
+                    <div class="timer-number" id="hours">00</div>
+                    <div class="timer-unit">Horas</div>
+                </div>
+                <div class="timer-box">
+                    <div class="timer-number" id="minutes">00</div>
+                    <div class="timer-unit">Minutos</div>
+                </div>
+                <div class="timer-box">
+                    <div class="timer-number" id="seconds">00</div>
+                    <div class="timer-unit">Segundos</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enlaces interactivos -->
+        <section class="actions-section">
+            <!-- Ubicación en Google Maps -->
+            <a href="https://maps.google.com" target="_blank" class="btn-link">
+                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                Ver Ubicación del Evento
+            </a>
+
+            <!-- Confirmación por WhatsApp -->
+            <a href="https://api.whatsapp.com/send?phone=5210000000000&text=Hola!%20Confirmo%20mi%20asistencia%20al%20evento" target="_blank" class="btn-link">
+                <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                Confirmar Asistencia (WhatsApp)
+            </a>
+
+            <!-- Agendar en Google Calendar -->
+            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Evento+Especial&dates=20260919T170000/20260919T230000&details=Te+esperamos+para+celebrar+juntos.&location=Ubicacion+del+evento" target="_blank" class="btn-link">
+                <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+                Agendar en Google Calendar
+            </a>
+        </section>
+
+        <footer>
+            <p>Con cariño • Nos vemos muy pronto</p>
+        </footer>
+    </div>
+
+    <script>
+        // Función para quitar la pantalla de apertura e iniciar la música
+        function openInvitation() {
+            const overlay = document.getElementById('envelope-overlay');
+            overlay.classList.add('hidden');
+            
+            const music = document.getElementById('bg-music');
+            if (music) {
+                music.play().catch(e => console.log("Autoplay restringido"));
+            }
+        }
+
+        // Lógica del Reloj Temporizador
+        // Configurado exactamente para: 19 de Septiembre de 2026 a las 17:00 (5:00 PM)
+        const eventDate = new Date("September 19, 2026 17:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            if (distance < 0) {
+                document.getElementById("days").innerText = "00";
+                document.getElementById("hours").innerText = "00";
+                document.getElementById("minutes").innerText = "00";
+                document.getElementById("seconds").innerText = "00";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days < 10 ? "0" + days : days;
+            document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
+            document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+        }
+
+        // Actualización en tiempo real cada segundo
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html>
